@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 """Evidence-focused study of movement *among retained funnel records*.
 
 Input is local and confidential. Returned outputs contain no client identifiers.
