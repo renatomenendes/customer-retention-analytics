@@ -33,3 +33,9 @@ Registrar data, decisão, proprietário, evidência, alternativas, impacto técn
 - Autorização concedida pelo responsável pelo projeto para criação de branches, commits e PRs de documentação/código relacionados ao projeto.
 - Manter a base e o manifesto de fingerprints localmente; não versionar nem publicar dados brutos, IDs de clientes ou resultados identificáveis.
 - Restrições de negócio DEC-001 a DEC-006 continuam pendentes de confirmação pelo detentor da definição oficial.
+
+## Referências técnicas autorizadas — 2026-10-14
+
+- **DEC-011 — Reutilização de conhecimento:** autorizada a consulta a outros repositórios da conta; registrar a aplicabilidade e origem em [`repository_reuse_assessment.md`](repository_reuse_assessment.md). **Aprovado para referência conceitual, não para transferir dados, códigos ou configurações sem revisão.**
+- **DEC-012 — Sobrevivência:** Kaplan–Meier/Cox apenas após identificar duração observada, evento datado, censura e população elegível. **Condicionado; não implementar ainda.**
+- **DEC-013 — Contratos analíticos e governança:** usar requisitos de dados, grain, testes de cardinalidade, rastreabilidade de KPIs e distinção entre fato, inferência e contexto de negócio, inspirados nos projetos inspecionados. **Aprovado como princípio de implementação; código e testes pendentes.**
