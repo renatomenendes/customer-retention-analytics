@@ -5,7 +5,6 @@ from pathlib import Path
 
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
-
 SHEET_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
   <sheetData>
