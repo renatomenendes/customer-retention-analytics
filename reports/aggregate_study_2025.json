@@ -1,0 +1,327 @@
+{
+  "metadata": {
+    "study": "Customer retention product movement / observational descriptive 2025",
+    "time_window": "2025-06 to 2025-12",
+    "grain": "record of funnel; episode key unvalidated",
+    "definitions": "provisional",
+    "confidentiality": "aggregated use within private approved project; no customer data or fingerprints",
+    "min_retained_mix_published": 1000,
+    "origin": "local execution of audit, profiles, opportunity diagnostics, and temporal model"
+  },
+  "totals": {
+    "eligible": 303652,
+    "retained": 249309,
+    "not_retained": 48091,
+    "open": 6252,
+    "retained_movement": 86540,
+    "repeated_client_ids": 14069,
+    "ids_multiple_status": 1706
+  },
+  "monthly": [
+    {
+      "month": "2025-06",
+      "records": 43218,
+      "retained": 36175,
+      "not_retained": 6330,
+      "open": 713,
+      "retention_closed": 0.851076,
+      "movement_retained": 0.305708
+    },
+    {
+      "month": "2025-07",
+      "records": 43244,
+      "retained": 36023,
+      "not_retained": 6501,
+      "open": 720,
+      "retention_closed": 0.847122,
+      "movement_retained": 0.395608
+    },
+    {
+      "month": "2025-08",
+      "records": 43418,
+      "retained": 36176,
+      "not_retained": 6623,
+      "open": 619,
+      "retention_closed": 0.845253,
+      "movement_retained": 0.362257
+    },
+    {
+      "month": "2025-09",
+      "records": 43470,
+      "retained": 35929,
+      "not_retained": 6989,
+      "open": 552,
+      "retention_closed": 0.837155,
+      "movement_retained": 0.345877
+    },
+    {
+      "month": "2025-10",
+      "records": 43509,
+      "retained": 35559,
+      "not_retained": 7028,
+      "open": 922,
+      "retention_closed": 0.834973,
+      "movement_retained": 0.359965
+    },
+    {
+      "month": "2025-11",
+      "records": 43337,
+      "retained": 34912,
+      "not_retained": 7177,
+      "open": 1248,
+      "retention_closed": 0.82948,
+      "movement_retained": 0.338394
+    },
+    {
+      "month": "2025-12",
+      "records": 43456,
+      "retained": 34535,
+      "not_retained": 7443,
+      "open": 1478,
+      "retention_closed": 0.822693,
+      "movement_retained": 0.32095
+    }
+  ],
+  "portfolio_size": [
+    {
+      "families": 1,
+      "records": 124394,
+      "retained": 90470,
+      "retained_movement": 25011,
+      "m0_opportunities": 90470,
+      "moved_flags": 25011,
+      "any_movement_rate": 0.276456,
+      "flags_per_opportunity": 0.276456
+    },
+    {
+      "families": 2,
+      "records": 105030,
+      "retained": 91072,
+      "retained_movement": 33605,
+      "m0_opportunities": 182144,
+      "moved_flags": 42932,
+      "any_movement_rate": 0.368994,
+      "flags_per_opportunity": 0.235704
+    },
+    {
+      "families": 3,
+      "records": 71302,
+      "retained": 65304,
+      "retained_movement": 26302,
+      "m0_opportunities": 195912,
+      "moved_flags": 41903,
+      "any_movement_rate": 0.402762,
+      "flags_per_opportunity": 0.213887
+    },
+    {
+      "families": 4,
+      "records": 2605,
+      "retained": 2333,
+      "retained_movement": 1622,
+      "m0_opportunities": 9332,
+      "moved_flags": 3398,
+      "any_movement_rate": 0.695242,
+      "flags_per_opportunity": 0.364123
+    }
+  ],
+  "origin": [
+    {
+      "origin": "LEGADO",
+      "records": 68380,
+      "closed": 62218,
+      "retained": 51214,
+      "retained_movement": 16389,
+      "open": 6162,
+      "retention_closed": 0.823138,
+      "movement_retained": 0.32001
+    },
+    {
+      "origin": "SOLAR",
+      "records": 235272,
+      "closed": 235182,
+      "retained": 198095,
+      "retained_movement": 70151,
+      "open": 90,
+      "retention_closed": 0.842305,
+      "movement_retained": 0.354128
+    }
+  ],
+  "product_opportunities": [
+    {
+      "product": "BL",
+      "opportunities": 239562,
+      "movement_flags": 74255,
+      "rate": 0.309962
+    },
+    {
+      "product": "TV",
+      "opportunities": 138754,
+      "movement_flags": 24595,
+      "rate": 0.177256
+    },
+    {
+      "product": "FONE",
+      "opportunities": 88578,
+      "movement_flags": 10007,
+      "rate": 0.112974
+    },
+    {
+      "product": "MV",
+      "opportunities": 10964,
+      "movement_flags": 4387,
+      "rate": 0.400128
+    }
+  ],
+  "portfolio_mix": [
+    {
+      "mix": "BL",
+      "retained": 82490,
+      "retained_movement": 23819,
+      "rate": 0.28875
+    },
+    {
+      "mix": "BL+TV",
+      "retained": 63301,
+      "retained_movement": 23003,
+      "rate": 0.363391
+    },
+    {
+      "mix": "BL+TV+FONE",
+      "retained": 61897,
+      "retained_movement": 24138,
+      "rate": 0.38997
+    },
+    {
+      "mix": "BL+FONE",
+      "retained": 21380,
+      "retained_movement": 7473,
+      "rate": 0.349532
+    },
+    {
+      "mix": "TV",
+      "retained": 7120,
+      "retained_movement": 1121,
+      "rate": 0.157444
+    },
+    {
+      "mix": "BL+MV",
+      "retained": 4802,
+      "retained_movement": 2663,
+      "rate": 0.554561
+    },
+    {
+      "mix": "BL+TV+MV",
+      "retained": 2511,
+      "retained_movement": 1626,
+      "rate": 0.647551
+    },
+    {
+      "mix": "BL+TV+FONE+MV",
+      "retained": 2333,
+      "retained_movement": 1622,
+      "rate": 0.695242
+    },
+    {
+      "mix": "TV+FONE",
+      "retained": 1169,
+      "retained_movement": 247,
+      "rate": 0.211292
+    }
+  ],
+  "economics": {
+    "retained_movement": {
+      "n": 86540,
+      "median_change": -25.46,
+      "mean_change": -37.72,
+      "share_negative": 0.786654,
+      "share_positive": 0.148509,
+      "share_zero": 0.064837,
+      "relative_sum_change": -0.200671
+    },
+    "retained_no_movement": {
+      "n": 162769,
+      "median_change": 0.0,
+      "mean_change": -21.49,
+      "share_negative": 0.195209,
+      "share_positive": 0.099227,
+      "share_zero": 0.705564,
+      "relative_sum_change": -0.124472
+    },
+    "not_retained": {
+      "n": 48091,
+      "median_change": -103.64,
+      "mean_change": -96.65,
+      "share_negative": 0.705205,
+      "share_positive": 0.042607,
+      "share_zero": 0.252189,
+      "relative_sum_change": -0.689183
+    }
+  },
+  "prediction": {
+    "task": "composite retained AND movement among closed leads, NOT propensity among retained",
+    "train_n": 165424,
+    "validation_n": 41343,
+    "test_n": 84067,
+    "train_period": "June–September 2025",
+    "validation_period": "October 2025",
+    "test_period": "November–December 2025",
+    "selection": "minimum validation Brier; only winner and baseline tested",
+    "validation": {
+      "baseline_constant": {
+        "n": 41343,
+        "prevalence": 0.300486,
+        "roc_auc": 0.5,
+        "average_precision": 0.300486,
+        "brier": 0.210206,
+        "log_loss": 0.611304,
+        "precision_top_decile": 0.300486,
+        "lift_top_decile": 1.0
+      },
+      "logistic": {
+        "n": 41343,
+        "prevalence": 0.300486,
+        "roc_auc": 0.664922,
+        "average_precision": 0.469475,
+        "brier": 0.193937,
+        "log_loss": 0.572757,
+        "precision_top_decile": 0.579927,
+        "lift_top_decile": 1.929964
+      },
+      "interpretable_tree": {
+        "n": 41343,
+        "prevalence": 0.300486,
+        "roc_auc": 0.668358,
+        "average_precision": 0.444904,
+        "brier": 0.193855,
+        "log_loss": 0.572236,
+        "precision_top_decile": 0.535429,
+        "lift_top_decile": 1.781877
+      }
+    },
+    "test": {
+      "baseline_constant": {
+        "n": 84067,
+        "prevalence": 0.272378,
+        "roc_auc": 0.5,
+        "average_precision": 0.272378,
+        "brier": 0.198796,
+        "log_loss": 0.58709,
+        "precision_top_decile": 0.272378,
+        "lift_top_decile": 1.0
+      },
+      "interpretable_tree": {
+        "n": 84067,
+        "prevalence": 0.272378,
+        "roc_auc": 0.662288,
+        "average_precision": 0.404893,
+        "brier": 0.184908,
+        "log_loss": 0.552518,
+        "precision_top_decile": 0.500416,
+        "lift_top_decile": 1.837213
+      }
+    },
+    "excluded_open": 6252,
+    "dropped_overlap_train": 5322,
+    "dropped_overlap_validation": 1244
+  }
+}

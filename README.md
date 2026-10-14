@@ -1,132 +1,87 @@
-# Customer Retention Analytics
+# Perfis de retenção com movimentação de produtos | Telecomunicações
 
-**Estudo de retenção e movimentação de produtos em telecomunicações — auditoria reproduzível, caracterização de perfis e decisões de negócio.**
+**Estudo observacional · junho–dezembro de 2025 · base de clientes sob confidencialidade**
 
-> **Janela de análise:** 1º de junho a 31 de dezembro de 2025, inclusive. **Granularidade atual:** registro do funil, candidato a episódio de atendimento. **Governança:** a planilha original e saídas com dados reais são confidenciais e não são versionadas.
+> **Questão central.** Quais perfis caracterizam registros de clientes classificados como **retidos com movimentação de produtos**? O que suas transições entre M0 e M30 permitem — e não permitem — concluir sobre a preservação de valor?
 
-## O problema de negócio
+Este repositório apresenta **perguntas de negócio, evidências, métodos, interpretações e recomendações**. Os notebooks permitem examinar os cálculos. O código utilizado na reprodução está disponível, mas não constitui o objeto principal da apresentação.
 
-A operação de retenção procura entender quais características dos clientes estão associadas à **retenção com movimentação de produtos** (Banda Larga, TV, Fone e Móvel). O projeto responde a essa pergunta sem confundir três fenômenos:
+## Síntese das descobertas
 
-| Dimensão | Observação operacional possível | Limite do dado |
+| Evidência observada | Resultado na amostra | Leitura relevante |
+|---|---:|---|
+| Registros na janela | **303.652** | Unidade observada: registro do funil, não cliente único comprovado |
+| Classificados como retidos | **249.309** | Status de atendimento, não permanência sustentada |
+| Retidos com alguma movimentação | **86.540** | **34,7%** dos registros retidos |
+| Registros com desfecho em aberto | **6.252** | Não devem ser imputados como perda |
+| Mediana M30 − M0 no grupo retido com movimento | **−25,46** | Unidade dos campos **VALOR_*** ainda não validada; não é perda faturada |
+| Modelo experimental no teste temporal | **AUC 0,662; Brier 0,1849** | Alvo composto distinto do perfil condicionado aos retidos |
+
+### Descoberta 1 — Mais produtos não equivalem, necessariamente, a maior propensão por produto
+
+![Duas medidas de movimentação segundo a quantidade de famílias iniciais](reports/figures/portfolio_opportunities.svg)
+
+A incidência de **qualquer movimentação entre retidos** foi de **27,6%** nas carteiras com uma família, **36,9%** com duas, **40,3%** com três e **69,5%** com quatro. Contudo, quando o denominador passa a ser o **total de famílias presentes em M0**, as incidências observadas de flags foram **27,6%**, **23,6%**, **21,4%** e **36,4%**, respectivamente.
+
+**Interpretação:** comparar somente “alguma movimentação” favorece carteiras com mais oportunidades de alteração. A normalização por família não elimina confundimento, mas muda a leitura do perfil. Não há evidência causal de que ampliar a carteira provoque movimentação.
+
+### Descoberta 2 — A participação de retenções encerradas muda ao longo da janela
+
+![Status retido entre leads encerrados por mês](reports/figures/status_retention_monthly.svg)
+
+A proporção do status `RETIDO` entre os leads **encerrados** passou de **85,1% em junho para 82,3% em dezembro**. O volume mensal ficou próximo de 43 mil registros, e a proporção de casos em aberto varia por mês e origem. **Não é adequado interpretar essa diferença como queda causal da eficácia comercial:** o desenho amostral e a maturidade do funil ainda não foram validados.
+
+### Descoberta 3 — Retenção com mudança de produtos não implica preservação dos valores observados
+
+![Medianas das variações monetárias entre M0 e M30](reports/figures/value_deltas.svg)
+
+Nos **86.540 registros retidos com movimentação**, **78,7%** apresentaram diferença negativa dos valores M30–M0; a mediana foi **−25,46**, e a soma dos campos monetários desse grupo variou **−20,1%** entre os estados observados. Para retidos sem movimentação, a mediana foi **zero**. Os campos não possuem unidade, competência financeira, descontos e regras de bundle formalmente validados; assim, **não são demonstração de receita, margem ou perda incremental**.
+
+### Descoberta 4 — Há sinal preditivo, mas não evidência de uplift comercial
+
+O experimento com atributos iniciais e teste em **novembro–dezembro de 2025** atingiu **AUC-ROC 0,662**, **average precision 0,405**, **Brier 0,1849** e **lift de 1,84× no decil superior**. A baseline constante obteve Brier 0,1988. O alvo foi a ocorrência conjunta de **`RETIDO` e movimentação entre leads encerrados**. Não mede, isoladamente, a movimentação *entre retidos*, nem o efeito de uma oferta. A regressão logística foi avaliada apenas na validação; não está demonstrado que a árvore seja superior fora da amostra.
+
+## Como o problema foi definido
+
+| Dimensão | Definição operacional provisória | Fronteira de interpretação |
 |---|---|---|
-| Retenção | Status final do lead, provisoriamente `RETIDO` | Não comprova permanência futura do cliente |
-| Movimentação | Flags por família e transições dos produtos entre M0 e M30 | Não comprova aceite de oferta ou aumento de receita |
-| Preservação de receita | Diferenças observadas em campos monetários `VALOR_*_M0/M30` | Sem comprovação de valor faturado, periodicidade ou margem |
+| Retenção | `NM_SUB_INDICADOR_NEGOCIO = RETIDO`, apenas no funil | Sem confirmação de atividade posterior ou contrato ativo |
+| Movimentação | Pelo menos uma `FLAG_MOV_* = 1`, confrontada com produto M0/M30 | Não se conhece aceite da oferta nem mudança de volume recorrente |
+| Valor | Σ dos campos `VALOR_*_M30` − Σ `VALOR_*_M0` | Snapshot de valores, sem comprovação de receita realizada |
 
-O projeto é deliberadamente **evidence-first**: nenhuma inferência causal será tirada de comparações observacionais; modelos preditivos somente serão construídos após a validação da unidade de análise, do alvo e da disponibilidade temporal das variáveis.
+**Universo analisado:** registros com entrada entre 01/06 e 31/12/2025, inclusive; excluídos dois fora da janela. `id_cliente` reaparece em múltiplas linhas: sem chave oficial do atendimento, as taxas são por **registro**, não por cliente único. Casos `LEAD EM ABERTO` são apresentados à parte.
 
-## Estado real das entregas
+## Perguntas respondidas e próximas decisões
 
-| Frente | Entrega | Estado |
+| Pergunta de negócio | O que os dados sustentam | Ação testável sugerida |
 |---|---|---|
-| Fundamentação | Escopo, critérios, dicionário preliminar, limitações e decisões | Documentada; regras de negócio **pendentes** |
-| Qualidade de dados | Auditoria incremental da planilha e testes sintéticos | Código e notebook implementados; saídas reais **somente locais** |
-| Perfis e modelagem | Exploração, características, baseline e validação temporal | **Ainda não implementados**; dependem da validação do alvo |
-| Inteligência de negócio | Recomendações e apresentação executiva | Depende da análise reprodutível e autorização de divulgação |
-| Portfólio | Demonstração técnica pública | Somente dados sintéticos ou material expressamente autorizado |
+| Qual carteira concentra alterações? | Evidência por mix e por oportunidade M0 | Testar jornadas por família disponível, mantendo comparabilidade |
+| O canal importa? | Diferenças descritivas entre `SOLAR` e `LEGADO` | Reconciliar desfechos pendentes e composição antes de comparação de eficiência |
+| Retenção protege valores? | Diferenças negativas M0–M30 observadas entre retidos que movimentaram | Auditar preço, descontos e cancelamento parcial e mensurar receita real |
+| Um score ajuda? | Discriminação experimental do evento composto, em split temporal | Validação prospectiva, calibração, estabilidade e teste controlado de oferta |
 
-**Entrega atual:** `notebooks/01_data_audit.ipynb` contém leitura de resumo gerado localmente, tabelas e visualizações, sem incorporar a planilha nem resultados confidenciais à versão Git. O processamento de dados ocorre em `src/`, separado da apresentação.
+A priorização, responsáveis, critérios de teste e evidências encontram-se no [relatório do estudo](docs/study_report.md). **Não há retorno financeiro incremental demonstrado.**
 
-## Arquitetura
+## Percurso de leitura do estudo
 
-```mermaid
-flowchart LR
-    A[XLSX privado] --> B[Leitura incremental read-only]
-    B --> C[Validações estruturais]
-    C --> D[Estados M0 / M30]
-    D --> E[Resumo e gráficos locais]
-    E --> F{Regras e alvo aprovados?}
-    F -->|Sim| G[Perfis e baseline]
-    F -->|Não| H[Registro de pendências]
-    G --> I[Recomendações testáveis]
-    H --> I
-```
+1. **[Relatório científico e executivo](docs/study_report.md):** objetivos, universo, diagnóstico, perfis, sinais, economia, implicações e limitações.
+2. **[Síntese analítica reproduzível](notebooks/05_study_synthesis.ipynb):** cálculos e visualizações dos agregados observados, sem exposição de linhas individuais.
+3. **[Apresentação executiva](presentations/executive_study.md):** narrativa para discussão de decisões e experimentos.
+4. [Auditoria e integridade](notebooks/01_data_audit.ipynb), [perfis e valores](notebooks/02_profiles_and_economics.ipynb), [predição temporal](notebooks/03_temporal_model_validation.ipynb) e [decisões](notebooks/04_business_decisions.ipynb): notebooks aprofundados, que requerem os agregados privados produzidos localmente.
+5. [Metodologia](docs/methodology.md), [dicionário](docs/data_dictionary.md), [limitações](docs/limitations.md) e [referências científicas](docs/benchmark_and_gap_review.md): fundamento para auditabilidade.
 
-```text
-customer-retention-analytics/
-├── .github/workflows/ci.yml         # Testes com dados sintéticos, sem planilha
-├── data/README.md                    # Política de dados; data/raw/ ignorada
-├── docs/                             # Regras, auditoria, decisões e riscos
-├── notebooks/01_data_audit.ipynb    # EDA auditável; outputs reais não versionados
-├── src/retention_analytics/
-│   ├── xlsx_stream.py                # Leitura da aba completa via ZIP/XML
-│   ├── audit.py                      # Métricas e contratos de integridade
-│   └── cli.py                        # Execução em linha de comando
-├── tests/                            # Casos sintéticos independentes
-├── pyproject.toml                    # Pacote Python e dependências
-└── README.md
-```
+## Reprodutibilidade e confidencialidade
 
-## Reproduzir a auditoria
+Os gráficos e a síntese utilizam o conjunto **[agregado, com grupos grandes](reports/aggregate_study_2025.json)**, derivado das execuções locais dos notebooks de auditoria, perfis e modelo. Não contém dados de clientes, identificadores ou fingerprints da planilha. Os arquivos brutos e as saídas privadas permanecem fora do Git.
 
-**Pré-requisitos:** Python 3.11+, acesso autorizado à planilha e ambiente local com memória para ler o índice de strings do XLSX. Não é necessário banco de dados, nuvem ou API externa.
+Para recomputar os resultados com a planilha original em ambiente autorizado: Python 3.11+, `python -m pip install -e ".[analysis,dev]"`, seguido de `retention-audit --input data/raw/retention_case.xlsx --output reports/private/audit_summary.json` e `retention-analyze --input data/raw/retention_case.xlsx --out-dir reports/private`. Para revisitar **a síntese publicada** sem dados brutos, execute `notebooks/05_study_synthesis.ipynb` com o arquivo agregado versionado.
 
-```bash
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev,analysis]"
-```
+A classificação dos resultados neste repositório é **observacional e provisória**. Sua reprodução algorítmica não valida semânticas de negócio: estão pendentes a chave do episódio, significado financeiro dos campos, definição do evento de retenção sustentada, universo amostral e desenho experimental. A política de divulgação deve ser revista antes de qualquer alteração da visibilidade privada.
 
-Armazene a planilha em `data/raw/retention_case.xlsx` **somente no ambiente autorizado**. O nome acima é local e não corresponde a um arquivo versionado.
+## Base conceitual e literatura
 
-```bash
-retention-audit \
-  --input data/raw/retention_case.xlsx \
-  --output reports/private/audit_summary.json \
-  --min-group-size 30
-```
+- Verbeke et al. (2012), [avaliação de churn orientada ao lucro](https://doi.org/10.1016/j.ejor.2011.09.031): decisões exigem custos e resultados financeiros, não apenas AUC.
+- Verhelst et al. (2025), [benchmark de uplift em telecom](https://doi.org/10.1007/978-3-031-74640-6_21): propensão e efeito incremental são problemas diferentes.
+- [scikit-learn: calibração de probabilidades](https://scikit-learn.org/stable/modules/calibration.html): Brier não dispensa curvas de confiabilidade.
 
-Esse comando percorre a aba completa, não o intervalo nomeado da pasta de trabalho, e grava **apenas no caminho local ignorado** contagens, medidas de qualidade e hash SHA-256 do arquivo de entrada. Para usar outra versão da fonte, **execute novamente** a auditoria; não reutilize resumos anteriores sem conferir a proveniência.
-
-O notebook é executado da raiz do projeto, após gerar o JSON local:
-
-```bash
-jupyter lab notebooks/01_data_audit.ipynb
-```
-
-O notebook lê o resumo privado, verifica os denominadores e exibe gráficos por mês e informações de integridade. **Não carrega nem exibe identificadores individuais de clientes.** A versão versionada possui células sem resultados executados; notebooks com saídas reais devem permanecer fora do Git.
-
-### Testes e CI
-
-```bash
-python -m pytest -q
-python -m compileall -q src tests
-ruff check src tests
-```
-
-O workflow em `.github/workflows/ci.yml` foi projetado exclusivamente para instalar dependências, validar o código e executar testes com linhas sintéticas. Nunca vincule a planilha ao GitHub Actions, mesmo no repositório privado.
-
-## Principais decisões metodológicas
-
-1. **Granularidade:** `id_cliente` se repete, portanto a análise não elimina registros repetidos por padrão. A chave oficial de episódio/lead continua pendente.
-2. **População:** somente entradas de junho a dezembro de 2025. `LEAD EM ABERTO` é observado separadamente, sem ser imputado como não retenção.
-3. **Status:** `RETIDO` é um desfecho operacional provisório do funil, não medida de sobrevivência do relacionamento.
-4. **Movimentação:** `FLAG_MOV_*` e mudança de código de produto são auditadas separadamente; mudança de preço não implica movimentação.
-5. **Receita:** os campos monetários são descritos, sem inferir receita contábil, ganho incremental, margem ou desconto efetivamente realizado.
-6. **Modelagem:** variáveis M30 e flags/desfechos posteriores não podem entrar como atributos de uma predição feita em M0. Segmentação descritiva e baseline interpretável precedem modelos complexos.
-7. **Sobrevivência:** Kaplan–Meier e Cox só serão considerados quando datas de evento, duração e censura forem demonstradas.
-
-**Documentação técnica:** [`project_charter.md`](docs/project_charter.md), [`methodology.md`](docs/methodology.md), [`data_audit_protocol.md`](docs/data_audit_protocol.md), [`data_dictionary.md`](docs/data_dictionary.md), [`decision_log.md`](docs/decision_log.md), [`limitations.md`](docs/limitations.md).
-
-## Segurança, confidencialidade e limites
-
-- O repositório privado contém somente código, documentação e testes sintéticos. Dados `.xlsx`, exportações `.csv`, modelos, relatórios detalhados, fingerprints e outputs reais ficam nos diretórios ignorados pelo Git.
-- Uma mudança de visibilidade, publicação de agregados ou portfólio público depende de **aprovação específica do titular dos dados** e revisão do risco de reidentificação, inclusive para grupos pequenos. O limiar técnico padrão de supressão é `n < 30` para as segmentações exportadas da auditoria, sujeito à política oficial.
-- Frequências da amostra não são taxas corporativas nem evidência de impacto causal de ofertas.
-- A licença `LICENSE` atualmente presente é Unlicense; sua presença **não libera direitos sobre informações de terceiros**, nem autoriza divulgar dados e resultados comerciais.
-
-## Benchmarking e revisão de profundidade
-
-A revisão de literatura, repositórios externos e lacunas científicas está em [`benchmark_and_gap_review.md`](docs/benchmark_and_gap_review.md). O [checklist de critérios de aceite](docs/study_acceptance_gates.md) evita confundir CI aprovado com estudo concluído.
-
-O módulo [`deep_diagnostics.py`](src/retention_analytics/deep_diagnostics.py) testa a interpretação da movimentação por registro e por família de produto disponível em M0, comparando exposição entre carteiras. Resultados efetivos devem ser calculados **localmente**; não implicam causalidade.
-
-## Referências metodológicas
-
-Os repositórios [`AnaliseSobrevivencia`](https://github.com/renatomenendes/AnaliseSobrevivencia), [`framework_pinhao`](https://github.com/renatomenendes/framework_pinhao), [`Analytics-Engineering-Blueprint`](https://github.com/renatomenendes/Analytics-Engineering-Blueprint) e [`pbi-profiling`](https://github.com/renatomenendes/pbi-profiling) foram considerados como **referências conceituais**, não como fontes de dados, código importado ou resultados deste case. Critérios e ressalvas estão em [`repository_reuse_assessment.md`](docs/repository_reuse_assessment.md).
-
----
-
-**Status de rigor:** auditoria implementada e suas métricas sujeitas às definições de negócio. A validação formal da população, dos eventos e da unidade monetária é pré-condição para conclusões financeiras, preditivas e executivas.
+**Conclusão:** os dados sustentam perfis descritivos relevantes e mostram tensões entre movimentação e valor observado; **a decisão ótima de retenção e sua receita incremental ainda não estão identificadas**.
