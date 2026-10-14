@@ -218,6 +218,14 @@ As faixas têm largura de 0,1 e são publicadas quando contêm ao menos 100 obse
 
 O modelo com todas as variáveis iniciais proporciona avaliação multivariada da discriminação, mas seus coeficientes/variáveis não identificam o efeito de intervenção nem inferem o evento **A = aceite**. Intervalos de confiança por cluster de cliente, curvas de decisão e avaliação em novos períodos após dezembro ainda não estão identificados: não os substituímos por p-values ingênuos. A consistência por mês e canal é apresentada com prevalência e denominadores.
 
+## 5.5. Exploração complementar — cancelamento parcial, limites de desfecho e robustez
+
+A [exploração aprofundada](deep_exploration_findings.md) foi executada sobre a planilha completa e apresenta os quatro cruzamentos **movimentação × cancelamento**, distribuições monetárias P10–mediana–P90, transições por família, coortes abertas por origem e diferença padronizada entre canais com bootstrap por cliente.
+
+O achado central é a presença de **32.318** retidos sem `FLAG_MOV_*` e com cancelamento de produto (mediana ΔV **−104,90**); entre os 86.540 retidos com movimento, **13.161** também tiveram cancelamento (mediana **−88,96**). A comparação SOLAR–LEGADO entre retidos passou de **+3,41 p.p.** brutos para **+2,93 p.p.** padronizados por coorte mensal × número de famílias em M0; intervalo bootstrap agrupado por cliente **[+2,53; +3,41] p.p.**. São associações condicionadas ao status RETIDO, sem interpretação causal.
+
+Os limites pessimista/otimista de retenção conforme encerramento dos casos abertos foram calculados; não os tratar como curvas de sobrevivência. Uma análise paramétrica de contribuição marginal versus custo de oferta ilustra limiares de equilíbrio, mas **não estima lucro ou uplift real**, ausentes da fonte.
+
 ## 6. Recomendações ordenadas pela decisão
 
 | Perfil ou problema | Evidência | Ação/protocolo | Indicador primário | Como validar |

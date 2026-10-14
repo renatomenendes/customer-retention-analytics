@@ -1,0 +1,1000 @@
+{
+  "metadata": {
+    "window": "2025-06..2025-12",
+    "grain": "spreadsheet row, repeated customer IDs",
+    "offer_acceptance": "unobserved",
+    "monetary_unit": "unconfirmed",
+    "causal_inference": "not identified",
+    "min_published_group": 500
+  },
+  "counts": {
+    "scope": 303652,
+    "status_NAO RETIDO": 48091,
+    "status_RETIDO": 249309,
+    "retained": 249309,
+    "retained_movement": 86540,
+    "retained_cancellation": 45479,
+    "retained_movement_and_cancellation": 13161,
+    "status_LEAD EM ABERTO": 6252,
+    "excluded_outside_or_invalid_date": 2
+  },
+  "retention_bounds_by_month_origin": [
+    {
+      "month": "2025-06",
+      "origin": "LEGADO",
+      "n": 9847,
+      "opened": 696,
+      "lower_if_all_open_not_retained": 0.7610439727835889,
+      "upper_if_all_open_retained": 0.831725398598558,
+      "observed_among_closed": 0.818926893235712,
+      "retained": 7494,
+      "not_retained": 1657
+    },
+    {
+      "month": "2025-06",
+      "origin": "SOLAR",
+      "n": 33371,
+      "opened": 17,
+      "lower_if_all_open_not_retained": 0.8594588115429564,
+      "upper_if_all_open_retained": 0.8599682358934404,
+      "observed_among_closed": 0.8598968639443545,
+      "retained": 28681,
+      "not_retained": 4673
+    },
+    {
+      "month": "2025-07",
+      "origin": "LEGADO",
+      "n": 8795,
+      "opened": 706,
+      "lower_if_all_open_not_retained": 0.7575895395110859,
+      "upper_if_all_open_retained": 0.8378624218305856,
+      "observed_among_closed": 0.8237112127580665,
+      "retained": 6663,
+      "not_retained": 1426
+    },
+    {
+      "month": "2025-07",
+      "origin": "SOLAR",
+      "n": 34449,
+      "opened": 14,
+      "lower_if_all_open_not_retained": 0.8522743766147058,
+      "upper_if_all_open_retained": 0.8526807744782142,
+      "observed_among_closed": 0.8526208799186874,
+      "retained": 29360,
+      "not_retained": 5075
+    },
+    {
+      "month": "2025-08",
+      "origin": "LEGADO",
+      "n": 8247,
+      "opened": 604,
+      "lower_if_all_open_not_retained": 0.7642779192433612,
+      "upper_if_all_open_retained": 0.8375166727294774,
+      "observed_among_closed": 0.8246761742771164,
+      "retained": 6303,
+      "not_retained": 1340
+    },
+    {
+      "month": "2025-08",
+      "origin": "SOLAR",
+      "n": 35171,
+      "opened": 15,
+      "lower_if_all_open_not_retained": 0.8493645332802593,
+      "upper_if_all_open_retained": 0.8497910210116288,
+      "observed_among_closed": 0.8497269313915121,
+      "retained": 29873,
+      "not_retained": 5283
+    },
+    {
+      "month": "2025-09",
+      "origin": "LEGADO",
+      "n": 8556,
+      "opened": 547,
+      "lower_if_all_open_not_retained": 0.7835437120149603,
+      "upper_if_all_open_retained": 0.8474754558204769,
+      "observed_among_closed": 0.8370583094019228,
+      "retained": 6704,
+      "not_retained": 1305
+    },
+    {
+      "month": "2025-09",
+      "origin": "SOLAR",
+      "n": 34914,
+      "opened": 5,
+      "lower_if_all_open_not_retained": 0.8370567680586584,
+      "upper_if_all_open_retained": 0.8371999770865556,
+      "observed_among_closed": 0.8371766593142169,
+      "retained": 29225,
+      "not_retained": 5684
+    },
+    {
+      "month": "2025-10",
+      "origin": "LEGADO",
+      "n": 9652,
+      "opened": 911,
+      "lower_if_all_open_not_retained": 0.7289680895151264,
+      "upper_if_all_open_retained": 0.8233526730211355,
+      "observed_among_closed": 0.8049422262898982,
+      "retained": 7036,
+      "not_retained": 1705
+    },
+    {
+      "month": "2025-10",
+      "origin": "SOLAR",
+      "n": 33857,
+      "opened": 11,
+      "lower_if_all_open_not_retained": 0.8424550314558289,
+      "upper_if_all_open_retained": 0.8427799273414656,
+      "observed_among_closed": 0.8427288305855936,
+      "retained": 28523,
+      "not_retained": 5323
+    },
+    {
+      "month": "2025-11",
+      "origin": "LEGADO",
+      "n": 11142,
+      "opened": 1234,
+      "lower_if_all_open_not_retained": 0.7333512834320589,
+      "upper_if_all_open_retained": 0.8441033925686591,
+      "observed_among_closed": 0.8246871215179653,
+      "retained": 8171,
+      "not_retained": 1737
+    },
+    {
+      "month": "2025-11",
+      "origin": "SOLAR",
+      "n": 32195,
+      "opened": 14,
+      "lower_if_all_open_not_retained": 0.8305948128591396,
+      "upper_if_all_open_retained": 0.8310296629911477,
+      "observed_among_closed": 0.8309561542525092,
+      "retained": 26741,
+      "not_retained": 5440
+    },
+    {
+      "month": "2025-12",
+      "origin": "LEGADO",
+      "n": 12141,
+      "opened": 1464,
+      "lower_if_all_open_not_retained": 0.7283584548225023,
+      "upper_if_all_open_retained": 0.8489416028333745,
+      "observed_among_closed": 0.8282289032499766,
+      "retained": 8843,
+      "not_retained": 1834
+    },
+    {
+      "month": "2025-12",
+      "origin": "SOLAR",
+      "n": 31315,
+      "opened": 14,
+      "lower_if_all_open_not_retained": 0.8204374900207568,
+      "upper_if_all_open_retained": 0.8208845601149609,
+      "observed_among_closed": 0.8208044471422639,
+      "retained": 25692,
+      "not_retained": 5609
+    }
+  ],
+  "profiles": {
+    "month": [
+      {
+        "group": "2025-08",
+        "n": 36176,
+        "movement": 13105,
+        "rate": 0.3622567448031844
+      },
+      {
+        "group": "2025-06",
+        "n": 36175,
+        "movement": 11059,
+        "rate": 0.3057083621285418
+      },
+      {
+        "group": "2025-07",
+        "n": 36023,
+        "movement": 14251,
+        "rate": 0.3956083613247092
+      },
+      {
+        "group": "2025-09",
+        "n": 35929,
+        "movement": 12427,
+        "rate": 0.34587658994127307
+      },
+      {
+        "group": "2025-10",
+        "n": 35559,
+        "movement": 12800,
+        "rate": 0.35996512837818834
+      },
+      {
+        "group": "2025-11",
+        "n": 34912,
+        "movement": 11814,
+        "rate": 0.3383936755270394
+      },
+      {
+        "group": "2025-12",
+        "n": 34535,
+        "movement": 11084,
+        "rate": 0.3209497611119154
+      }
+    ],
+    "origin": [
+      {
+        "group": "SOLAR",
+        "n": 198095,
+        "movement": 70151,
+        "rate": 0.3541280698654686
+      },
+      {
+        "group": "LEGADO",
+        "n": 51214,
+        "movement": 16389,
+        "rate": 0.3200101534736595
+      }
+    ],
+    "mix": [
+      {
+        "group": "BL",
+        "n": 82490,
+        "movement": 23819,
+        "rate": 0.28875015153351924
+      },
+      {
+        "group": "BL+TV",
+        "n": 63301,
+        "movement": 23003,
+        "rate": 0.36339078371589706
+      },
+      {
+        "group": "BL+TV+FONE",
+        "n": 61897,
+        "movement": 24138,
+        "rate": 0.38997043475451154
+      },
+      {
+        "group": "BL+FONE",
+        "n": 21380,
+        "movement": 7473,
+        "rate": 0.349532273152479
+      },
+      {
+        "group": "TV",
+        "n": 7120,
+        "movement": 1121,
+        "rate": 0.1574438202247191
+      },
+      {
+        "group": "BL+MV",
+        "n": 4802,
+        "movement": 2663,
+        "rate": 0.5545605997501041
+      },
+      {
+        "group": "BL+TV+MV",
+        "n": 2511,
+        "movement": 1626,
+        "rate": 0.6475507765830346
+      },
+      {
+        "group": "BL+TV+FONE+MV",
+        "n": 2333,
+        "movement": 1622,
+        "rate": 0.695242177453922
+      },
+      {
+        "group": "TV+FONE",
+        "n": 1169,
+        "movement": 247,
+        "rate": 0.21129170230966637
+      },
+      {
+        "group": "FONE",
+        "n": 858,
+        "movement": 70,
+        "rate": 0.08158508158508158
+      },
+      {
+        "group": "BL+FONE+MV",
+        "n": 848,
+        "movement": 507,
+        "rate": 0.597877358490566
+      }
+    ],
+    "family_count": [
+      {
+        "group": "2",
+        "n": 91072,
+        "movement": 33605,
+        "rate": 0.36899376317638793
+      },
+      {
+        "group": "1",
+        "n": 90470,
+        "movement": 25011,
+        "rate": 0.27645628385100035
+      },
+      {
+        "group": "3",
+        "n": 65304,
+        "movement": 26302,
+        "rate": 0.40276246478010536
+      },
+      {
+        "group": "4",
+        "n": 2333,
+        "movement": 1622,
+        "rate": 0.695242177453922
+      }
+    ],
+    "mplay": [
+      {
+        "group": "UNKNOWN",
+        "n": 232017,
+        "movement": 79798,
+        "rate": 0.34393169466030504
+      },
+      {
+        "group": "MARCADO",
+        "n": 10587,
+        "movement": 5721,
+        "rate": 0.5403797109662793
+      },
+      {
+        "group": "NAO-MARCADO",
+        "n": 6705,
+        "movement": 1021,
+        "rate": 0.15227442207307978
+      }
+    ],
+    "mobile_flag": [
+      {
+        "group": "1",
+        "n": 136438,
+        "movement": 51558,
+        "rate": 0.37788592620824113
+      },
+      {
+        "group": "0",
+        "n": 112871,
+        "movement": 34982,
+        "rate": 0.30992903402999883
+      }
+    ],
+    "uf": [
+      {
+        "group": "SP",
+        "n": 108570,
+        "movement": 39762,
+        "rate": 0.36623376623376624
+      },
+      {
+        "group": "RJ",
+        "n": 35753,
+        "movement": 11951,
+        "rate": 0.3342656560288647
+      },
+      {
+        "group": "RS",
+        "n": 16132,
+        "movement": 4599,
+        "rate": 0.28508554425985616
+      },
+      {
+        "group": "MG",
+        "n": 14959,
+        "movement": 5660,
+        "rate": 0.3783675379370279
+      },
+      {
+        "group": "PR",
+        "n": 10356,
+        "movement": 3401,
+        "rate": 0.328408651989185
+      },
+      {
+        "group": "SC",
+        "n": 10024,
+        "movement": 3321,
+        "rate": 0.3313048683160415
+      },
+      {
+        "group": "DF",
+        "n": 7823,
+        "movement": 2728,
+        "rate": 0.3487153266010482
+      },
+      {
+        "group": "GO",
+        "n": 5860,
+        "movement": 1961,
+        "rate": 0.334641638225256
+      },
+      {
+        "group": "BA",
+        "n": 5692,
+        "movement": 1927,
+        "rate": 0.33854532677442023
+      },
+      {
+        "group": "AM",
+        "n": 4489,
+        "movement": 1665,
+        "rate": 0.37090666072621964
+      },
+      {
+        "group": "ES",
+        "n": 4087,
+        "movement": 1230,
+        "rate": 0.3009542451676046
+      },
+      {
+        "group": "PA",
+        "n": 3347,
+        "movement": 1198,
+        "rate": 0.3579324768449358
+      },
+      {
+        "group": "PE",
+        "n": 2828,
+        "movement": 928,
+        "rate": 0.32814710042432815
+      },
+      {
+        "group": "CE",
+        "n": 2528,
+        "movement": 833,
+        "rate": 0.32950949367088606
+      },
+      {
+        "group": "MS",
+        "n": 2444,
+        "movement": 816,
+        "rate": 0.33387888707037644
+      },
+      {
+        "group": "MT",
+        "n": 2405,
+        "movement": 709,
+        "rate": 0.2948024948024948
+      },
+      {
+        "group": "PB",
+        "n": 2375,
+        "movement": 790,
+        "rate": 0.33263157894736844
+      },
+      {
+        "group": "MA",
+        "n": 2004,
+        "movement": 598,
+        "rate": 0.29840319361277445
+      },
+      {
+        "group": "AL",
+        "n": 1824,
+        "movement": 630,
+        "rate": 0.34539473684210525
+      },
+      {
+        "group": "RN",
+        "n": 1724,
+        "movement": 614,
+        "rate": 0.3561484918793503
+      },
+      {
+        "group": "SE",
+        "n": 1069,
+        "movement": 322,
+        "rate": 0.30121608980355474
+      },
+      {
+        "group": "RO",
+        "n": 977,
+        "movement": 265,
+        "rate": 0.2712384851586489
+      },
+      {
+        "group": "PI",
+        "n": 761,
+        "movement": 250,
+        "rate": 0.328515111695138
+      },
+      {
+        "group": "AC",
+        "n": 550,
+        "movement": 175,
+        "rate": 0.3181818181818182
+      }
+    ],
+    "origin_family_count": [
+      {
+        "group": "SOLAR|2",
+        "n": 73103,
+        "movement": 27436,
+        "rate": 0.3753060749900825
+      },
+      {
+        "group": "SOLAR|1",
+        "n": 70879,
+        "movement": 20348,
+        "rate": 0.28708079967268163
+      },
+      {
+        "group": "SOLAR|3",
+        "n": 52060,
+        "movement": 20994,
+        "rate": 0.40326546292739146
+      },
+      {
+        "group": "LEGADO|1",
+        "n": 19591,
+        "movement": 4663,
+        "rate": 0.23801745699555918
+      },
+      {
+        "group": "LEGADO|2",
+        "n": 17969,
+        "movement": 6169,
+        "rate": 0.343313484334131
+      },
+      {
+        "group": "LEGADO|3",
+        "n": 13244,
+        "movement": 5308,
+        "rate": 0.40078526125037756
+      },
+      {
+        "group": "SOLAR|4",
+        "n": 1988,
+        "movement": 1373,
+        "rate": 0.6906438631790744
+      }
+    ],
+    "origin_month": [
+      {
+        "group": "SOLAR|2025-08",
+        "n": 29873,
+        "movement": 11115,
+        "rate": 0.37207511799953136
+      },
+      {
+        "group": "SOLAR|2025-07",
+        "n": 29360,
+        "movement": 11896,
+        "rate": 0.40517711171662124
+      },
+      {
+        "group": "SOLAR|2025-09",
+        "n": 29225,
+        "movement": 10404,
+        "rate": 0.35599657827202735
+      },
+      {
+        "group": "SOLAR|2025-06",
+        "n": 28681,
+        "movement": 9023,
+        "rate": 0.3145985146961403
+      },
+      {
+        "group": "SOLAR|2025-10",
+        "n": 28523,
+        "movement": 10411,
+        "rate": 0.3650036812397013
+      },
+      {
+        "group": "SOLAR|2025-11",
+        "n": 26741,
+        "movement": 9058,
+        "rate": 0.3387307879286489
+      },
+      {
+        "group": "SOLAR|2025-12",
+        "n": 25692,
+        "movement": 8244,
+        "rate": 0.3208780943484353
+      },
+      {
+        "group": "LEGADO|2025-12",
+        "n": 8843,
+        "movement": 2840,
+        "rate": 0.32115797806174373
+      },
+      {
+        "group": "LEGADO|2025-11",
+        "n": 8171,
+        "movement": 2756,
+        "rate": 0.3372904173295802
+      },
+      {
+        "group": "LEGADO|2025-06",
+        "n": 7494,
+        "movement": 2036,
+        "rate": 0.27168401387776886
+      },
+      {
+        "group": "LEGADO|2025-10",
+        "n": 7036,
+        "movement": 2389,
+        "rate": 0.33953951108584424
+      },
+      {
+        "group": "LEGADO|2025-09",
+        "n": 6704,
+        "movement": 2023,
+        "rate": 0.3017601431980907
+      },
+      {
+        "group": "LEGADO|2025-07",
+        "n": 6663,
+        "movement": 2355,
+        "rate": 0.3534443944169293
+      },
+      {
+        "group": "LEGADO|2025-08",
+        "n": 6303,
+        "movement": 1990,
+        "rate": 0.3157226717436141
+      }
+    ]
+  },
+  "movement_combinations_retained": {
+    "NONE": 162769,
+    "BL": 51962,
+    "BL+TV": 13404,
+    "TV": 7091,
+    "BL+FONE": 4125,
+    "BL+TV+FONE": 2906,
+    "MV": 2355,
+    "FONE": 2023,
+    "BL+MV": 1315,
+    "TV+FONE": 642,
+    "BL+TV+MV": 282,
+    "BL+FONE+MV": 133,
+    "BL+TV+FONE+MV": 128,
+    "TV+MV": 124,
+    "FONE+MV": 32,
+    "TV+FONE+MV": 18
+  },
+  "product_presence_and_flags": {
+    "BL": {
+      "present_m0": 239562,
+      "movement_flag": 74255,
+      "movement_flag_with_initial_presence": 74255,
+      "movement_flag_without_initial_presence": 0,
+      "cancellation_flag": 22478
+    },
+    "TV": {
+      "cancellation_flag": 19381,
+      "present_m0": 138754,
+      "movement_flag": 24595,
+      "movement_flag_with_initial_presence": 24595,
+      "movement_flag_without_initial_presence": 0
+    },
+    "FONE": {
+      "present_m0": 88578,
+      "cancellation_flag": 17059,
+      "movement_flag": 10007,
+      "movement_flag_with_initial_presence": 10007,
+      "movement_flag_without_initial_presence": 0
+    },
+    "MV": {
+      "present_m0": 10964,
+      "movement_flag": 4387,
+      "movement_flag_with_initial_presence": 4387,
+      "movement_flag_without_initial_presence": 0
+    }
+  },
+  "product_transition_economics_retained": {
+    "BL": {
+      "unchanged": {
+        "n": 142829,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 142829,
+        "negative_share_priced": 0.011951354416820114,
+        "average_delta_priced": 0.9751525250474343
+      },
+      "replacement": {
+        "n": 74255,
+        "move_flag": 74255,
+        "cancel_flag": 0,
+        "priced": 74255,
+        "negative_share_priced": 0.8003232105582115,
+        "average_delta_priced": -22.080894350548785
+      },
+      "absent": {
+        "n": 9747,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 9747,
+        "negative_share_priced": 0.0,
+        "average_delta_priced": 0.0
+      },
+      "removal": {
+        "n": 22478,
+        "move_flag": 0,
+        "cancel_flag": 22478,
+        "priced": 22478,
+        "negative_share_priced": 0.9628525669543554,
+        "average_delta_priced": -101.3242984251268
+      }
+    },
+    "TV": {
+      "removal": {
+        "n": 19381,
+        "move_flag": 0,
+        "cancel_flag": 19381,
+        "priced": 19381,
+        "negative_share_priced": 0.9780197100252825,
+        "average_delta_priced": -118.33254166451681
+      },
+      "replacement": {
+        "n": 24595,
+        "move_flag": 24595,
+        "cancel_flag": 0,
+        "priced": 24595,
+        "negative_share_priced": 0.7436877414108559,
+        "average_delta_priced": -30.756236633462088
+      },
+      "absent": {
+        "n": 110555,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 110555,
+        "negative_share_priced": 0.006557821898602506,
+        "average_delta_priced": -0.36645036407218123
+      },
+      "unchanged": {
+        "n": 94778,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 94778,
+        "negative_share_priced": 0.07959653084049041,
+        "average_delta_priced": 1.4603991432610943
+      }
+    },
+    "FONE": {
+      "absent": {
+        "n": 160731,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 160731,
+        "negative_share_priced": 0.0,
+        "average_delta_priced": 0.0
+      },
+      "unchanged": {
+        "n": 61512,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 61512,
+        "negative_share_priced": 0.0,
+        "average_delta_priced": 0.0
+      },
+      "removal": {
+        "n": 17059,
+        "move_flag": 0,
+        "cancel_flag": 17059,
+        "priced": 17059,
+        "negative_share_priced": 0.0,
+        "average_delta_priced": 0.0
+      },
+      "replacement": {
+        "n": 10007,
+        "move_flag": 10007,
+        "cancel_flag": 0,
+        "priced": 10007,
+        "negative_share_priced": 0.0,
+        "average_delta_priced": 0.0
+      }
+    },
+    "MV": {
+      "absent": {
+        "n": 238345,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 238345,
+        "negative_share_priced": 0.0,
+        "average_delta_priced": 0.0
+      },
+      "unchanged": {
+        "n": 6577,
+        "move_flag": 0,
+        "cancel_flag": 0,
+        "priced": 6577,
+        "negative_share_priced": 0.04318078151132735,
+        "average_delta_priced": -1.6378546449749125
+      },
+      "replacement": {
+        "n": 4387,
+        "move_flag": 4387,
+        "cancel_flag": 0,
+        "priced": 4387,
+        "negative_share_priced": 0.5393207203100069,
+        "average_delta_priced": -4.811050832003647
+      }
+    }
+  },
+  "retained_value_distributions": {
+    "all_retained": {
+      "n": 249309,
+      "negative": 0.40051101243837967,
+      "positive": 0.11633354592092544,
+      "zero": 0.4831554416406949,
+      "median_delta": 0.0,
+      "p10_delta": -108.50000000000003,
+      "p90_delta": 5.0,
+      "mean_delta": -27.12190261883847,
+      "relative_sum_delta": -0.15240814391955182
+    },
+    "no_movement_with_cancel": {
+      "n": 32318,
+      "negative": 0.8110340986447181,
+      "positive": 0.02419704189615694,
+      "zero": 0.16476885945912495,
+      "median_delta": -104.9,
+      "p10_delta": -225.06599999999997,
+      "p90_delta": 0.0,
+      "mean_delta": -111.52654557831549,
+      "relative_sum_delta": -0.6669007880946243
+    },
+    "origin:SOLAR": {
+      "n": 198095,
+      "negative": 0.4248618087281355,
+      "positive": 0.11558595623312047,
+      "zero": 0.45955223503874404,
+      "median_delta": 0.0,
+      "p10_delta": -114.35599999999998,
+      "p90_delta": 5.0,
+      "mean_delta": -29.74238632979126,
+      "relative_sum_delta": -0.16500185994513739
+    },
+    "month:2025-06": {
+      "n": 36175,
+      "negative": 0.3486109191430546,
+      "positive": 0.23018659295093297,
+      "zero": 0.42120248790601245,
+      "median_delta": 0.0,
+      "p10_delta": -101.7,
+      "p90_delta": 12.21200000000005,
+      "mean_delta": -21.526141257774707,
+      "relative_sum_delta": -0.12207816395587812
+    },
+    "moving_without_cancel": {
+      "n": 73379,
+      "negative": 0.7645784216192644,
+      "positive": 0.16343913108655064,
+      "zero": 0.07198244729418499,
+      "median_delta": -22.47999999999996,
+      "p10_delta": -87.82,
+      "p90_delta": 14.520000000000016,
+      "mean_delta": -28.20448765995721,
+      "relative_sum_delta": -0.15351753928401524
+    },
+    "month:2025-09": {
+      "n": 35929,
+      "negative": 0.42375240056778646,
+      "positive": 0.07111247181942164,
+      "zero": 0.5051351276127919,
+      "median_delta": 0.0,
+      "p10_delta": -114.9,
+      "p90_delta": 0.0,
+      "mean_delta": -30.521856995741597,
+      "relative_sum_delta": -0.17017356191923738
+    },
+    "no_movement_no_cancel": {
+      "n": 130451,
+      "negative": 0.0426443645506742,
+      "positive": 0.11781435174893255,
+      "zero": 0.8395412837003933,
+      "median_delta": 0.0,
+      "p10_delta": 0.0,
+      "p90_delta": 5.9299999999999855,
+      "mean_delta": 0.8170129013959265,
+      "relative_sum_delta": 0.004695991571784797
+    },
+    "month:2025-12": {
+      "n": 34535,
+      "negative": 0.3842478644853048,
+      "positive": 0.0799478789633705,
+      "zero": 0.5358042565513248,
+      "median_delta": 0.0,
+      "p10_delta": -109.44,
+      "p90_delta": 0.0,
+      "mean_delta": -26.779685825973647,
+      "relative_sum_delta": -0.1509333675209179
+    },
+    "origin:LEGADO": {
+      "n": 51214,
+      "negative": 0.3063224899441559,
+      "positive": 0.11922521185613309,
+      "zero": 0.574452298199711,
+      "median_delta": 0.0,
+      "p10_delta": -79.87399999999998,
+      "p90_delta": 7.420000000000002,
+      "mean_delta": -16.985910102706292,
+      "relative_sum_delta": -0.10047103755016851
+    },
+    "month:2025-11": {
+      "n": 34912,
+      "negative": 0.3961961503208066,
+      "positive": 0.08114688359303392,
+      "zero": 0.5226569660861595,
+      "median_delta": 0.0,
+      "p10_delta": -106.09299999999998,
+      "p90_delta": 0.0,
+      "mean_delta": -26.65080917736022,
+      "relative_sum_delta": -0.15184276782952488
+    },
+    "month:2025-10": {
+      "n": 35559,
+      "negative": 0.4207936106189713,
+      "positive": 0.07840490452487416,
+      "zero": 0.5008014848561546,
+      "median_delta": 0.0,
+      "p10_delta": -111.38400000000001,
+      "p90_delta": 0.0,
+      "mean_delta": -29.33769706684665,
+      "relative_sum_delta": -0.16444533999372224
+    },
+    "month:2025-07": {
+      "n": 36023,
+      "negative": 0.40199317102961996,
+      "positive": 0.2025650278988424,
+      "zero": 0.39544180107153765,
+      "median_delta": 0.0,
+      "p10_delta": -104.90000000000002,
+      "p90_delta": 11.379999999999995,
+      "mean_delta": -25.43610720928296,
+      "relative_sum_delta": -0.14234627683444978
+    },
+    "month:2025-08": {
+      "n": 36176,
+      "negative": 0.4276039363113667,
+      "positive": 0.06750331711632021,
+      "zero": 0.5048927465723131,
+      "median_delta": 0.0,
+      "p10_delta": -110.525,
+      "p90_delta": 0.0,
+      "mean_delta": -29.622758182220252,
+      "relative_sum_delta": -0.16468579146954554
+    },
+    "moving_with_cancel": {
+      "n": 13161,
+      "negative": 0.909733302940506,
+      "positive": 0.06526859661119976,
+      "zero": 0.024998100448294203,
+      "median_delta": -88.96,
+      "p10_delta": -181.79999999999998,
+      "p90_delta": -4.400000000000034,
+      "mean_delta": -90.75165792872882,
+      "relative_sum_delta": -0.4290013690494062
+    }
+  },
+  "channel_comparison_standardized": {
+    "identified": true,
+    "raw_solar_minus_legado": 0.034117916391809056,
+    "standardized_solar_minus_legado": 0.029310517496320545,
+    "common_support_retained_records": 248864,
+    "all_retained_records": 249309,
+    "common_support_coverage": 0.9982150664436502,
+    "strata_available": 26,
+    "strata_total": 35,
+    "ci_95_cluster_poisson": [
+      0.02534121199066324,
+      0.034084352111844796
+    ],
+    "bootstrap_draws": 200,
+    "unique_clients_clustered": 235462,
+    "noncausal_warning": "Channel assignment and retention status are not randomized; CI does not remove confounding."
+  },
+  "interpretation_notes": [
+    "Status and offer acceptance are different constructs.",
+    "Post-retention conditional associations do not identify effects of sales channels.",
+    "Unknown event times and censoring prevent Kaplan-Meier or Cox survival estimation.",
+    "Open-case bounds are binary-outcome sensitivity scenarios, not survival estimates.",
+    "Values at M0 and M30 are not reconciled to billed revenue, cost or margin.",
+    "Product transition counts and flag semantics must be validated by business owners.",
+    "Bootstrap describes repeated-record sampling variation, not representativeness or hidden confounding."
+  ]
+}
