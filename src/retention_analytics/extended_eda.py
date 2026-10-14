@@ -163,7 +163,9 @@ def analyze_records(
             ("origin_family_count", f"{orig}|{k}"),
             ("origin_month", f"{orig}|{m}"),
         ):
-            c = profile[(dim, label)]; c["n"] += 1; c["movement"] += y
+            c = profile[(dim, label)]
+            c["n"] += 1
+            c["movement"] += y
         values_m0, values_m30 = [], []
         for f in PRODUCTS:
             before = _product_id(row, f, "M0")
@@ -173,7 +175,9 @@ def analyze_records(
                           else "replacement" if before is not None and after is not None and before != after
                           else "unchanged" if before is not None and after is not None else "absent")
             cc = transitions[(f, transition)]
-            cc["n"] += 1; cc["move_flag"] += f in moved; cc["cancel_flag"] += f in cancels
+            cc["n"] += 1
+            cc["move_flag"] += f in moved
+            cc["cancel_flag"] += f in cancels
             a, b = _number(row.get(f"VALOR_{f}_M0")), _number(row.get(f"VALOR_{f}_M30"))
             if a is not None and b is not None:
                 d = b - a
@@ -182,7 +186,8 @@ def analyze_records(
                 cc["positive"] += d > 1e-8
                 cc["unchanged_value"] += abs(d) <= 1e-8
                 cc["delta_cents"] += round(d * 100)
-                values_m0.append(a); values_m30.append(b)
+                values_m0.append(a)
+                values_m30.append(b)
             else:
                 overall["missing_product_value_pair"] += 1
         if len(values_m0) == 4:
@@ -192,15 +197,20 @@ def analyze_records(
                    "no_movement_with_cancel" if cancels else "no_movement_no_cancel")
             for label in ("all_retained", cat, f"origin:{orig}", f"month:{m}"):
                 cell = money[label]
-                cell["n"] += 1; cell["sum_m0_cents"] += round(sum(values_m0) * 100)
+                cell["n"] += 1
+                cell["sum_m0_cents"] += round(sum(values_m0) * 100)
                 cell["sum_m30_cents"] += round(sum(values_m30) * 100)
-                cell["neg"] += diff < -1e-8; cell["pos"] += diff > 1e-8
+                cell["neg"] += diff < -1e-8
+                cell["pos"] += diff > 1e-8
                 cell["zero"] += abs(diff) <= 1e-8
                 revenue_deltas[label].append(diff)
         ident = str(row.get("id_cliente") or "").strip()
         if orig in ORIGINS and ident and 0 <= k <= 4:
-            client_ids.append(ident); months.append(int(m[-2:]) - 6)
-            family_counts.append(k); origins.append(ORIGINS.index(orig)); movements.append(y)
+            client_ids.append(ident)
+            months.append(int(m[-2:]) - 6)
+            family_counts.append(k)
+            origins.append(ORIGINS.index(orig))
+            movements.append(y)
     reported_profiles = {}
     for (dimension, label), c in profile.items():
         if c["n"] < 500:
