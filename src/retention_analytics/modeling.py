@@ -46,20 +46,36 @@ def prepare_partitions(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
         if not record["client_id"]:
             continue
         month = record["month"]
-        split = "train" if month <= "2025-09" else "val" if month == "2025-10" else "test"
+        if month <= "2025-09":
+            split = "train"
+        elif month == "2025-10":
+            split = "val"
+        else:
+            split = "test"
         grouped[split].append(record)
-    val_and_test_ids = {r["client_id"] for split in ("val", "test") for r in grouped[split]}
+    val_and_test_ids = {
+        r["client_id"]
+        for part in ("val", "test")
+        for r in grouped[part]
+    }
     test_ids = {r["client_id"] for r in grouped["test"]}
     removed_train = sum(r["client_id"] in val_and_test_ids for r in grouped["train"])
     removed_val = sum(r["client_id"] in test_ids for r in grouped["val"])
-    grouped["train"] = [r for r in grouped["train"] if r["client_id"] not in val_and_test_ids]
+    grouped["train"] = [
+        r for r in grouped["train"]
+        if r["client_id"] not in val_and_test_ids
+    ]
     grouped["val"] = [r for r in grouped["val"] if r["client_id"] not in test_ids]
     return {
         "partitions": grouped,
         "dropped_overlap_train": removed_train,
         "dropped_overlap_validation": removed_val,
         "excluded_open": open_count,
-        "split_periods": {"train": "2025-06..2025-09", "val": "2025-10", "test": "2025-11..2025-12"},
+        "split_periods": {
+            "train": "2025-06..2025-09",
+            "val": "2025-10",
+            "test": "2025-11..2025-12",
+        },
     }
 
 
@@ -116,7 +132,10 @@ def evaluate_models(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
     if any(not data[part] for part in ("train", "val", "test")):
         raise ValueError("At least one temporal split has no closed leads")
     x = {k: _matrix(v) for k, v in data.items()}
-    y = {k: np.array([int(r["retained_movement"]) for r in v], dtype=int) for k, v in data.items()}
+    y = {
+        k: np.array([int(r["retained_movement"]) for r in v], dtype=int)
+        for k, v in data.items()
+    }
     models = {
         "baseline_constant": DummyClassifier(strategy="prior"),
         "logistic": _model(LogisticRegression(max_iter=700, C=0.2, random_state=42)),
@@ -135,9 +154,19 @@ def evaluate_models(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
         estimator = models[name]
         probability = estimator.predict_proba(x["test"])[:, 1]
         test_scores[name] = evaluation(y["test"], probability)
-    counts = {k: {"n": len(v), "positive": int(y[k].sum()), "clients": len({r["client_id"] for r in v})} for k, v in data.items()}
+    counts = {
+        k: {
+            "n": len(v),
+            "positive": int(y[k].sum()),
+            "clients": len({r["client_id"] for r in v}),
+        }
+        for k, v in data.items()
+    }
     return {
-        "task": "composite event RETIDO and any FLAG_MOV among leads with a closed status",
+        "task": (
+            "composite event RETIDO and any FLAG_MOV "
+            "among leads with a closed status"
+        ),
         "decision_time": "M0 (start of funnel); all predictors use M0 or static fields",
         "target_definition": "PROVISIONAL_NOT_VALIDATED",
         "splits": partitions,
@@ -147,11 +176,15 @@ def evaluate_models(records: Iterable[dict[str, Any]]) -> dict[str, Any]:
         "selected_by_validation_brier": winner,
         "test_metrics": test_scores,
         "limitations": [
-            "Unknown official episode key; repeated episodes of a customer within a split remain.",
-            "Cross-period customer IDs are purged to prevent direct leakage across splits.",
+            "Unknown official episode key; repeated episodes of a "
+            "customer within a split remain.",
+            "Cross-period customer IDs are purged to prevent direct "
+            "leakage across splits.",
             "Open leads are excluded; closure/maturity selection bias is possible.",
-            "Class labels and M0 availability are unvalidated, and observable period is only seven months.",
-            "Predictive discrimination does not demonstrate causal uplift from an offer.",
+            "Class labels and M0 availability are unvalidated, and "
+            "observable period is only seven months.",
+            "Predictive discrimination does not demonstrate causal "
+            "uplift from an offer.",
             "Models have not been calibrated or validated on future unseen periods.",
         ],
     }

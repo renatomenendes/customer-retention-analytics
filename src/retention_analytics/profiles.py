@@ -8,7 +8,6 @@ from __future__ import annotations
 import json
 import math
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
 from pathlib import Path
 from statistics import median
 from typing import Any, Iterable, Mapping
@@ -80,7 +79,9 @@ def record_profile(row: Mapping[str, str | None]) -> dict[str, Any] | None:
     }
 
 
-def wilson_interval(count: int, n: int, z: float = 1.95996398454) -> tuple[float | None, float | None]:
+def wilson_interval(
+    count: int, n: int, z: float = 1.95996398454
+) -> tuple[float | None, float | None]:
     """Binomial Wilson interval; descriptive, not adjusted for repeated customers."""
     if n <= 0:
         return None, None
@@ -91,7 +92,9 @@ def wilson_interval(count: int, n: int, z: float = 1.95996398454) -> tuple[float
     return center - radius, center + radius
 
 
-def summarize_profiles(records: Iterable[dict[str, Any]], min_group_n: int = 100) -> dict[str, Any]:
+def summarize_profiles(
+    records: Iterable[dict[str, Any]], min_group_n: int = 100
+) -> dict[str, Any]:
     """Summarize sample groups and value differences without exposing raw records."""
     if min_group_n < 30:
         raise ValueError("Minimum group size must be at least 30")
@@ -203,7 +206,8 @@ def summarize_profiles(records: Iterable[dict[str, Any]], min_group_n: int = 100
         "value_snapshot_comparison": economics,
         "limitations": [
             "Row-level episodes are not officially identified and may repeat clients.",
-            "Wilson intervals assume independent records and are optimistic under repeated IDs.",
+            "Wilson intervals assume independent records and are "
+            "optimistic under repeated IDs.",
             "M0/M30 value is not a validated measure of realized revenue.",
             "Status RETIDO represents a funnel outcome, not long-run survival.",
             "Observed associations do not establish causal effects of offers.",
@@ -219,5 +223,7 @@ def analyze_workbook(path: str | Path, output_path: str | Path) -> dict[str, Any
     )
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
+    output.write_text(
+        json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
     return result
