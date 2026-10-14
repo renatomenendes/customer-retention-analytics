@@ -11,11 +11,12 @@ requires-python = ">=3.11"
 dependencies = ["lxml>=5.0,<7"]
 
 [project.optional-dependencies]
-analysis = ["jupyter>=1.0,<2", "nbformat>=5.9,<6", "nbclient>=0.10,<1", "matplotlib>=3.8,<4"]
-dev = ["pytest>=8,<10", "ruff>=0.8,<1"]
+analysis = ["jupyter>=1.0,<2", "nbformat>=5.9,<6", "nbclient>=0.10,<1", "matplotlib>=3.8,<4", "numpy>=1.26,<3", "scikit-learn>=1.5,<2"]
+dev = ["pytest>=8,<10", "ruff>=0.8,<1", "numpy>=1.26,<3", "scikit-learn>=1.5,<2"]
 
 [project.scripts]
 retention-audit = "retention_analytics.cli:main"
+retention-analyze = "retention_analytics.analysis_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
