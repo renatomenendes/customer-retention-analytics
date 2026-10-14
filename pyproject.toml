@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "customer-retention-analytics"
+version = "0.1.0"
+description = "Privacy-first, reproducible retention funnel analytics"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["lxml>=5.0,<7"]
+
+[project.optional-dependencies]
+analysis = ["jupyter>=1.0,<2", "nbformat>=5.9,<6", "nbclient>=0.10,<1", "matplotlib>=3.8,<4"]
+dev = ["pytest>=8,<10", "ruff>=0.8,<1"]
+
+[project.scripts]
+retention-audit = "retention_analytics.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

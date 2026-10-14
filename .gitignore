@@ -58,3 +58,9 @@ dist/
 /data/raw/
 /data/interim/
 /data/processed/
+
+# Local notebooks executed against confidential data and reports
+/notebooks/.executed/
+/notebooks/*executed*.ipynb
+/reports/private/
+/reports/figures/
