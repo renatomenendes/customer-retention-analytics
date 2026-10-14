@@ -1,5 +1,10 @@
 """Synthetic-only tests for provisional case analysis."""
-from retention_analytics.profiles import record_profile, summarize_profiles, wilson_interval
+
+from retention_analytics.profiles import (
+    record_profile,
+    summarize_profiles,
+    wilson_interval,
+)
 
 
 def _case(state="RETIDO", flag="1", client="TEST-001"):
@@ -36,7 +41,8 @@ def test_suppressed_groups_and_economics():
     sample = [record_profile(_case(client=f"TEST-{i}")) for i in range(32)]
     result = summarize_profiles(sample, min_group_n=30)
     assert result["overall"]["retained_movement"] == 32
-    assert result["value_snapshot_comparison"]["retained_movement"]["median_change"] == -20
+    movement = result["value_snapshot_comparison"]["retained_movement"]
+    assert movement["median_change"] == -20
     assert all(item["n"] >= 30 for item in result["segments"])
 
 
