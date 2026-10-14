@@ -12,8 +12,8 @@
 | DEC-006 | Amostra | Amostra aleatória vs. quotas por mês/origem. **Não extrapolar** ao universo até conhecer seleção e pesos. | **Pendente:** plano amostral |
 | DEC-007 | Modelagem | Perfil descritivo vs. predição em M0. **Começar pela caracterização descritiva**, avaliar predição após validação. | **Provisório** |
 | DEC-008 | Validação | Split aleatório vs. temporal/cliente. **Preferir temporal com segregação por cliente**, examinar viabilidade. | **Provisório** |
-| DEC-009 | GitHub | Repositório privado `renatomenendes/customer-retention-analytics` acessível em 2026-10-14. **Usar branch e PR; preservar `main`.** | **Confirmado para manutenção de código e documentação** |
-| DEC-010 | Confidencialidade | Publicação de amostra/resultados vs. documentação e código apenas. **Dados brutos e resultados identificáveis excluídos do Git**, inclusive privado. | **Em vigor; requer liberação específica de dados** |
+| DEC-009 | GitHub | Repositório inexistente entre os acessíveis. **Nenhum push ou criação automatizada**. | **Aguardando criação privada e acesso** |
+| DEC-010 | Confidencialidade | Publicação de amostra/resultados vs. documentação e código apenas. **Dados excluídos do Git**. | **Em vigor até autorização** |
 
 ## Informações essenciais a solicitar ao responsável pelo negócio
 
@@ -22,20 +22,16 @@
 3. `FLAG_MOV_*` captura mudança de produto/plano, mudança de preço, oferta aceita ou outros eventos? E `FLAG_CANC_*`?
 4. `VALOR_*` significa mensalidade recorrente, cobrança, receita líquida ou valor de catálogo? Inclui descontos, impostos, créditos ou bundles?
 5. Como a amostra foi extraída? Há filtros, quotas, pesos ou defasagem de atualização em dezembro?
-6. Há autorização da proprietária dos dados para publicar resultados agregados? Qual limiar de divulgação por grupo? A autorização para manter o repositório privado não constitui liberação de dados nem de resultados comerciais.
+6. O material e os resultados agregados podem ser versionados em repositório privado? Há limiar de divulgação por grupo e autorização para portfólio público?
 
 ## Padrão de atualização
 
 Registrar data, decisão, proprietário, evidência, alternativas, impacto técnico e possíveis reversões quando uma definição for confirmada.
-## Registro de execução — 2026-10-14
 
-- Repositório verificado pela integração GitHub: privado; branch `main`; conteúdo inicial apenas `LICENSE` (Unlicense); sem PRs abertos no momento da inspeção.
-- Autorização concedida pelo responsável pelo projeto para criação de branches, commits e PRs de documentação/código relacionados ao projeto.
-- Manter a base e o manifesto de fingerprints localmente; não versionar nem publicar dados brutos, IDs de clientes ou resultados identificáveis.
-- Restrições de negócio DEC-001 a DEC-006 continuam pendentes de confirmação pelo detentor da definição oficial.
+## Decisões científicas a partir da reexecução condicional em 2026-10-14
 
-## Referências técnicas autorizadas — 2026-10-14
-
-- **DEC-011 — Reutilização de conhecimento:** autorizada a consulta a outros repositórios da conta; registrar a aplicabilidade e origem em [`repository_reuse_assessment.md`](repository_reuse_assessment.md). **Aprovado para referência conceitual, não para transferir dados, códigos ou configurações sem revisão.**
-- **DEC-012 — Sobrevivência:** Kaplan–Meier/Cox apenas após identificar duração observada, evento datado, censura e população elegível. **Condicionado; não implementar ainda.**
-- **DEC-013 — Contratos analíticos e governança:** usar requisitos de dados, grain, testes de cardinalidade, rastreabilidade de KPIs e distinção entre fato, inferência e contexto de negócio, inspirados nos projetos inspecionados. **Aprovado como princípio de implementação; código e testes pendentes.**
+- **DEC-014 — Perfil central:** estimar e apresentar `P(FLAG_MOV=1 | RETIDO=1, X_M0)` para caracterizar a população solicitada pelo case. O evento composto permanece análise secundária, não substituto do perfil entre retidos.
+- **DEC-015 — Aceite de oferta:** não existe campo observável da decisão de aceite. Foi testada uma proxy de troca de código/plano sem cancelamento; ela coincide exatamente com a flag ampla de movimentação no grupo retido e **não produz evidência independente**. Cenários de aceite não podem receber status de resultados observados.
+- **DEC-016 — Comparação condicional:** baseline de prevalência, regressão logística regularizada, árvore curta e gradient boosting avaliados no mesmo holdout temporal. Escolha por Brier na validação; todos os modelos foram avaliados no teste para comparação de métodos.
+- **DEC-017 — Receita:** o DOCX define `valor` como valor monetário pago ao cliente associado ao lead; diferenças entre M0/M30 são descritas como valores registrados, sem declarar impacto incremental sobre faturamento, margem ou efeitos de uma oferta.
+- **DEC-018 — Divulgação:** síntese, tabelas de grupos grandes e notebook executado com agregados foram mantidos no repositório privado; a base, IDs de cliente e métricas por grupos pequenos permanecem fora do Git.

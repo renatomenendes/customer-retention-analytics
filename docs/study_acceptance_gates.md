@@ -1,46 +1,23 @@
-# Critérios de aceite científico e operacional
+# Critérios de conclusão do estudo frente ao enunciado do case
 
-Este checklist substitui a interpretação equivocada de que “notebooks executam” ou “CI verde” equivale a estudo concluído. `CI` valida requisitos de software; dados, inferência, impacto econômico e comunicação demandam outras evidências.
+**Referência:** `Objetivo do Case.docx`, três páginas. **Recorte:** junho a dezembro de 2025. Esta matriz descreve o escopo *mensurável na fonte recebida*, não o ciclo de desenvolvimento do repositório.
 
-## Fundamentação
+| Pergunta ou entrega | Evidência produzida | Limite documentado |
+|---|---|---|
+| Caracterização descritiva da amostra | Auditoria da planilha completa, 303.652 registros no recorte, status, repetições e evolução mensal | Registro do funil sem chave oficial de episódio |
+| Identificar retidos com movimentação | 249.309 `RETIDO`; 86.540 com alguma `FLAG_MOV`, 34,7% entre retidos | O rótulo é o status do atendimento, não sobrevivência futura |
+| Identificar perfis entre retidos | Mix inicial, quantidade de famílias, região/UF, MPlay, origem, classificação e posse móvel; taxas com denominadores explícitos | Grupos não têm efeito causal; MPlay tem grande parcela sem informação |
+| Conferir se a maior movimentação de multiprodutos é estrutural | Taxa por qualquer movimentação e incidência por família presente em M0 | Normalização por oportunidade não elimina seleção de ofertas |
+| Aceite de ofertas | Hipótese explicitada, testadas flags e proxy de alteração contratual; coincidência das duas na amostra | **Não identificável** como taxa verdadeira sem oferta apresentada e decisão registrada; qualquer simulação é rotulada hipótese |
+| Explorar produtos BL, TV, Fone, MV | Transições de códigos M0/M30, flags de movimento e cancelamento, variações de valor por família | Cancelamento parcial não representa churn de relacionamento |
+| Examinar valor pago associado ao lead | Δ valores M0/M30, sinal de redução, resumo por transição e família | Sem conciliação de faturamento, não se afirma margem ou efeito incremental |
+| Modelagem analítica adequada à pergunta central | Baseline, regressão regularizada, árvore curta e boosting para `MOV` entre retidos, mesmo teste temporal, AP/AUC/Brier/log-loss/lift e calibração | **Retenção condicionante** conhecida apenas após atendimento; não aplicar pontuação ex-ante à população geral |
+| Robustez e explicação | Teste nov–dez, métricas por mês/origem, split disjunto por cliente e sensibilidade primeiro registro retido por ID | Não há histórico pós-dezembro nem chave oficial do episódio |
+| Notebook documentado e apresentação | Notebooks 01–06, síntese executada com agregados, relatório e apresentação de 20 slides | Dados confidenciais não versionados; artefatos descrevem associação e hipóteses |
+| Estratégia de retenção | Seis recomendações associadas a evidência, público/tema, KPI e desenho de validação | Ganhos incrementais exigem medição causal e financeira adicional |
 
-- [x] Fontes do case e período delimitados.
-- [x] Variáveis e hipóteses operacionais registradas.
-- [x] Revisão de estudos e repositórios externos com aplicabilidade explícita.
-- [ ] Identificador do episódio de atendimento confirmado pelo negócio.
-- [ ] Semântica de retenção, movimentação, valor monetário e janela de desfecho confirmadas.
-- [ ] Amostragem, representatividade e autorização de divulgação documentadas.
+## Limites da fonte, não itens disfarçados de análise concluída
 
-## Investigação
+Sem **ID do lead**, **registro da oferta apresentada/aceita**, **data individual de encerramento**, **faturamento conciliado por competência**, **histórico de retenção posterior** e **plano amostral**, certas afirmações não são estimáveis. O estudo deve demonstrar esses limites e **não inventar valores** para satisfazer formalmente o enunciado.
 
-- [x] Auditoria de integridade e cortes mensais executada localmente.
-- [x] Mapeamento de status em aberto, repetições e flags.
-- [ ] Comparação por oportunidade efetiva de movimentação concluída e interpretada.
-- [ ] Sensibilidade para registros recorrentes e estados incompletos documentada.
-- [ ] Testes de estabilidade das associações por mês, origem e mix concluídos.
-
-## Modelagem
-
-- [x] Modelo inicial com divisão temporal e baseline constante (provisório).
-- [ ] Alvos condicionados e compostos comparados explicitamente.
-- [ ] Benchmark competitivo sobre mesmos splits, com orçamento/hiperparâmetros registrados.
-- [ ] Calibração avaliada por curva e medidas independentes; limiar baseado em critério de negócio.
-- [ ] Variação fora do tempo e intervalos agrupados por cliente quantificados.
-- [ ] Impacto de atraso de desfecho e exclusões examinado.
-
-## Inteligência de negócio
-
-- [ ] Perfil-alvo com efeito/taxa, denominadores e incerteza apresentados.
-- [ ] Variação econômica por produto e retenção/cancelamento parcial conciliada.
-- [ ] Recomendações priorizadas, cada uma com hipótese, risco, teste e KPI.
-- [ ] Avaliação econômica só após unidade e custo validados, senão cenários ilustrativos.
-
-## Entrega e divulgação
-
-- [x] Projeto privado versionado e CI de testes sintéticos.
-- [ ] Todos os resultados e gráficos rastreáveis até execução reproduzível.
-- [ ] Apresentação executiva revisada e consistente com limites metodológicos.
-- [ ] Revisão final de segurança, copyright e divulgação.
-- [ ] Material de portfólio público somente com aprovação ou dados sintéticos.
-
-**Condição para fechamento:** todos os itens mandatórios atendidos ou dispensados por decisão formal fundamentada, com limites explicitados. Não há autorização metodológica implícita por aprovação do CI.
+O repositório privado mantém a investigação observacional e sua documentação. Qualquer divulgação pública de números agregados exige liberação específica.

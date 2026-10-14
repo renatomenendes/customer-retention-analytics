@@ -16,3 +16,10 @@
 | R-12 | Classes e segmentos pequenos | Instabilidade e reidentificação | Limiar de supressão a estabelecer com governança |
 
 **Aviso:** este documento descreve riscos e observações de estrutura, não certifica que a base tenha passado em testes nem que exista impacto financeiro mensurado.
+
+## Limites resolvidos por formulação e não por imputação
+
+- **Aceite de ofertas:** o DOCX descreve o perfil de quem aceita ofertas, mas a planilha não registra apresentação, proposta, aceite ou recusa. A coincidência exata da flag ampla com a proxy contratual restritiva nos retidos prova que as duas não são sinais independentes; **não autoriza inferir aceite real**.
+- **Predição condicionada ao status final:** a regressão/árvore/boosting de `MOV | RETIDO` descreve retrospectivamente características e não é pontuação operacional para todos os clientes em M0, porque `RETIDO` só será conhecido ao fim do atendimento.
+- **Valores e produto:** o DOCX identifica `valor` como montante pago, mas a planilha não possui conciliação contábil ou custo de oferta; diferenças observadas por produto não estimam preservação de receita incremental.
+- **Estabilidade/representatividade:** testes novembro–dezembro e cortes por origem validam a divisão observacional; não demonstram estabilidade em períodos futuros nem corrigem a seleção da amostra e episódios repetidos.

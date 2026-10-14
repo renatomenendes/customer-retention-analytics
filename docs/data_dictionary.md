@@ -31,3 +31,11 @@ Este documento usa o enunciado do case e **nomes de colunas informados pelos art
 - Uso, moeda e periodicidade de `VALOR_*` e tratamento de descontos/créditos.
 - Semântica exata de `FLAG_MOV_*`, `FLAG_CANC_*` e codificações de produto/pacote.
 - Momento de coleta de origem, elegibilidade e classificação regional, para prevenir leakage.
+
+## Aceite de ofertas e leitura das flags no estudo executado
+
+O DOCX cita clientes que aceitam ofertas, mas **não define nem disponibiliza uma coluna de oferta apresentada/aceita/recusada**. Aceite real é variável não observada.
+
+Nos registros classificados como `RETIDO`, a regra operacional de proxy contratual (alguma flag de movimentação de produto associada a troca de código em M30 sem cancelamento da família) coincide com a incidência de qualquer `FLAG_MOV_*` nos 86.540 registros movimentados. Logo, ela **não é um segundo indicador independente** nem pode ser chamada de aceite. O significado comercial dessa codificação depende do catálogo de ofertas e do log de intervenções.
+
+O DOCX descreve `valor` como **valor monetário pago pelo cliente (receita associada ao lead)**. A periodicidade, o faturamento reconhecido, o efeito de descontos e a composição de pacotes não são documentados, razão pela qual comparamos o valor registrado M0/M30 sem inferir receita incremental.
