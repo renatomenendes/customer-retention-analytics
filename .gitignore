@@ -1,0 +1,60 @@
+# Dados originais e derivados confidenciais
+/data/*
+!/data/README.md
+*.csv
+*.tsv
+*.xls
+*.xlsx
+*.xlsm
+*.parquet
+*.feather
+*.arrow
+*.sqlite
+*.db
+*.pkl
+*.pickle
+*.joblib
+*.sav
+
+# Artefatos locais e resultados potencialmente sensíveis
+/artifacts/
+/outputs/
+/reports/data/
+/reports/private/
+*.log
+
+# Segredos e ambientes
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*credentials*
+*secret*
+.venv/
+venv/
+.envrc
+
+# Python/Jupyter
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.DS_Store
+
+# Proveniência e relatórios de auditoria locais; não versionar dados derivados
+/docs/source_manifest.md
+/auditoria_*.json
+/Relatorio_Auditoria_*.md
+/reports/raw/
+/data/raw/
+/data/interim/
+/data/processed/
