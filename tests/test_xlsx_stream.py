@@ -1,7 +1,7 @@
 """Synthetic XLSX fixture: no real data or customer identifiers."""
 
+import zipfile
 from pathlib import Path
-from zipfile import ZIP_DEFLATED, ZipFile
 
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
@@ -26,7 +26,9 @@ STRINGS_XML = """<?xml version="1.0" encoding="UTF-8"?>
 
 def test_stream_synthetic_sparse_worksheet(tmp_path: Path):
     filename = tmp_path / "fixture.xlsx"
-    with ZipFile(filename, "w", compression=ZIP_DEFLATED) as archive:
+    with zipfile.ZipFile(
+        filename, "w", compression=zipfile.ZIP_DEFLATED
+    ) as archive:
         archive.writestr("xl/worksheets/sheet1.xml", SHEET_XML)
         archive.writestr("xl/sharedStrings.xml", STRINGS_XML)
 
