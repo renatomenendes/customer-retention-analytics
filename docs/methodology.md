@@ -46,3 +46,11 @@
 - Sem definição do significado de `VALOR`: **bloquear alegações de preservação financeira**.
 - Sem plano de amostragem: não generalizar métricas pontuais para a base corporativa.
 - Sem dados de resultado da oferta por tratamento: não reportar uplift causal.
+
+## Estimandos e modelagem diretamente associados ao enunciado
+
+A pergunta primária é a comparação dos clientes/atendimentos **classificados como `RETIDO` com e sem `FLAG_MOV`**, usando características disponíveis ou presumidamente disponíveis em M0. Assim, o alvo de modelagem **condicional** é `P(MOV=1 | RETIDO=1, X_M0)`; como `RETIDO` só é conhecido após a decisão, trata-se de modelagem retrospectiva para descrição de perfis, e não um recomendador operacional disponível no início do funil. O evento composto `P(RETIDO ∧ MOV | X_M0)` permanece análise secundária, com estimando e denominador diferentes.
+
+O indicador de **aceite de oferta** não existe no dicionário recebido: inferências só podem ser discutidas como mecanismos plausíveis não identificados. A proxy de movimentação e a proxy mais restrita de alteração de código/plano não cancelada coincidiram no grupo retido; nenhuma identifica o aceite. Cenários de prevalência de aceite devem ser descritos como simulações condicionais a hipóteses, nunca como mensurações.
+
+A análise condicional compara baseline de frequência, regressão logística regularizada, árvore curta e gradient boosting sobre o mesmo holdout novembro–dezembro de 2025, selecionando o candidato de menor Brier na validação de outubro. São apresentados AUC, PR-AUC com prevalência, Brier, log loss, lift por capacidade e faixas de calibração. Não se confunde desempenho no holdout com ganho financeiro ou causalidade da oferta.

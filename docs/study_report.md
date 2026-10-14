@@ -1,70 +1,26 @@
-# Estudo de retenção e movimentação de produtos — resultados observacionais
+# Estudo de clientes retidos com movimentação — caracterização analítica e decisões
 
-**Período:** junho a dezembro de 2025. **Unidade:** registro da planilha (episódio do funil apenas candidato). **Status:** estudo exploratório executado, conclusões com hipóteses explícitas. **Classificação:** uso restrito no repositório privado.
+**Período de entrada:** junho a dezembro de 2025, inclusive. **Fonte:** planilha do case processada localmente, com resultados agregados para o repositório privado. **Referência:** `Objetivo do Case.docx` (3 páginas). **População:** status `RETIDO`; **unidade:** linha da planilha até validação da chave de atendimento.
 
 ## Resumo executivo
 
-Foram examinados **303.652 registros** no período, com **249.309 classificados como retidos**, **48.091 como não retidos** e **6.252 sem desfecho concluído**. No grupo retido, **86.540 registros** apresentaram ao menos uma flag de movimentação (**34,7%**). A medida se refere a registros do funil, não a permanência do assinante, aceite de ofertas ou retenção futura.
+O enunciado solicita identificar características de quem aceita ofertas e altera produtos. A base permite observar **o status de retenção, as flags de movimentação, trocas de produto/plano e valores M0/M30**, mas não permite confirmar o **aceite**. O problema mensurável é a caracterização de `P(MOV=1 | RETIDO, X_M0)`, não apenas `P(RETIDO ∧ MOV | X_M0)`.
 
-Três achados delimitam a decisão: (i) a aparente maior movimentação em carteiras multiproduto é parcialmente dependente do número de oportunidades; (ii) a variação dos campos de valor em retidos com movimentação é frequentemente negativa; (iii) um classificador do evento composto mostrou discriminação moderada fora do treino, mas não avalia efeito de intervenção.
+**População central:** 249.309 registros `RETIDO`; 86.540 com alguma movimentação (34,7%); 86.540 com proxy restritiva de alteração contratual não cancelada (34,7%). Do total de retidos com movimentação, 15,2% também têm alguma flag de cancelamento de produto: **movimentação é heterogênea**, não sinônimo de oferta aceita.
 
-## 1. Escopo, pergunta, estimandos e elegibilidade
+## 1. Pergunta, construtos e validade
 
-A pergunta central não é simplesmente prever *churn*. É caracterizar, **dentro dos registros classificados como retidos**, aqueles com alteração contratual e examinar separadamente a evolução de valor observado. Distinguimos:
+- **R**: `RETIDO`, desfecho operacional do funil. **M**: pelo menos uma `FLAG_MOV_* = 1`. **X_M0**: carteira, atributos geográficos e comerciais disponíveis ou presumidos no início. **A**: aceite real de oferta, **variável latente não observada**.
+- **Estimando central:** `P(M=1 | R=1, X_M0)`. Esta condição gera seleção pelo desfecho e serve para **caracterização retrospectiva**, não para pontuar todos os leads antes da retenção.
+- **Estimando secundário:** `P(R=1, M=1 | X_M0)` entre atendimentos concluídos. Continua no notebook 03 com escopo próprio.
+- **Valor:** M30−M0 de campos `0VALOR`0; o DOCX os descreve como valores pagos associados ao lead. Sem competência e preço líquido conciliado, não equivalem a ganho incremental da campanha.
+- **Aceite de oferta:** não observado. A proxy ampla pode superestimar aceite e a restritiva pode simultaneamente admitir falsos positivos e excluir aceites sem troca de código. Não há limite estatisticamente identificado para `P(A=1)` a partir dos campos presentes.
 
-- **R** = status `RETIDO` nos leads com desfecho conhecido; `LEAD EM ABERTO` não compõe a classe negativa.
-- **M** = ao menos uma `FLAG_MOV_BL/TV/FONE/MV` acionada, observada após atendimento.
-- **Perfil central** = distribuição das características de M0 entre `R=1,M=1` comparada a `R=1,M=0`; calcular `P(M=1|R=1,X)` exige deixar claro o condicionamento no desfecho.
-- **Predição secundária** = `P(R=1,M=1|X)` entre encerrados, com atributos presumidos em M0. Esse não é o mesmo alvo do perfil central.
-- **ΔV** = `Σ VALOR_*_M30 − Σ VALOR_*_M0`, com unidades e periodicidade ainda **não confirmadas**. Não é lucro, receita faturada, margem, economia gerada ou causalidade da oferta.
+## 2. Caracterização dos perfis — todos os denominadores são retidos
 
-O arquivo contém **303.654** linhas, mas duas precedem junho de 2025; logo, são usados **303.652** registros. Há **14.069 IDs de cliente repetidos**, dos quais **1.706 com status distintos**. Não se deve deduplicar nem atribuir a cada linha uma pessoa distinta até que exista chave oficial de episódio. A frequência dos leads por mês não demonstra desenho probabilístico da amostra.
+### 2.1 Mix inicial
 
-## 2. Evolução no tempo
-
-| Entrada | Registros | Retidos | Não retidos | Abertos | Retidos / encerrados | Com movimento / retidos |
-|---|---:|---:|---:|---:|---:|---:|
-| 2025-06 | 43.218 | 36.175 | 6.330 | 713 | 85,1% | 30,6% |
-| 2025-07 | 43.244 | 36.023 | 6.501 | 720 | 84,7% | 39,6% |
-| 2025-08 | 43.418 | 36.176 | 6.623 | 619 | 84,5% | 36,2% |
-| 2025-09 | 43.470 | 35.929 | 6.989 | 552 | 83,7% | 34,6% |
-| 2025-10 | 43.509 | 35.559 | 7.028 | 922 | 83,5% | 36,0% |
-| 2025-11 | 43.337 | 34.912 | 7.177 | 1.248 | 82,9% | 33,8% |
-| 2025-12 | 43.456 | 34.535 | 7.443 | 1.478 | 82,3% | 32,1% |
-
-![Status ao longo do período](../reports/figures/status_retention_monthly.svg)
-
-A participação do status de retenção entre atendimentos **encerrados** declina na amostra, mas não é inferível como deterioração do processo: composição por origem, critérios de encerramento, extração e maturidade podem variar. A movimentação entre retidos apresenta um pico em julho, o que recomenda checar política e mix do período, em vez de interpretá-lo como efeito sazonal comprovado.
-
-## 3. Perfis de carteira e viés de oportunidade
-
-| Famílias M0 | Retidos (registros) | Retidos com alguma movimentação | Taxa por registro retido | Flags por oportunidade M0 |
-|---|---:|---:|---:|---:|
-| 1 | 90.470 | 25.011 | 27,6% | 27,6% |
-| 2 | 91.072 | 33.605 | 36,9% | 23,6% |
-| 3 | 65.304 | 26.302 | 40,3% | 21,4% |
-| 4 | 2.333 | 1.622 | 69,5% | 36,4% |
-
-![Movimentação por exposição inicial](../reports/figures/portfolio_opportunities.svg)
-
-A taxa de qualquer movimentação responde à pergunta de **qual percentual de registros tiveram ao menos uma mudança**. A taxa por oportunidade responde à pergunta distinta de **quantas flags ocorreram por família existente em M0**. Não se pode somar ambas nem tratar oportunidades como ensaios independentes. A curva não é monotônica após normalização: 4 famílias permanecem um grupo diferenciado, mas com tamanho muito menor, possível efeito de composição e regras próprias de produto móvel.
-
-### Famílias disponíveis em M0
-
-| Família | Oportunidades observadas entre retidos | Flags acionadas | Flags / oportunidades |
-|---|---:|---:|---:|
-| BL | 239.562 | 74.255 | 31,0% |
-| TV | 138.754 | 24.595 | 17,7% |
-| FONE | 88.578 | 10.007 | 11,3% |
-| MV | 10.964 | 4.387 | 40,0% |
-
-![Taxa por família disponível](../reports/figures/movements_by_family.svg)
-
-As famílias apresentam heterogeneidade substantiva. Móvel possui a maior incidência condicionada à presença inicial, mas também possui o menor denominador. Seria incorreto recomendar inclusão de móvel para elevar movimentação: a associação pode resultar de oferta, elegibilidade, seleção e natureza da alteração.
-
-### Combinações iniciais mais frequentes
-
-| Mix M0 | Retidos | Movimentação / retidos |
+| Composição da carteira em M0 | Retidos | Com alguma movimentação |
 |---|---:|---:|
 | BL | 82.490 | 28,9% |
 | BL+TV | 63.301 | 36,3% |
@@ -75,90 +31,208 @@ As famílias apresentam heterogeneidade substantiva. Móvel possui a maior incid
 | BL+TV+MV | 2.511 | 64,8% |
 | BL+TV+FONE+MV | 2.333 | 69,5% |
 | TV+FONE | 1.169 | 21,1% |
+| FONE | 858 | 8,2% |
+| BL+FONE+MV | 848 | 59,8% |
 
-Os grupos exibidos exigem pelo menos **1.000 registros retidos**; grupos menores foram suprimidos desta síntese. Não há ranking de desempenho causal entre mixes. Um refinamento futuro deve estimar comparações estratificadas por origem, mês e famílias elegíveis, preferencialmente com incerteza por cluster de cliente.
+Esta tabela só mostra grupos com pelo menos 500 registros. Uma carteira com mais famílias oferece mais oportunidades de movimento. Dividir o total de flags por famílias presentes em M0 ajuda a expor esse problema, mas não produz efeito ajustado nem causal. As comparações por família e exposição estão no notebook 05.
 
-## 4. Origem e desfechos ainda abertos
+### 2.2 Origem e composição
 
-| Origem | Registros | Abertos | Abertos / total | Retidos / encerrados | Movimentação / retidos |
+| Canal | Registros `RETIDO` | Com movimentação |
+|---|---:|---:|
+| LEGADO | 51.214 | 32,0% |
+| SOLAR | 198.095 | 35,4% |
+
+| Famílias M0 + origem | Retidos | Movimentação |
+|---|---:|---:|
+| 1|LEGADO | 19.591 | 23,8% |
+| 1|SOLAR | 70.879 | 28,7% |
+| 2|LEGADO | 17.969 | 34,3% |
+| 2|SOLAR | 73.103 | 37,5% |
+| 3|LEGADO | 13.244 | 40,1% |
+| 3|SOLAR | 52.060 | 40,3% |
+| 4|SOLAR | 1.988 | 69,1% |
+
+Há 6.162 leads abertos em LEGADO e 90 em SOLAR, segundo os agregados auditados. A diferença de casos pendentes torna inadequada uma comparação causal entre canais.
+
+### 2.3 Região, MPlay, classificação e posse móvel
+
+Essas dimensões estão representadas no modelo conjunto e foram examinadas em segmentos de pelo menos 500 registros, com seus denominadores explícitos.
+
+**MPlay (M0):**
+
+| Categoria | Retidos | Movimentação |
+|---|---:|---:|
+| UNKNOWN | 232.017 | 34,4% |
+| MARCADO | 10.587 | 54,0% |
+| NAO-MARCADO | 6.705 | 15,2% |
+
+**Classificação comercial:**
+
+| Categoria | Retidos | Movimentação |
+|---|---:|---:|
+| G1 | 144.563 | 34,6% |
+| G2 | 45.764 | 34,6% |
+| MD2 | 24.914 | 36,4% |
+| MD1 | 7.000 | 36,4% |
+| G7 | 5.974 | 34,1% |
+| G4 | 5.929 | 34,3% |
+| G5 | 4.193 | 34,5% |
+
+**Posse móvel:**
+
+| Categoria | Retidos | Movimentação |
+|---|---:|---:|
+| 1 | 136.438 | 37,8% |
+| 0 | 112.871 | 31,0% |
+
+**UFs com mais registros:**
+
+| UF | Retidos | Movimentação |
+|---|---:|---:|
+| SP | 108.570 | 36,6% |
+| RJ | 35.753 | 33,4% |
+| RS | 16.132 | 28,5% |
+| MG | 14.959 | 37,8% |
+| PR | 10.356 | 32,8% |
+| SC | 10.024 | 33,1% |
+| DF | 7.823 | 34,9% |
+| GO | 5.860 | 33,5% |
+| BA | 5.692 | 33,9% |
+| AM | 4.489 | 37,1% |
+| ES | 4.087 | 30,1% |
+| PA | 3.347 | 35,8% |
+
+A regressão penalizada permite examinar associação conjunta, mas não resolve seleção do funil, confundimento por ofertas não medidas ou a natureza comercial dessas categorias. O estudo não declara que estes grupos constituem *personas* estáveis ou são efeitos causais.
+
+### 2.4 Sensibilidade à repetição do mesmo cliente
+
+Há uma média de 34,7% de movimentação entre **todos os registros retidos** versus 34,8% quando se mantém somente o primeiro registro `RETIDO` conhecido de cada ID (235.462 IDs). Essa sensibilidade não equivale à identificação do primeiro lead do cliente: registros com `NAO RETIDO` podem preceder o primeiro `RETIDO`.
+
+### 2.5 Evolução mensal
+
+| Mês | Registros `RETIDO` | Com movimentação |
+|---|---:|---:|
+| 2025-06 | 36.175 | 30,6% |
+| 2025-07 | 36.023 | 39,6% |
+| 2025-08 | 36.176 | 36,2% |
+| 2025-09 | 35.929 | 34,6% |
+| 2025-10 | 35.559 | 36,0% |
+| 2025-11 | 34.912 | 33,8% |
+| 2025-12 | 34.535 | 32,1% |
+
+Alterações entre meses podem refletir mix, política de atendimento, maturidade ou composição amostral. Não há série longitudinal de faturamento de cada cliente.
+
+## 3. Movimentação, cancelamento e variação monetária por família
+
+As transições usam os códigos de produto/plano de M0 e M30. **Troca de código** não é necessariamente inclusão de produto, **cancelamento de produto** não é churn total, e **mudança de valor sem troca de código** não deve ser ignorada.
+
+| Família | Transição | Registros retidos | FLAG_MOV na transição | FLAG_CANC | Média Δ valor quando presente |
+|---|---|---:|---:|---:|---:|
+| BL | unchanged | 142.829 | 0,0% | 0,0% | 0,98 |
+| BL | replacement | 74.255 | 100,0% | 0,0% | -22,08 |
+| BL | absent | 9.747 | 0,0% | 0,0% | 0,00 |
+| BL | removal | 22.478 | 0,0% | 100,0% | -101,32 |
+| TV | removal | 19.381 | 0,0% | 100,0% | -118,33 |
+| TV | replacement | 24.595 | 100,0% | 0,0% | -30,76 |
+| TV | absent | 110.555 | 0,0% | 0,0% | -0,37 |
+| TV | unchanged | 94.778 | 0,0% | 0,0% | 1,46 |
+| FONE | absent | 160.731 | 0,0% | 0,0% | 0,00 |
+| FONE | unchanged | 61.512 | 0,0% | 0,0% | 0,00 |
+| FONE | removal | 17.059 | 0,0% | 100,0% | 0,00 |
+| FONE | replacement | 10.007 | 100,0% | 0,0% | 0,00 |
+| MV | absent | 238.345 | 0,0% | 0,0% | 0,00 |
+| MV | unchanged | 6.577 | 0,0% | 0,0% | -1,64 |
+| MV | replacement | 4.387 | 100,0% | 0,0% | -4,81 |
+
+*Grupos abaixo de 500 foram omitidos nesta tabela de divulgação agregada. Médias monetárias são por registro com valor comparável em ambos os estados, sem correção por pacotes, desconto ou competência.*
+
+Nos retidos que movimentaram: mediana M30−M0 de **-25,46**, redução em **78,7%** e variação agregada da soma de **-20,1%**. Sem transação de oferta, custo e competência financeira, não calcular **preservação de receita incremental** ou margem.
+
+## 4. Inferência disciplinada sobre aceite de ofertas
+
+**Aceite observado:** indisponível. **Sinais observados:** movimento amplo e transição restritiva compatível com uma alteração de plano/produto. A última exige mudança de código/plano, presença do produto ao final, flag de movimento e inexistência de cancelamento naquela família.
+
+| Sinal | N entre retidos | Fração dos retidos | O que indica |
+|---|---:|---:|---|
+| Alguma flag `FLAG_MOV_*` | 86.540 | 34,7% | Alteração operacional; pode ou não estar ligada a oferta |
+| Proxy de alteração contratual não cancelada | 86.540 | 34,7% | Mudança compatível com possível oferta; não confirma apresentação nem aceite |
+
+Para estabelecer a escala do **risco de extrapolação**, a tabela abaixo varia *hipoteticamente* a fração de movimentos ligados a aceites; **não é modelo estimado a partir da planilha**:
+
+| Hipótese de aceites dentre movimentos | Quantidade hipotética |
+|---|---:|
+| 25% (suposição) | 21.635 (simulação) |
+| 50% (suposição) | 43.270 (simulação) |
+| 75% (suposição) | 64.905 (simulação) |
+
+**Teste de informação incremental da proxy:** na amostra analisada, os **86.540** registros positivos na proxy restritiva são exatamente os **86.540** com alguma flag de movimentação. Portanto a proxy restritiva **não discrimina** um subconjunto adicional e não aumenta a evidência acerca de aceite. É um diagnóstico do modo como as flags codificam a troca contratual; não valida a oferta apresentada ou aceita.
+
+A proporção real pode ficar fora dessas hipóteses: mudanças sem flags e ofertas que alteram só desconto são possíveis. O intervalo 25–75% **não é intervalo de confiança, faixa identificada nem estimativa**. A medição exigirá campos de oferta exposta, oferta aceite/recusada, data, canal, elegibilidade e preço antes/depois.
+
+## 5. Modelagem condicional — comparação comum e estabilidade
+
+### 5.1 Desenho
+
+Treino junho–setembro, validação outubro, teste novembro–dezembro. Observações com o mesmo ID de cliente não atravessam períodos de treino/validação/teste; os descartes foram 4.918 registros do treino e 1.131 da validação. Repetições **dentro** dos períodos permanecem. O estado `RETIDO` é usado para delimitar a amostra, logo os modelos são retrospectivos, não motores acionáveis em M0 para toda a população.
+
+Alvo operacional: `MOV` em `R=1`. Atributos: canal, UF, MPlay, classificação, posse móvel, mix e tamanho da carteira inicial e três valores M0. A semântica temporal de todas as classificações ainda requer validação. A mesma divisão foi aplicada à taxa de treino (baseline), regressão penalizada, árvore rasa e boosting tabular.
+
+| Modelo | AUC-ROC | AP | Brier | Log-loss | Lift no top 10% |
 |---|---:|---:|---:|---:|---:|
-| LEGADO | 68.380 | 6.162 | 9,0% | 82,3% | 32,0% |
-| SOLAR | 235.272 | 90 | 0,0% | 84,2% | 35,4% |
+| prior | 0,500 | 0,330 | 0,2216 | 0,6352 | 1,00× |
+| logistic | 0,627 | 0,458 | 0,2104 | 0,6099 | 1,68× |
+| small tree | 0,629 | 0,444 | 0,2097 | 0,6083 | 1,67× |
+| hist boosting | 0,650 | 0,487 | 0,2065 | 0,6010 | 1,81× |
 
-A concentração de leads em aberto em `LEGADO` é uma ameaça à comparabilidade dos canais. Condicionar a análise apenas aos atendimentos encerrados seleciona grupos com maturidade diferente. **Não existe base para concluir que o mecanismo `SOLAR` causa maior retenção ou preservação de receita.** A estratégia adequada é reconciliar critérios de encerramento e estágio do funil antes de estimar vantagens comparativas.
+**Modelo com menor Brier na validação:** hist_boosting. Nenhuma métrica foi calculada em outro conjunto de teste para favorecê-lo. A seleção por validação não prova melhoria comercial; se os modelos tiverem desempenho próximo, simplificação e estabilidade devem prevalecer.
 
-## 5. Movimentação e preservação de valor: limites econômicos
+### 5.2 Evolução dentro do holdout
 
-| Grupo (registros) | N | Mediana ΔV | Média ΔV | ΔV negativo | ΔV positivo | Variação da soma M0→M30 |
-|---|---:|---:|---:|---:|---:|---:|
-| Retidos com movimentação | 86.540 | -25.46 | -37.72 | 78,7% | 14,9% | -20,1% |
-| Retidos sem movimentação | 162.769 | 0.00 | -21.49 | 19,5% | 9,9% | -12,4% |
-| Não retidos | 48.091 | -103.64 | -96.65 | 70,5% | 4,3% | -68,9% |
+| Mês do teste | N | Prevalência de MOV | AUC do escolhido | Brier do escolhido |
+|---|---:|---:|---:|---:|
+| 2025-11 | 34.912 | 33,8% | 0,647 | 0,2094 |
+| 2025-12 | 34.535 | 32,1% | 0,652 | 0,2036 |
 
-![Mediana dos valores](../reports/figures/value_deltas.svg)
+**Por origem no teste:**
 
-No grupo com status retido e movimento, **78,7%** têm ΔV negativo e apenas **14,9%** ΔV positivo. A mediana é **−25,46** e a variação relativa da soma, **−20,1%**. Esses números não medem impacto de oferta ou receita realizada. Sem competência financeira, regras de bundle, desconto, crédito, preço versus cobrança e custo, nenhuma análise de LTV, margem ou lucro foi validada. O campo monetário de Fone é quase sempre zero apesar da presença contratual, aumentando o risco de erro econômico se interpretado como faturamento real.
+| Origem | N | Prevalência | AUC | Brier |
+|---|---:|---:|---:|---:|
+| LEGADO | 17.014 | 32,9% | 0,659 | 0,2046 |
+| SOLAR | 52.433 | 33,0% | 0,651 | 0,2071 |
 
-Recomendação metodológica imediata: conciliar valor por **produto, tipo de transição de código, flag de cancelamento, origem e mês**, com identificação contratual do campo; só então monetizar preservação efetiva ou construir um modelo orientado a margem.
+### 5.3 Calibração descritiva do melhor por validação
 
-## 6. Modelo experimental: avaliação cronológica, não validação comercial
-
-**Tarefa modelada:** evento composto `RETIDO ∧ qualquer FLAG_MOV`, entre registros de status encerrado. **Não foi modelada isoladamente a variável M entre os retidos.** Preditores disponíveis ou presumidos em M0; origem, UF, classificação, quantidade e mix de famílias e valores M0. A disponibilidade temporal de todos os preditores ainda requer confirmação.
-
-| Divisão | Período | Registros |
-|---|---|---:|
-| train | junho–setembro de 2025 | 165.424 |
-| validation | outubro de 2025 | 41.343 |
-| test | novembro–dezembro de 2025 | 84.067 |
-
-Os clientes presentes em períodos posteriores foram excluídos do treino (5.322 registros) e, quando pertinente, da validação (1.244), evitando compartilhamento direto de IDs entre essas partições. Há ainda observações repetidas **dentro** de cada partição.
-
-| Modelo | Validação: AUC | Validação: AP | Validação: Brier |
+| Faixa prevista | N | P média prevista | Movimento observado |
 |---|---:|---:|---:|
-| Constante | 0.500 | 0.300 | 0.2102 |
-| Logística | 0.665 | 0.469 | 0.1939 |
-| Árvore curta | 0.668 | 0.445 | 0.1939 |
+| 0.1-0.2 | 6.976 | 16,7% | 14,2% |
+| 0.2-0.3 | 12.659 | 25,6% | 24,1% |
+| 0.3-0.4 | 33.196 | 34,5% | 31,8% |
+| 0.4-0.5 | 11.628 | 44,6% | 44,9% |
+| 0.5-0.6 | 3.601 | 53,8% | 57,3% |
+| 0.6-0.7 | 1.268 | 64,5% | 74,9% |
 
-**A árvore foi selecionada pelo menor Brier em outubro, mas a diferença para a logística foi somente 0,000082**. Sem intervalo de incerteza e sem teste da logística em novembro–dezembro, não há base para declarar superioridade geral da árvore.
+As faixas têm largura de 0,1 e são publicadas quando contêm ao menos 100 observações; a ECE informada no arquivo de métricas é **parcial** quando há faixas omitidas. Brier e diagrama de calibração não validam a decisão de oferta, apenas o ajuste da previsão do evento analisado.
 
-| Modelo no holdout | AUC-ROC | AP | Brier | Log-loss | Lift top 10% |
-|---|---:|---:|---:|---:|---:|
-| Constante | 0.500 | 0.272 | 0.1988 | 0.5871 | 1.00× |
-| Árvore selecionada | 0.662 | 0.405 | 0.1849 | 0.5525 | 1.84× |
+### 5.4 Interpretação e incerteza
 
-O holdout tem 84.067 registros encerrados e prevalência do evento composto de 27,24%. A precisão no decil superior da árvore foi 50,04%, comparada à prevalência da base de 27,24%. Isso é ranking de um **evento operacional observado**, não benefício de ofertar a clientes pontuados. O Brier não é prova isolada de calibração: faltam curvas de confiabilidade, ECE com intervalos, replicações temporais e acompanhamento prospectivo.
+O modelo com todas as variáveis iniciais proporciona avaliação multivariada da discriminação, mas seus coeficientes/variáveis não identificam o efeito de intervenção nem inferem o evento **A = aceite**. Intervalos de confiança por cluster de cliente, curvas de decisão e avaliação em novos períodos após dezembro ainda não estão identificados: não os substituímos por p-values ingênuos. A consistência por mês e canal é apresentada com prevalência e denominadores.
 
-## 7. Benchmark científico: posicionamento apropriado
+## 6. Recomendações ordenadas pela decisão
 
-- **Verbeke et al. (2012)**: otimização de retenção requer custo e valor econômico de campanhas. Usar AUC como indicador único é insuficiente. DOI: [10.1016/j.ejor.2011.09.031](https://doi.org/10.1016/j.ejor.2011.09.031).
-- **Verhelst et al. (2025)**: uplift em telecom diferencia probabilidade de churn de *mudança provocada pela ação*. Nosso dataset não registra tratamento/controle e aceite em termos que permitam identificar tal estimando. DOI: [10.1007/978-3-031-74640-6_21](https://doi.org/10.1007/978-3-031-74640-6_21).
-- **Scikit-learn, calibração**: perdas próprias como Brier combinam resolução e calibração; é obrigatório avaliar confiabilidade de probabilidades antes de uso comercial. [Documentação](https://scikit-learn.org/stable/modules/calibration.html).
+| Perfil ou problema | Evidência | Ação/protocolo | Indicador primário | Como validar |
+|---|---|---|---|---|
+| Mix inicial e exposição | Taxas distintas por carteira e por oportunidade | Ofertas e scripts de atendimento orientados à família presente em M0 | Movimentação entre retidos e retenção entre encerrados, separadamente | Teste estratificado por mix, mantendo capacidade e elegibilidade |
+| Movimentações com cancelamento parcial | 15,2% dos retidos movimentados têm alguma FLAG_CANC | Auditar tipo de transição e perda de produto | Retenção com cancelamento e delta por família | Comparar taxas e custos com decisão operacional revisada |
+| Valor registrado negativo | 78,7% dos retidos que movimentaram têm Δ negativo | Investigar descontos, downgrade, fim de bônus e pacotes | Δ monetário reconciliado; receita líquida após contrato | Extração de faturamento e desenho de teste financeiro |
+| Origens com maturidade diferente | Leads em aberto muito distintos por canal | Melhorar definição e atualização de encerramento | SLA de fechamento, abertos e retenção entre casos maduros | Acompanhar coortes após prazo fixo |
+| Aceite não registrado | Proxies têm erros de classificação desconhecidos | Instrumentar ID e resultado de cada oferta | Taxa efetiva de aceite e receita incremental | Experimento randomizado com grupo comparável |
+| Modelo de movimento entre retidos | AUC, AP, Brier por período no holdout | Estudar características associadas, sem aplicação preditiva ex-ante | Estabilidade do perfil e desempenho por período | Avaliar período posterior e reproduzir com chave oficial |
 
-A literatura fornece critérios metodológicos, **não metas de AUC diretamente comparáveis** ao case. Curvas de sobrevivência (Kaplan–Meier/Cox) ficam fora do escopo empiricamente identificado até existir duração e censura observáveis por lead.
+## 7. Conclusão e limites formais
 
-## 8. Recomendações priorizadas como hipóteses a testar
+**Respondido pela amostra:** perfis observados dentro dos registros classificados como retidos, descrição condicional de movimentação por características iniciais, contraste de transições M0/M30, diferenças entre flags e troca de código, comparação de quatro modelos num mesmo teste temporal e recomendações testáveis.
 
-| Prioridade | Perfil-alvo | Evidência | Ação e desenho de teste | Métrica principal | Pré-condição |
-|---|---|---|---|---|---|
-| 1 | Carteiras BL e multiproduto com movimentação | Denominador por família altera leitura de propensão | Experimentar políticas de oferta estratificadas por mix e elegibilidade; randomização no atendimento | Retenção real e valor líquido validado por conta | Chave do atendimento, produtos elegíveis e custos |
-| 2 | Atendimentos com redução de valores apesar de `RETIDO` | 78,7% do grupo retido/movimentado têm ΔV negativo | Auditar downgrade, cancelamento parcial, crédito e desconto; intervir após validação dos tipos | Receita líquida e margem após ciclo definido | Dicionário financeiro/contábil |
-| 3 | Leads abertos do canal LEGADO | Taxa de pendência desproporcional entre canais | Diagnosticar SLA, data de resolução e cadência de atualização; comparar apenas coortes maduras | Fração encerrada por idade do lead | Timestamp de encerramento |
-| 4 | Registros com score alto do evento composto | Lift 1,84× no decil superior de teste temporal | Modo sombra e auditoria de estabilidade; depois A/B de oferta com controle | Ganho incremental líquido por contato | Tratamento definido, holdout e custos |
+**Não identificável sem novos dados:** taxa verdadeira de aceite, efeito incremental/causal de ofertas, permanência futura, lucro/receita reconhecida e episódios únicos de atendimento. Estas não são etapas de engenharia atrasadas: são limites de identificação da fonte fornecida. O estudo não inventa dados para suprir essas lacunas.
 
-Nenhuma dessas ações tem impacto causal ou financeiro demonstrado na amostra. As recomendações são desenhos de aprendizado e decisão, não promessas comerciais.
-
-## 9. Validade, sensibilidade e pendências impeditivas
-
-- **Unidade da análise:** episódios ainda não têm chave oficial; intervalos binomiais ingênuos subestimam dependência de IDs repetidos.
-- **População e seleção:** amostra sem plano de extração/pesos; volume mensal regular e canal dependente de encerramento.
-- **Tempo:** apenas sete meses e M30 sem timestamp individual de desfecho; não identificar sobrevivência, churn sustentado ou censura.
-- **Movimentação:** flags indicam transição/código, não oferta aceita; crescimento de volume/compra recorrente não observável.
-- **Economia:** unidades monetárias ainda não validadas, possível bundling e valores de Fone nulos/zero na maior parte dos registros.
-- **Modelagem:** partição cronológica, mas sem teste comparativo completo, estabilidade, incerteza por cliente, controle de múltiplos testes, calibração ou uplift causal.
-- **Privacidade:** somente agregados com grandes denominadores são materializados neste relatório; nenhum registro, hash de dados, endereço ou identificador foi divulgado.
-
-**Condição de encerramento científico:** a investigação descritiva e o experimento estão executados e documentados. A validação de política de retenção e de preservação de receita **não está empiricamente identificada**; requer decisões de negócio e/ou novas fontes. Declarar essas limitações faz parte da conclusão correta do estudo, não é omissão de um resultado possível.
-
-## 10. Procedência e reprodução
-
-Indicadores gerados pela leitura integral local da planilha autorizada. Os arquivos-fonte privados foram analisados em ambiente local. Os agregados publicados em [`reports/aggregate_study_2025.json`](../reports/aggregate_study_2025.json) resultam de **`audit_summary.json`**, **`profiles_summary.json`**, **`opportunity_diagnostics.json`** e **`model_validation.json`**, preservados apenas localmente. O notebook [05](../notebooks/05_study_synthesis.ipynb) demonstra os cálculos da síntese pública do repositório privado, enquanto notebooks 01–04 permitem recomputar as etapas originais mediante acesso à planilha privada.
+**Fonte do enunciado:** `Objetivo do Case.docx` (3 páginas), disponibilizado para o projeto. Dados não publicados no repositório. **Referências metodológicas** e contraindicações encontram-se em `docs/benchmark_and_gap_review.md`.

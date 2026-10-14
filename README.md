@@ -1,87 +1,98 @@
-# Perfis de retenção com movimentação de produtos | Telecomunicações
+# Retenção e movimentação de produtos — estudo de perfis | Telecom, 2025
 
-**Estudo observacional · junho–dezembro de 2025 · base de clientes sob confidencialidade**
+*Análise de uma amostra de atendimentos de retenção de junho a dezembro de 2025. Resultados observacionais; documentação técnica e de negócio separadas.*
 
-> **Questão central.** Quais perfis caracterizam registros de clientes classificados como **retidos com movimentação de produtos**? O que suas transições entre M0 e M30 permitem — e não permitem — concluir sobre a preservação de valor?
+> **Pergunta do case.** Quais características dos clientes classificados como **retidos** estão associadas à **movimentação de produtos** durante o atendimento, e o que isso sugere para melhorar a personalização das ofertas e proteger o valor pago?
 
-Este repositório apresenta **perguntas de negócio, evidências, métodos, interpretações e recomendações**. Os notebooks permitem examinar os cálculos. O código utilizado na reprodução está disponível, mas não constitui o objeto principal da apresentação.
+## Principais descobertas
 
-## Síntese das descobertas
-
-| Evidência observada | Resultado na amostra | Leitura relevante |
+| Evidência | Resultado | Interpretação para a área de retenção |
 |---|---:|---|
-| Registros na janela | **303.652** | Unidade observada: registro do funil, não cliente único comprovado |
-| Classificados como retidos | **249.309** | Status de atendimento, não permanência sustentada |
-| Retidos com alguma movimentação | **86.540** | **34,7%** dos registros retidos |
-| Registros com desfecho em aberto | **6.252** | Não devem ser imputados como perda |
-| Mediana M30 − M0 no grupo retido com movimento | **−25,46** | Unidade dos campos **VALOR_*** ainda não validada; não é perda faturada |
-| Modelo experimental no teste temporal | **AUC 0,662; Brier 0,1849** | Alvo composto distinto do perfil condicionado aos retidos |
+| Registros no período | **303.652** | Unidade: registro do funil; um cliente pode reaparecer |
+| Status `RETIDO` | **249.309** | Desfecho do atendimento, não permanência futura |
+| Retidos com alguma movimentação | **86.540 (34,7%)** | Medida central do estudo, condicionada à retenção |
+| Mudança contratual compatível com oferta, proxy estrita | **86.540 (34,7%)** | Não representa aceite comprovado |
+| Retidos com movimento e redução de valor registrado | **78,7%** | A retenção pode coexistir com queda do valor observado |
+| Primeiro registro retido por cliente (sensibilidade) | **34,8%** | Teste de sensibilidade à repetição de clientes, não nova definição de lead |
+| Melhor modelo explicativo condicional no teste | **AUC 0,650** | Performance fora do treino de **P(movimento | retido, M0)** |
 
-### Descoberta 1 — Mais produtos não equivalem, necessariamente, a maior propensão por produto
+**O que este trabalho demonstrou:** diferenças de movimentação associadas a mix, características iniciais e origem, controlando explicitamente a população de retidos; reconciliação parcial de alterações contratuais e valores; e comparação temporal de modelos condicionais. **O que não demonstrou:** aceite real da oferta, benefício causal de uma recomendação ou faturamento incremental.
 
-![Duas medidas de movimentação segundo a quantidade de famílias iniciais](reports/figures/portfolio_opportunities.svg)
+## 1. O perfil deve ser estudado dentro da população retida
 
-A incidência de **qualquer movimentação entre retidos** foi de **27,6%** nas carteiras com uma família, **36,9%** com duas, **40,3%** com três e **69,5%** com quatro. Contudo, quando o denominador passa a ser o **total de famílias presentes em M0**, as incidências observadas de flags foram **27,6%**, **23,6%**, **21,4%** e **36,4%**, respectivamente.
+![Oportunidades de movimentação por tamanho do portfólio](reports/figures/portfolio_opportunities.svg)
 
-**Interpretação:** comparar somente “alguma movimentação” favorece carteiras com mais oportunidades de alteração. A normalização por família não elimina confundimento, mas muda a leitura do perfil. Não há evidência causal de que ampliar a carteira provoque movimentação.
+Carteiras com mais famílias apresentam maior chance de *alguma* movimentação, mas também oferecem mais possibilidades de alteração. Ao comparar flags por família disponível em M0, a tendência muda. Por isso, o estudo utiliza **P(movimentação | RETIDO, características M0)** como questão principal. O modelo de evento composto é apenas uma análise secundária.
 
-### Descoberta 2 — A participação de retenções encerradas muda ao longo da janela
+### Segmentação por composição inicial
 
-![Status retido entre leads encerrados por mês](reports/figures/status_retention_monthly.svg)
+| Mix M0 | Registros retidos | Com alguma movimentação |
+|---|---:|---:|
+| BL | 82.490 | 28,9% |
+| BL+TV | 63.301 | 36,3% |
+| BL+TV+FONE | 61.897 | 39,0% |
+| BL+FONE | 21.380 | 35,0% |
+| TV | 7.120 | 15,7% |
+| BL+MV | 4.802 | 55,5% |
+| BL+TV+MV | 2.511 | 64,8% |
+| BL+TV+FONE+MV | 2.333 | 69,5% |
+| TV+FONE | 1.169 | 21,1% |
+| FONE | 858 | 8,2% |
 
-A proporção do status `RETIDO` entre os leads **encerrados** passou de **85,1% em junho para 82,3% em dezembro**. O volume mensal ficou próximo de 43 mil registros, e a proporção de casos em aberto varia por mês e origem. **Não é adequado interpretar essa diferença como queda causal da eficácia comercial:** o desenho amostral e a maturidade do funil ainda não foram validados.
+Não interpretar os grupos como causalidade, efeito de vender mais produtos ou propensão invariável: origem, elegibilidade, preço e regras de oferta podem diferir.
 
-### Descoberta 3 — Retenção com mudança de produtos não implica preservação dos valores observados
+### Canais e período
 
-![Medianas das variações monetárias entre M0 e M30](reports/figures/value_deltas.svg)
+| Origem | Retidos | Movimentação entre retidos |
+|---|---:|---:|
+| LEGADO | 51.214 | 32,0% |
+| SOLAR | 198.095 | 35,4% |
 
-Nos **86.540 registros retidos com movimentação**, **78,7%** apresentaram diferença negativa dos valores M30–M0; a mediana foi **−25,46**, e a soma dos campos monetários desse grupo variou **−20,1%** entre os estados observados. Para retidos sem movimentação, a mediana foi **zero**. Os campos não possuem unidade, competência financeira, descontos e regras de bundle formalmente validados; assim, **não são demonstração de receita, margem ou perda incremental**.
+As proporções de atendimentos pendentes são muito diferentes entre canais; portanto **os contrastes entre origens são descritivos, não uma comparação de eficiência causal**.
 
-### Descoberta 4 — Há sinal preditivo, mas não evidência de uplift comercial
+## 2. Aceite de oferta: inferência delimitada, nunca rótulo inventado
 
-O experimento com atributos iniciais e teste em **novembro–dezembro de 2025** atingiu **AUC-ROC 0,662**, **average precision 0,405**, **Brier 0,1849** e **lift de 1,84× no decil superior**. A baseline constante obteve Brier 0,1988. O alvo foi a ocorrência conjunta de **`RETIDO` e movimentação entre leads encerrados**. Não mede, isoladamente, a movimentação *entre retidos*, nem o efeito de uma oferta. A regressão logística foi avaliada apenas na validação; não está demonstrado que a árvore seja superior fora da amostra.
+O enunciado menciona clientes que aceitam ofertas, mas **não existe variável de aceite observável na planilha**. Em vez de criar um desfecho fictício, analisamos dois sinais:
 
-## Como o problema foi definido
+- **Proxy ampla de movimentação**: ao menos uma `FLAG_MOV_* = 1` (inclui mudanças que podem ser motivadas por outras razões).
+- **Proxy restritiva, compatível com uma mudança contratual de oferta**: flag de movimentação, código/plano diferente em M30, produto presente em M30 e ausência de flag de cancelamento da família. Foram observados **86.540** registros com essa condição (**34,7%** entre retidos).
 
-| Dimensão | Definição operacional provisória | Fronteira de interpretação |
-|---|---|---|
-| Retenção | `NM_SUB_INDICADOR_NEGOCIO = RETIDO`, apenas no funil | Sem confirmação de atividade posterior ou contrato ativo |
-| Movimentação | Pelo menos uma `FLAG_MOV_* = 1`, confrontada com produto M0/M30 | Não se conhece aceite da oferta nem mudança de volume recorrente |
-| Valor | Σ dos campos `VALOR_*_M30` − Σ `VALOR_*_M0` | Snapshot de valores, sem comprovação de receita realizada |
+Nesta amostra, **os dois sinais coincidem exatamente (86.540 registros)**: a proxy restritiva não fornece qualquer informação adicional sobre aceite. **Nenhum deles estima diretamente a taxa de aceite**; inclusive a proxy restritiva pode conter mudanças sem oferta ou deixar de fora ofertas de desconto sem troca de produto. Um cenário de aceite de 25%, 50% ou 75% das movimentações é apenas uma simulação de sensibilidade, jamais um resultado estimado.
 
-**Universo analisado:** registros com entrada entre 01/06 e 31/12/2025, inclusive; excluídos dois fora da janela. `id_cliente` reaparece em múltiplas linhas: sem chave oficial do atendimento, as taxas são por **registro**, não por cliente único. Casos `LEAD EM ABERTO` são apresentados à parte.
+## 3. Valor monetário: retenção não significa manutenção do valor
 
-## Perguntas respondidas e próximas decisões
+Nos retidos com movimentação, a mediana dos valores M30−M0 é **-25,46** e **78,7%** apresentam redução; no agregado, a soma dos valores registrou variação de **-20,1%**. O DOCX denomina `valor` como montante pago pelo cliente associado ao lead, mas não descreve competência, descontos e consolidação de pacotes; não chamamos isso de margem, faturamento confirmado nem efeito de ofertas.
 
-| Pergunta de negócio | O que os dados sustentam | Ação testável sugerida |
-|---|---|---|
-| Qual carteira concentra alterações? | Evidência por mix e por oportunidade M0 | Testar jornadas por família disponível, mantendo comparabilidade |
-| O canal importa? | Diferenças descritivas entre `SOLAR` e `LEGADO` | Reconciliar desfechos pendentes e composição antes de comparação de eficiência |
-| Retenção protege valores? | Diferenças negativas M0–M30 observadas entre retidos que movimentaram | Auditar preço, descontos e cancelamento parcial e mensurar receita real |
-| Um score ajuda? | Discriminação experimental do evento composto, em split temporal | Validação prospectiva, calibração, estabilidade e teste controlado de oferta |
+![Variação observada de valores M0/M30](reports/figures/value_deltas.svg)
 
-A priorização, responsáveis, critérios de teste e evidências encontram-se no [relatório do estudo](docs/study_report.md). **Não há retorno financeiro incremental demonstrado.**
+A decomposição de trocas, saídas, inclusões e alterações por família consta do [relatório de resultados](docs/study_report.md).
 
-## Percurso de leitura do estudo
+## 4. Comparação de modelos na população correta
 
-1. **[Relatório científico e executivo](docs/study_report.md):** objetivos, universo, diagnóstico, perfis, sinais, economia, implicações e limitações.
-2. **[Síntese analítica reproduzível](notebooks/05_study_synthesis.ipynb):** cálculos e visualizações dos agregados observados, sem exposição de linhas individuais.
-3. **[Apresentação executiva](presentations/executive_study.md)** e **[PowerPoint com 18 slides](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx):** narrativa para discussão de decisões e experimentos.
-4. [Auditoria e integridade](notebooks/01_data_audit.ipynb), [perfis e valores](notebooks/02_profiles_and_economics.ipynb), [predição temporal](notebooks/03_temporal_model_validation.ipynb) e [decisões](notebooks/04_business_decisions.ipynb): notebooks aprofundados, que requerem os agregados privados produzidos localmente.
-5. [Metodologia](docs/methodology.md), [dicionário](docs/data_dictionary.md), [limitações](docs/limitations.md) e [referências científicas](docs/benchmark_and_gap_review.md): fundamento para auditabilidade.
+Todos os modelos receberam o **mesmo conjunto de teste cronológico de novembro–dezembro**, exclusivo de clientes usados no treino e na validação. Alvo: movimentação entre observações com status `RETIDO`. Esta modelagem é **explicativa e retrospectiva**, porque o status de retenção não é conhecido no instante inicial M0.
 
-## Reprodutibilidade e confidencialidade
+| Modelo | AUC-ROC | Average precision | Brier | Log-loss | Lift no decil superior |
+|---|---:|---:|---:|---:|---:|
+| prior | 0,500 | 0,330 | 0,2216 | 0,6352 | 1,00× |
+| logistic | 0,627 | 0,458 | 0,2104 | 0,6099 | 1,68× |
+| small tree | 0,629 | 0,444 | 0,2097 | 0,6083 | 1,67× |
+| hist boosting | 0,650 | 0,487 | 0,2065 | 0,6010 | 1,81× |
 
-Os gráficos e a síntese utilizam o conjunto **[agregado, com grupos grandes](reports/aggregate_study_2025.json)**, derivado das execuções locais dos notebooks de auditoria, perfis e modelo. Não contém dados de clientes, identificadores ou fingerprints da planilha. Os arquivos brutos e as saídas privadas permanecem fora do Git.
+O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro foram avaliados no mesmo holdout. O relatório apresenta desempenho por mês, origem e bandas de calibração. Discriminação e calibração **não provam aceite nem efeito de oferta**.
 
-Para recomputar os resultados com a planilha original em ambiente autorizado: Python 3.11+, `python -m pip install -e ".[analysis,dev]"`, seguido de `retention-audit --input data/raw/retention_case.xlsx --output reports/private/audit_summary.json` e `retention-analyze --input data/raw/retention_case.xlsx --out-dir reports/private`. Para revisitar **a síntese publicada** sem dados brutos, execute `notebooks/05_study_synthesis.ipynb` com o arquivo agregado versionado.
+## 5. Decisões sugeridas
 
-A classificação dos resultados neste repositório é **observacional e provisória**. Sua reprodução algorítmica não valida semânticas de negócio: estão pendentes a chave do episódio, significado financeiro dos campos, definição do evento de retenção sustentada, universo amostral e desenho experimental. A política de divulgação deve ser revista antes de qualquer alteração da visibilidade privada.
+1. **Oferta relevante ao mix M0:** testar abordagens por família disponível, em vez de usar número bruto de movimentações como eficácia.
+2. **Proteção do valor observado:** auditar mudanças de plano e valor negativo em retidos, por tipo de transição, antes de transformar desconto em meta financeira.
+3. **Processo de atendimento e desfechos pendentes:** uniformizar o fechamento de leads antes de comparar `SOLAR` e `LEGADO`.
+4. **Medição real de aceite e eficácia:** capturar oferta apresentada, elegibilidade, oferta aceita, incentivo e data; testar alternativas com controle randomizado e mensurar retenção posterior e receita reconhecida.
 
-## Base conceitual e literatura
+## Como consultar as evidências
 
-- Verbeke et al. (2012), [avaliação de churn orientada ao lucro](https://doi.org/10.1016/j.ejor.2011.09.031): decisões exigem custos e resultados financeiros, não apenas AUC.
-- Verhelst et al. (2025), [benchmark de uplift em telecom](https://doi.org/10.1007/978-3-031-74640-6_21): propensão e efeito incremental são problemas diferentes.
-- [scikit-learn: calibração de probabilidades](https://scikit-learn.org/stable/modules/calibration.html): Brier não dispensa curvas de confiabilidade.
+- [Relatório completo: perguntas, perfis, inferências, matriz de decisões e limitações](docs/study_report.md)
+- [Notebook 06 — perfis entre retidos, proxy de aceite e comparação condicional de modelos](notebooks/06_retained_profiles_and_offer_proxies.ipynb)
+- [Notebooks 01–05 — auditoria, exploração, modelos e síntese](notebooks/)
+- [Apresentação executiva](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx)
+- [Metodologia e dicionário](docs/methodology.md) · [Referências científicas](docs/benchmark_and_gap_review.md)
 
-**Conclusão:** os dados sustentam perfis descritivos relevantes e mostram tensões entre movimentação e valor observado; **a decisão ótima de retenção e sua receita incremental ainda não estão identificadas**.
+**Natureza do resultado:** amostra de registros, não base probabilística comprovada de clientes. Sem ID oficial do episódio, histórico de ofertas, data de encerramento, dados contábeis reconciliados ou experimento causal, as recomendações são hipóteses mensuráveis e não promessas de impacto.
