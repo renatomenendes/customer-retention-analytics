@@ -18,6 +18,16 @@
 
 **O que este trabalho demonstrou:** diferenças de movimentação associadas a mix, características iniciais e origem, controlando explicitamente a população de retidos; reconciliação parcial de alterações contratuais e valores; e comparação temporal de modelos condicionais. **O que não demonstrou:** aceite real da oferta, benefício causal de uma recomendação ou faturamento incremental.
 
+## Descoberta ampliada — a mesma classificação RETIDO esconde quatro situações distintas
+
+A exploração aprofundada mostrou que **32.318** registros retidos **sem flag de movimentação** tiveram **cancelamento de produto**, com mediana M30−M0 de **−104,90**. Entre os retidos com movimentação, **13.161 (15,2%)** também cancelaram algum produto, com mediana **−88,96**. Os 130.451 retidos sem nenhum desses eventos tiveram mediana zero. Esses grupos não devem ser combinados ao avaliar mudanças de valor.
+
+![Diferença de valores por tipo de evento](reports/figures/retained_four_event_economics.svg)
+
+A diferença descritiva de movimentação entre SOLAR e LEGADO, entre retidos, caiu de **3,41 para 2,93 pontos percentuais** após padronização por mês e número de famílias em M0 (IC bootstrap agrupado por cliente: **2,53–3,41 p.p.**). Isso **não** identifica efeito causal de canal. Leads em aberto também geram intervalos muito diferentes para o status de retenção, especialmente em LEGADO.
+
+**[Leia a investigação exploratória ampliada](docs/deep_exploration_findings.md)** e o [notebook com gráficos e cenários econômicos](notebooks/07_exploratory_deep_dive.ipynb). Lucro, aceite de ofertas e sobrevivência posterior continuam variáveis não identificáveis com a fonte atual.
+
 ## 1. O perfil deve ser estudado dentro da população retida
 
 ![Oportunidades de movimentação por tamanho do portfólio](reports/figures/portfolio_opportunities.svg)
