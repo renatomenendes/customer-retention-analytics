@@ -44,6 +44,10 @@ Notebooks, módulos, testes, apresentação e automações serão adicionados **
 
 Ainda não há ambiente Python fixado nem comandos de execução do notebook: documentá-los sem implementação seria enganoso.
 
+## Referências técnicas e reutilização
+
+O projeto aproveita **princípios metodológicos**, não dados nem código, de referências selecionadas no GitHub do responsável. Consultar [avaliação de reutilização](docs/repository_reuse_assessment.md) para fontes, critérios de adoção, limitações de licenciamento e viabilidade condicionada da análise de sobrevivência.
+
 ## Proteção de informação
 
 Arquivos tabulares, caches, saídas, registros detalhados, checkpoints, credenciais e segredos estão ignorados por padrão. Revisar `git status` e `git diff --cached` antes de cada commit; a existência de `.gitignore` não substitui revisão.
