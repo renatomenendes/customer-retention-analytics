@@ -649,12 +649,7 @@
     "FONE": 2023,
     "BL+MV": 1315,
     "TV+FONE": 642,
-    "BL+TV+MV": 282,
-    "BL+FONE+MV": 133,
-    "BL+TV+FONE+MV": 128,
-    "TV+MV": 124,
-    "FONE+MV": 32,
-    "TV+FONE+MV": 18
+    "OTHER_SMALL_COMBINATIONS": 717
   },
   "product_presence_and_flags": {
     "BL": {
