@@ -66,7 +66,7 @@ A priorização, responsáveis, critérios de teste e evidências encontram-se n
 
 1. **[Relatório científico e executivo](docs/study_report.md):** objetivos, universo, diagnóstico, perfis, sinais, economia, implicações e limitações.
 2. **[Síntese analítica reproduzível](notebooks/05_study_synthesis.ipynb):** cálculos e visualizações dos agregados observados, sem exposição de linhas individuais.
-3. **[Apresentação executiva](presentations/executive_study.md):** narrativa para discussão de decisões e experimentos.
+3. **[Apresentação executiva](presentations/executive_study.md)** e **[PowerPoint com 18 slides](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx):** narrativa para discussão de decisões e experimentos.
 4. [Auditoria e integridade](notebooks/01_data_audit.ipynb), [perfis e valores](notebooks/02_profiles_and_economics.ipynb), [predição temporal](notebooks/03_temporal_model_validation.ipynb) e [decisões](notebooks/04_business_decisions.ipynb): notebooks aprofundados, que requerem os agregados privados produzidos localmente.
 5. [Metodologia](docs/methodology.md), [dicionário](docs/data_dictionary.md), [limitações](docs/limitations.md) e [referências científicas](docs/benchmark_and_gap_review.md): fundamento para auditabilidade.
 
