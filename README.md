@@ -117,6 +117,12 @@ O workflow em `.github/workflows/ci.yml` foi projetado exclusivamente para insta
 - Frequências da amostra não são taxas corporativas nem evidência de impacto causal de ofertas.
 - A licença `LICENSE` atualmente presente é Unlicense; sua presença **não libera direitos sobre informações de terceiros**, nem autoriza divulgar dados e resultados comerciais.
 
+## Benchmarking e revisão de profundidade
+
+A revisão de literatura, repositórios externos e lacunas científicas está em [`benchmark_and_gap_review.md`](docs/benchmark_and_gap_review.md). O [checklist de critérios de aceite](docs/study_acceptance_gates.md) evita confundir CI aprovado com estudo concluído.
+
+O módulo [`deep_diagnostics.py`](src/retention_analytics/deep_diagnostics.py) testa a interpretação da movimentação por registro e por família de produto disponível em M0, comparando exposição entre carteiras. Resultados efetivos devem ser calculados **localmente**; não implicam causalidade.
+
 ## Referências metodológicas
 
 Os repositórios [`AnaliseSobrevivencia`](https://github.com/renatomenendes/AnaliseSobrevivencia), [`framework_pinhao`](https://github.com/renatomenendes/framework_pinhao), [`Analytics-Engineering-Blueprint`](https://github.com/renatomenendes/Analytics-Engineering-Blueprint) e [`pbi-profiling`](https://github.com/renatomenendes/pbi-profiling) foram considerados como **referências conceituais**, não como fontes de dados, código importado ou resultados deste case. Critérios e ressalvas estão em [`repository_reuse_assessment.md`](docs/repository_reuse_assessment.md).
