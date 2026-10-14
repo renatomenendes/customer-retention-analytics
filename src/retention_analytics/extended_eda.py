@@ -261,7 +261,12 @@ def analyze_records(
         "counts":dict(overall),
         "retention_bounds_by_month_origin":cohorts,
         "profiles":reported_profiles,
-        "movement_combinations_retained":dict(moved_families.most_common()),
+        "movement_combinations_retained": {
+            **{key: count for key, count in moved_families.most_common() if count >= 500},
+            "OTHER_SMALL_COMBINATIONS": sum(
+                count for count in moved_families.values() if count < 500
+            ),
+        },
         "product_presence_and_flags":{f:dict(products[f]) for f in PRODUCTS},
         "product_transition_economics_retained":transition_report,
         "retained_value_distributions":economic,
