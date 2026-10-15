@@ -13,7 +13,14 @@ from typing import Any, Iterable, Mapping
 
 import numpy as np
 
-from retention_analytics.audit import PRODUCTS, _flag, _month, _mplay, _number, _product_id
+from retention_analytics.audit import (
+    PRODUCTS,
+    _flag,
+    _month,
+    _mplay,
+    _number,
+    _product_id,
+)
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
 STATUS = ("RETIDO", "NAO RETIDO", "LEAD EM ABERTO")
