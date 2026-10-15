@@ -18,17 +18,17 @@
 
 **O que este trabalho demonstrou:** diferenças de movimentação associadas a mix, características iniciais e origem, controlando explicitamente a população de retidos; reconciliação parcial de alterações contratuais e valores; e comparação temporal de modelos condicionais. **O que não demonstrou:** aceite real da oferta, benefício causal de uma recomendação ou faturamento incremental.
 
-## Descoberta ampliada — a mesma classificação RETIDO esconde quatro situações distintas
+## Retenção e cancelamento de produtos — quatro situações distintas
 
-A exploração aprofundada mostrou que **32.318** registros retidos **sem flag de movimentação** tiveram **cancelamento de produto**, com mediana M30−M0 de **−104,90**. Entre os retidos com movimentação, **13.161 (15,2%)** também cancelaram algum produto, com mediana **−88,96**. Os 130.451 retidos sem nenhum desses eventos tiveram mediana zero. Esses grupos não devem ser combinados ao avaliar mudanças de valor.
+A análise dos eventos contratuais identificou que **32.318** registros retidos **sem flag de movimentação** tiveram **cancelamento de produto**, com mediana M30−M0 de **−104,90**. Entre os retidos com movimentação, **13.161 (15,2%)** também cancelaram algum produto, com mediana **−88,96**. Os 130.451 retidos sem nenhum desses eventos tiveram mediana zero. Esses grupos não devem ser combinados ao avaliar mudanças de valor.
 
 ![Diferença de valores por tipo de evento](reports/figures/retained_four_event_economics.svg)
 
 A diferença descritiva de movimentação entre SOLAR e LEGADO, entre retidos, caiu de **3,41 para 2,93 pontos percentuais** após padronização por mês e número de famílias em M0 (IC bootstrap agrupado por cliente: **2,53–3,41 p.p.**). Isso **não** identifica efeito causal de canal. Leads em aberto também geram intervalos muito diferentes para o status de retenção, especialmente em LEGADO.
 
-**[Leia a investigação exploratória ampliada](docs/deep_exploration_findings.md)** e o [notebook com gráficos e cenários econômicos](notebooks/07_exploratory_deep_dive.ipynb). Lucro, aceite de ofertas e sobrevivência posterior continuam variáveis não identificáveis com a fonte atual.
+**[Examine a análise de eventos contratuais](docs/deep_exploration_findings.md)** e o [notebook com gráficos e cenários econômicos](notebooks/07_exploratory_deep_dive.ipynb). Lucro, aceite de ofertas e sobrevivência posterior continuam variáveis não identificáveis com a fonte atual.
 
-## Descoberta complementar — desbalanceamento e oportunidades por produto
+## Desbalanceamento e oportunidades por família
 
 A contagem absoluta de alterações favorece produtos mais presentes no início do atendimento. Entre registros `RETIDO` com a família em M0, Banda Larga (internet fixa) teve **74.255 movimentações em 239.562 elegíveis (31,0%)**; Móvel teve **4.387 em 10.964 (40,0%)**. Logo, **o ranking de volumes não é o ranking de propensão condicional**. TV registrou 17,7% e Fone 11,3% entre elegíveis.
 
@@ -68,7 +68,7 @@ Não interpretar os grupos como causalidade, efeito de vender mais produtos ou p
 
 As proporções de atendimentos pendentes são muito diferentes entre canais; portanto **os contrastes entre origens são descritivos, não uma comparação de eficiência causal**.
 
-## 2. Aceite de oferta: inferência delimitada, nunca rótulo inventado
+## 2. Aceite de oferta: evidência observada e hipótese
 
 O enunciado menciona clientes que aceitam ofertas, mas **não existe variável de aceite observável na planilha**. Em vez de criar um desfecho fictício, analisamos dois sinais:
 
@@ -85,7 +85,7 @@ Nos retidos com movimentação, a mediana dos valores M30−M0 é **-25,46** e *
 
 A decomposição de trocas, saídas, inclusões e alterações por família consta do [relatório de resultados](docs/study_report.md).
 
-## 4. Comparação de modelos na população correta
+## 4. Modelagem da movimentação entre retidos
 
 Todos os modelos receberam o **mesmo conjunto de teste cronológico de novembro–dezembro**, exclusivo de clientes usados no treino e na validação. Alvo: movimentação entre observações com status `RETIDO`. Esta modelagem é **explicativa e retrospectiva**, porque o status de retenção não é conhecido no instante inicial M0.
 
@@ -98,12 +98,19 @@ Todos os modelos receberam o **mesmo conjunto de teste cronológico de novembro�
 
 O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro foram avaliados no mesmo holdout. O relatório apresenta desempenho por mês, origem e bandas de calibração. Discriminação e calibração **não provam aceite nem efeito de oferta**.
 
-## 5. Decisões sugeridas
+## 5. Implicações para a retenção
 
 1. **Oferta relevante ao mix M0:** testar abordagens por família disponível, em vez de usar número bruto de movimentações como eficácia.
 2. **Proteção do valor observado:** auditar mudanças de plano e valor negativo em retidos, por tipo de transição, antes de transformar desconto em meta financeira.
 3. **Processo de atendimento e desfechos pendentes:** uniformizar o fechamento de leads antes de comparar `SOLAR` e `LEGADO`.
 4. **Medição real de aceite e eficácia:** capturar oferta apresentada, elegibilidade, oferta aceita, incentivo e data; testar alternativas com controle randomizado e mensurar retenção posterior e receita reconhecida.
+
+## Apresentação executiva
+
+A exposição principal conduz a audiência da questão de negócio às descobertas e recomendações, com anexo técnico separado para consultas.
+
+- [Apresentação executiva — 20 slides de resultados e 5 slides de apoio técnico](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx)
+- [Roteiro de fala com notas e transições](presentations/executive_study.md)
 
 ## Como consultar as evidências
 
