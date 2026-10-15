@@ -12,7 +12,14 @@ from pathlib import Path
 from statistics import median
 from typing import Any, Iterable, Mapping
 
-from retention_analytics.audit import PRODUCTS, _flag, _month, _mplay, _number, _product_id
+from retention_analytics.audit import (
+    PRODUCTS,
+    _flag,
+    _month,
+    _mplay,
+    _number,
+    _product_id,
+)
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
 DATE_RANGE = ("2025-06", "2025-12")
