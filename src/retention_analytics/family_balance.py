@@ -13,7 +13,7 @@ from typing import Any, Iterable
 
 import numpy as np
 from sklearn.dummy import DummyClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 
 from retention_analytics.audit import PRODUCTS
@@ -116,22 +116,27 @@ def evaluate_family_models(records: list[dict[str, Any]]) -> dict[str, Any]:
         }
         if any(len(np.unique(y[k])) < 2 for k in SPLITS):
             raise ValueError(f"both classes required for {family}")
+        preprocess = _pipeline(DummyClassifier(strategy="prior")).named_steps["features"]
+        z_train = preprocess.fit_transform(x["train"], y["train"])
+        z_val = preprocess.transform(x["val"])
+        z_test = preprocess.transform(x["test"])
         models = {
             "prior": DummyClassifier(strategy="prior"),
-            "logistic_natural": _pipeline(LogisticRegression(
-                C=0.2, max_iter=200, solver="liblinear", tol=0.001, random_state=42
-            )),
-            "logistic_balanced": _pipeline(LogisticRegression(
-                C=0.2, max_iter=200, solver="liblinear", tol=0.001,
-                class_weight="balanced", random_state=42
-            )),
+            "logistic_natural": SGDClassifier(
+                loss="log_loss", penalty="l2", alpha=0.0001,
+                max_iter=70, tol=0.001, random_state=42,
+            ),
+            "logistic_balanced": SGDClassifier(
+                loss="log_loss", penalty="l2", alpha=0.0001,
+                max_iter=70, tol=0.001, class_weight="balanced", random_state=42,
+            ),
         }
         comparisons = {}
         for name, estimator in models.items():
-            estimator.fit(x["train"], y["train"])
+            estimator.fit(z_train, y["train"])
             comparisons[name] = {
-                part: scores(y[part], estimator.predict_proba(x[part])[:, 1])
-                for part in ("val", "test")
+                "val": scores(y["val"], estimator.predict_proba(z_val)[:, 1]),
+                "test": scores(y["test"], estimator.predict_proba(z_test)[:, 1]),
             }
         result["families"][family] = {
             "split_n": {k: len(y[k]) for k in SPLITS},
