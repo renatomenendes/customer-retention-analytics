@@ -13,7 +13,14 @@ from typing import Any, Iterable, Mapping
 
 import numpy as np
 
-from retention_analytics.audit import PRODUCTS, _flag, _month, _number, _product_id
+from retention_analytics.audit import (
+    PRODUCTS,
+    _flag,
+    _month,
+    _mplay,
+    _number,
+    _product_id,
+)
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
 STATUS = ("RETIDO", "NAO RETIDO", "LEAD EM ABERTO")
@@ -157,7 +164,7 @@ def analyze_records(
         for dim, label in (
             ("month", m), ("origin", orig), ("mix", "+".join(mix) or "NONE"),
             ("family_count", str(k)),
-            ("mplay", (row.get("DSC_CLI_MPLAY_M0") or "UNKNOWN").strip() or "UNKNOWN"),
+            ("mplay", _mplay(row.get("DSC_CLI_MPLAY_M0"))),
             ("mobile_flag", (row.get("flag_movel") or "UNKNOWN").strip() or "UNKNOWN"),
             ("uf", (row.get("SGL_UF") or "UNKNOWN").strip() or "UNKNOWN"),
             ("origin_family_count", f"{orig}|{k}"),

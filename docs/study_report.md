@@ -59,11 +59,11 @@ Há 6.162 leads abertos em LEGADO e 90 em SOLAR, segundo os agregados auditados.
 
 Essas dimensões estão representadas no modelo conjunto e foram examinadas em segmentos de pelo menos 500 registros, com seus denominadores explícitos.
 
-**MPlay (M0):**
+**MPlay (M0):** campo vazio significa **não elegível** à unificação de faturas no dicionário fornecido; não é valor desconhecido. A categoria representa **93,1%** dos registros retidos, enquanto **34,4%** é a taxa de movimentação dentro dela. Os percentuais da tabela seguinte são todos taxas condicionadas ao respectivo grupo.
 
 | Categoria | Retidos | Movimentação |
 |---|---:|---:|
-| UNKNOWN | 232.017 | 34,4% |
+| NÃO ELEGÍVEL (vazio no campo original) | 232.017 | 34,4% |
 | MARCADO | 10.587 | 54,0% |
 | NAO-MARCADO | 6.705 | 15,2% |
 

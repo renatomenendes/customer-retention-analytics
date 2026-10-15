@@ -10,7 +10,7 @@ Este documento usa o enunciado do case e **nomes de colunas informados pelos art
 | `FLAG_ORIGEM` | `SOLAR`: recomendação; `LEGADO`: catálogo de ofertas | Descrição/controle de composição; não causal |
 | `NM_SUB_INDICADOR_NEGOCIO` | Situação do lead; níveis previamente observados: `RETIDO`, `NAO RETIDO`, `LEAD EM ABERTO` | Possível desfecho, dependente de validação |
 | `flag_movel` | Indicador de posse de móvel | Entrada sob confirmação de granularidade |
-| `DSC_CLI_MPLAY_M0`, `DSC_CLI_MPLAY_M30` | Situação de unificação de faturas nos dois momentos | M0 candidata a atributo; M30 somente descritiva |
+| `DSC_CLI_MPLAY_M0`, `DSC_CLI_MPLAY_M30` | `MARCADO`: faturas unificadas; `NAO-MARCADO`: elegível à unificação; **vazio: não elegível** (conforme enunciado) | M0: perfil e modelagem retrospectiva; M30: apenas descritiva |
 | `ID_PRODUTO_{BL,TV,FONE}_{M0,M30}` | Código por família de produto e instante | Descrever carteira/transições, com atenção a nulos |
 | `COD_PLANO_MOVEL_{M0,M30}` | Código de plano móvel | Transições móveis, cuja relação com `flag_movel` precisa ser validada |
 | `DSC_PRODUTO_{BL,TV,FONE}_{M0,M30}` | Descrição do produto | Auditoria e possível categorização controlada |

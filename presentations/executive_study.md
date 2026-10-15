@@ -74,9 +74,9 @@ As combinações iniciais exibem frequências distintas de movimentação. Por e
 
 *Transição:* Outros atributos comerciais também apresentam heterogeneidade, com importantes condições de cobertura.
 
-### Slide 12 — MPlay distingue perfis, mas 93% dos retidos não têm classificação
+### Slide 12 — A situação MPlay está associada a taxas distintas de movimentação
 
-A variável de consolidação de faturas é interessante do ponto de vista comercial: os grupos MARCADO e NÃO MARCADO têm taxas de movimentação bastante distintas. Entretanto, 232.017 dos registros retidos não trazem classificação informada, cerca de 93,1 por cento. Isso pode refletir ausência estrutural de elegibilidade; não podemos imputar comportamento nem atribuir efeito causal à unificação.
+O dicionário define MARCADO como faturas unificadas, NÃO MARCADO como elegível para unificação e vazio como NÃO ELEGÍVEL. Entre os retidos, as taxas de movimentação são 54,0% nos 10.587 marcados, 15,2% nos 6.705 não marcados e 34,4% nos 232.017 não elegíveis. Esse último grupo representa 93,1% da população retida; 93,1% é participação do grupo, não taxa de movimentação. As diferenças observadas não estabelecem efeito causal da unificação.
 
 *Transição:* Na comparação dos canais, também é necessário separar comportamento e composição.
 
@@ -106,7 +106,7 @@ No modelo por família, a telefonia fixa e Móvel apresentam AUC pouco acima de 
 
 ### Slide 17 — Pesar classes piorou o erro probabilístico nos quatro produtos
 
-Testamos ponderação balanceada no treino e avaliamos os mesmos registros de novembro e dezembro. O Brier, que mede erro de probabilidade, piorou para internet fixa, TV, Fone e Móvel. Em Fone, por exemplo, a discriminação teve pequena melhora, mas o erro probabilístico praticamente dobrou. Não há justificativa para impor ponderação uniforme como regra comercial. O balanceamento é uma escolha dependente do custo de erro, da métrica e da calibração.
+Testamos ponderação balanceada no treino e avaliamos os mesmos registros de novembro e dezembro. O Brier, que mede erro de probabilidade, piorou para internet fixa, TV, Fone e Móvel. Em Fone, por exemplo, a discriminação teve pequena melhora, mas o erro probabilístico praticamente dobrou. Não há justificativa para impor ponderação uniforme como regra comercial. O balanceamento é uma escolha dependente do custo de erro, da métrica e da calibração. A regressão ponderada não passou por recalibração posterior; portanto, os resultados não descartam a possibilidade de um modelo ponderado e calibrado apresentar comportamento melhor.
 
 *Transição:* Há ainda um resultado que a base não observa: o aceite efetivo da oferta.
 

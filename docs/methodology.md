@@ -54,3 +54,8 @@ A pergunta primária é a comparação dos clientes/atendimentos **classificados
 O indicador de **aceite de oferta** não existe no dicionário recebido: inferências só podem ser discutidas como mecanismos plausíveis não identificados. A proxy de movimentação e a proxy mais restrita de alteração de código/plano não cancelada coincidiram no grupo retido; nenhuma identifica o aceite. Cenários de prevalência de aceite devem ser descritos como simulações condicionais a hipóteses, nunca como mensurações.
 
 A análise condicional compara baseline de frequência, regressão logística regularizada, árvore curta e gradient boosting sobre o mesmo holdout novembro–dezembro de 2025, selecionando o candidato de menor Brier na validação de outubro. São apresentados AUC, PR-AUC com prevalência, Brier, log loss, lift por capacidade e faixas de calibração. Não se confunde desempenho no holdout com ganho financeiro ou causalidade da oferta.
+
+
+## Interpretação de MPlay conforme o enunciado
+
+O atributo `DSC_CLI_MPLAY_M0` tem três estados operacionais: `MARCADO` = faturas móvel e residencial já unificadas; `NAO-MARCADO` = elegível à unificação; campo vazio = **não elegível**. O vazio deve ser codificado como `NAO_ELEGIVEL`, não como `UNKNOWN`/dado ausente. A recodificação altera a interpretação e os rótulos, **não a composição dos grupos**. Movimentação por categoria é associação descritiva, não efeito causal de unificação.

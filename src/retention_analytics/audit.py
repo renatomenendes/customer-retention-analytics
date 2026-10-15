@@ -51,6 +51,12 @@ def _month(value: str | None) -> str | None:
         return None
 
 
+def _mplay(value: str | None) -> str:
+    """Interpret blank MPlay as NOT ELIGIBLE, per case specification."""
+    normalized = (value or "").strip()
+    return normalized if normalized else "NAO_ELEGIVEL"
+
+
 def _presence(value: str | None) -> bool:
     return value is not None and str(value).strip() not in ("", "0", "0.0")
 
