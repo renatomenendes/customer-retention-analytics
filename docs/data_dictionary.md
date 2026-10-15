@@ -8,7 +8,7 @@ As variáveis são interpretadas de acordo com as definições fornecidas para o
 | `DATA_FUNIL_SOLAR` | Data de entrada do lead no funil | Recorte temporal, engenharia de mês de entrada |
 | `COD_IBGE`, `DSC_CIDADE`, `SGL_UF`, `NM_GRUPO_REGIONAL` | Localização/região | Descrição; cuidado com granularidade e grupos pequenos |
 | `FLAG_ORIGEM` | `SOLAR`: recomendação; `LEGADO`: catálogo de ofertas | Descrição/controle de composição; não causal |
-| `NM_SUB_INDICADOR_NEGOCIO` | Situação do lead; níveis previamente observados: `RETIDO`, `NAO RETIDO`, `LEAD EM ABERTO` | Possível desfecho, dependente de validação |
+| `NM_SUB_INDICADOR_NEGOCIO` | Situação do atendimento: `RETIDO`, `NAO RETIDO`, `LEAD EM ABERTO` | Desfecho operacional; os casos em aberto são analisados separadamente |
 | `flag_movel` | Indicador de posse de móvel | Entrada sob confirmação de granularidade |
 | `DSC_CLI_MPLAY_M0`, `DSC_CLI_MPLAY_M30` | `MARCADO`: faturas unificadas; `NAO-MARCADO`: elegível à unificação; **vazio: não elegível** | M0: perfil e modelagem retrospectiva; M30: apenas descritiva |
 | `ID_PRODUTO_{BL,TV,FONE}_{M0,M30}` | Código por família de produto e instante | Descrever carteira/transições, com atenção a nulos |
