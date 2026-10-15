@@ -244,3 +244,8 @@ Os limites pessimista/otimista de retenção conforme encerramento dos casos abe
 **Não identificável sem novos dados:** taxa verdadeira de aceite, efeito incremental/causal de ofertas, permanência futura, lucro/receita reconhecida e episódios únicos de atendimento. Estas não são etapas de engenharia atrasadas: são limites de identificação da fonte fornecida. O estudo não inventa dados para suprir essas lacunas.
 
 **Fonte do enunciado:** `Objetivo do Case.docx` (3 páginas), disponibilizado para o projeto. Dados não publicados no repositório. **Referências metodológicas** e contraindicações encontram-se em `docs/benchmark_and_gap_review.md`.
+
+
+## 8. Desbalanceamento por família e robustez de ponderação
+
+A análise global não basta para concluir que os modelos representam igualmente bem BL (Banda Larga, internet fixa), TV, Fone e Móvel. A nova análise usa quatro alvos binários, cada um condicionado à presença do respectivo produto em M0. No teste cronológico, a classe positiva variou de 12,1% (Fone) a 40,7% (Móvel). A ponderação balanceada no treino piorou o Brier nas quatro famílias e nem sempre melhorou o ranking. Em Fone elevou a AUC (0,551 para 0,574), mas o Brier subiu de 0,1061 para 0,2219; em Móvel, a vantagem marginal de validação do ponderado não se manteve no teste. Os valores, AP relativa à prevalência e comparação dos modelos estão no [estudo de desbalanceamento](family_imbalance_analysis.md) e no [notebook 08](../notebooks/08_family_imbalance.ipynb). Nenhum resultado valida aceite de oferta ou recomendação causal.

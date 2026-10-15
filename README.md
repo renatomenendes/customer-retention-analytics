@@ -28,6 +28,14 @@ A diferença descritiva de movimentação entre SOLAR e LEGADO, entre retidos, c
 
 **[Leia a investigação exploratória ampliada](docs/deep_exploration_findings.md)** e o [notebook com gráficos e cenários econômicos](notebooks/07_exploratory_deep_dive.ipynb). Lucro, aceite de ofertas e sobrevivência posterior continuam variáveis não identificáveis com a fonte atual.
 
+## Descoberta complementar — desbalanceamento e oportunidades por produto
+
+A contagem absoluta de alterações favorece produtos mais presentes no início do atendimento. Entre registros `RETIDO` com a família em M0, Banda Larga (internet fixa) teve **74.255 movimentações em 239.562 elegíveis (31,0%)**; Móvel teve **4.387 em 10.964 (40,0%)**. Logo, **o ranking de volumes não é o ranking de propensão condicional**. TV registrou 17,7% e Fone 11,3% entre elegíveis.
+
+No teste cronológico por família, **balancear as classes piorou o Brier nas quatro comparações**. Em Fone, houve aumento de AUC (0,551→0,574), mas o Brier passou de 0,1061 para 0,2219. Em Móvel, a pequena vantagem de validação do modelo ponderado não se repetiu no teste. Portanto, a ponderação não deve ser aplicada por padrão. Os números e os denominadores estão na [análise específica](docs/family_imbalance_analysis.md).
+
+A movimentação das quatro famílias foi examinada como **quatro resultados binários que podem ocorrer simultaneamente**, e não como classes mutuamente exclusivas. A [avaliação específica de desbalanceamento](docs/family_imbalance_analysis.md) apresenta os denominadores e testa a sensibilidade dos modelos à ponderação de classes, preservando a prevalência natural no teste. A área de retenção não deve escolher ofertas pelo volume bruto de movimentações nem presumir que um escore global tenha a mesma qualidade em cada produto.
+
 ## 1. O perfil deve ser estudado dentro da população retida
 
 ![Oportunidades de movimentação por tamanho do portfólio](reports/figures/portfolio_opportunities.svg)

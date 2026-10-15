@@ -39,3 +39,8 @@ Este roteiro sintetiza a apresentação PowerPoint de 20 slides. O recorte e o s
 **O que falta para decisão de implantação?** Identificador do episódio, rótulo de oferta, data e permanência do desfecho, faturamento e desenho experimental.
 
 Consulte o [relatório detalhado](../docs/study_report.md), os [notebooks](../notebooks/) e os [resultados agregados](../reports/retained_profile_study_2025.json).
+
+
+## Anexo para defesa técnica — desbalanceamento entre famílias
+
+O ranking por volume de movimentações é dominado pela presença de BL (internet fixa) na carteira, mas a taxa de movimentação entre elegíveis em M0 é maior em Móvel. Não são quatro classes mutuamente exclusivas. Avaliamos, separadamente, quatro alvos binários entre registros RETIDO com o produto presente em M0. No teste de novembro–dezembro, a ponderação de classes piorou o Brier em todas as famílias. Por exemplo, em Fone a AUC melhorou de 0,551 para 0,574, mas o Brier piorou de 0,1061 para 0,2219. **Resposta à banca:** pesos de classe não devem ser aplicados indiscriminadamente, pois priorizar recall/ranking pode comprometer a confiabilidade probabilística. Consulte [o relatório comparativo](../docs/family_imbalance_analysis.md) e [notebook 08](../notebooks/08_family_imbalance.ipynb).
