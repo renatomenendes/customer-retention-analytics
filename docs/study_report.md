@@ -13,7 +13,7 @@ A análise caracteriza **movimentações entre registros retidos**, com base no 
 - **R**: `RETIDO`, desfecho operacional do funil. **M**: pelo menos uma `FLAG_MOV_* = 1`. **X_M0**: carteira, atributos geográficos e comerciais disponíveis ou presumidos no início. **A**: aceite real de oferta, **variável latente não observada**.
 - **Estimando central:** `P(M=1 | R=1, X_M0)`. Esta condição gera seleção pelo desfecho e serve para **caracterização retrospectiva**, não para pontuar todos os leads antes da retenção.
 - **Estimando secundário:** `P(R=1, M=1 | X_M0)` entre atendimentos concluídos. Continua no notebook 03 com escopo próprio.
-- **Valor:** M30−M0 de campos `0VALOR`0; são valores pagos associados ao registro. Sem competência e preço líquido conciliado, não equivalem a ganho incremental da campanha.
+- **Valor:** M30−M0 de campos `VALOR_*`; são valores pagos associados ao registro. Sem competência e preço líquido conciliado, não equivalem a ganho incremental da campanha.
 - **Aceite de oferta:** não observado. A proxy ampla pode superestimar aceite e a restritiva pode simultaneamente admitir falsos positivos e excluir aceites sem troca de código. Não há limite estatisticamente identificado para `P(A=1)` a partir dos campos presentes.
 
 ## 2. Caracterização dos perfis — todos os denominadores são retidos
