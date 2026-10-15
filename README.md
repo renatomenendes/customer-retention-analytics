@@ -107,16 +107,14 @@ O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro fora
 
 ## Apresentação executiva
 
-A exposição principal conduz a audiência da questão de negócio às descobertas e recomendações, com anexo técnico separado para consultas.
-
-- [Apresentação executiva — 20 slides de resultados e 5 slides de apoio técnico](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx)
-- [Roteiro de fala com notas e transições](presentations/executive_study.md)
+- [Apresentação — resultados e recomendações](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx)
+- [Roteiro para apresentação oral](presentations/executive_study.md)
 
 ## Como consultar as evidências
 
 - [Relatório completo: perguntas, perfis, inferências, matriz de decisões e limitações](docs/study_report.md)
 - [Notebook 06 — perfis entre retidos, proxy de aceite e comparação condicional de modelos](notebooks/06_retained_profiles_and_offer_proxies.ipynb)
-- [Notebooks 01–05 — auditoria, exploração, modelos e síntese](notebooks/)
+- [Notebooks 01–08 — auditoria, perfis, exploração, modelagem e desbalanceamento](notebooks/)
 - [Apresentação executiva](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx)
 - [Metodologia e dicionário](docs/methodology.md) · [Referências científicas](docs/benchmark_and_gap_review.md)
 
