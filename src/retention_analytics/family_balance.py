@@ -13,11 +13,12 @@ from typing import Any, Iterable
 
 import numpy as np
 from sklearn.dummy import DummyClassifier
+from sklearn.feature_extraction import DictVectorizer
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 
 from retention_analytics.audit import PRODUCTS
-from retention_analytics.study_profiles import _pipeline, extract
+from retention_analytics.study_profiles import extract
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
 SPLITS = {
@@ -110,25 +111,42 @@ def evaluate_family_models(records: list[dict[str, Any]]) -> dict[str, Any]:
             k: np.asarray([int(row["moves"][family]) for row in group], dtype=int)
             for k, group in eligible.items()
         }
-        x = {
-            k: np.asarray([row["x"] for row in group], dtype=object)
-            for k, group in eligible.items()
-        }
         if any(len(np.unique(y[k])) < 2 for k in SPLITS):
             raise ValueError(f"both classes required for {family}")
-        preprocess = _pipeline(DummyClassifier(strategy="prior")).named_steps["features"]
-        z_train = preprocess.fit_transform(x["train"], y["train"])
-        z_val = preprocess.transform(x["val"])
-        z_test = preprocess.transform(x["test"])
+        def value_band(value: Any) -> str:
+            if value is None:
+                return "missing"
+            v = float(value)
+            return "neg" if v < 0 else "0-50" if v < 50 else "50-100" if v < 100 else "100-200" if v < 200 else "200+"
+
+        def fmap(row: dict[str, Any]) -> dict[str, str]:
+            fields = row["x"]
+            return {
+                "origin": str(fields[0]),
+                "uf": str(fields[1]),
+                "mplay": str(fields[2]),
+                "classification": str(fields[3]),
+                "mobile_flag": str(fields[4]),
+                "mix": str(fields[5]),
+                "n_families": str(fields[6]),
+                "value_bl_band": value_band(fields[11]),
+                "value_tv_band": value_band(fields[12]),
+                "value_mv_band": value_band(fields[13]),
+            }
+
+        encoder = DictVectorizer(sparse=True)
+        z_train = encoder.fit_transform(fmap(r) for r in eligible["train"])
+        z_val = encoder.transform(fmap(r) for r in eligible["val"])
+        z_test = encoder.transform(fmap(r) for r in eligible["test"])
         models = {
             "prior": DummyClassifier(strategy="prior"),
             "logistic_natural": SGDClassifier(
-                loss="log_loss", penalty="l2", alpha=0.0001,
-                max_iter=70, tol=0.001, random_state=42,
+                loss="log_loss", penalty="l2", alpha=0.0005,
+                max_iter=25, tol=0.005, random_state=42,
             ),
             "logistic_balanced": SGDClassifier(
-                loss="log_loss", penalty="l2", alpha=0.0001,
-                max_iter=70, tol=0.001, class_weight="balanced", random_state=42,
+                loss="log_loss", penalty="l2", alpha=0.0005,
+                max_iter=25, tol=0.005, class_weight="balanced", random_state=42,
             ),
         }
         comparisons = {}
