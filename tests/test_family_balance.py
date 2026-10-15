@@ -30,3 +30,23 @@ def test_top_decile_and_ap_relative_to_prevalence():
 def test_constant_label_rejected():
     with pytest.raises(ValueError):
         scores(np.zeros(10), np.full(10, 0.5))
+
+
+def test_client_overlap_removed_from_prior_temporal_splits():
+    from retention_analytics.family_balance import prepare_splits
+
+    rows = [
+        {"id": "a", "month": "2025-06"},
+        {"id": "b", "month": "2025-08"},
+        {"id": "a", "month": "2025-10"},
+        {"id": "c", "month": "2025-11"},
+    ]
+    pools, purged = prepare_splits(rows)
+    assert purged == {"train": 1, "val": 0}
+    assert [r["id"] for r in pools["train"]] == ["b"]
+    train = {r["id"] for r in pools["train"]}
+    val = {r["id"] for r in pools["val"]}
+    test = {r["id"] for r in pools["test"]}
+    assert train.isdisjoint(val)
+    assert train.isdisjoint(test)
+    assert val.isdisjoint(test)
