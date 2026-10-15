@@ -1,54 +1,42 @@
-# Protocolo analítico — perfis, snapshots econômicos e modelo experimental
+# Desenho analítico e reprodutibilidade
 
-## Fontes e segregação
+## População e indicadores
 
-A planilha original permanece exclusivamente no ambiente local autorizado. O código gera agregados em `reports/private/` e não grava linhas individuais, IDs ou estimadores treinados. Os notebooks versionados não contêm outputs executados com dados reais; estes permanecem em `notebooks/.executed/`.
+A população central contém registros classificados como `RETIDO`, com entrada no funil de junho a dezembro de 2025. A unidade é o registro, e não necessariamente um cliente único ou episódio individual confirmado.
 
-## Pergunta, população e unidade
+- **Movimentação entre retidos:** registros `RETIDO` com alguma `FLAG_MOV_*` positiva / total de registros `RETIDO`.
+- **Evento composto:** registros retidos com movimentação / total de atendimentos encerrados; indicador distinto do perfil entre retidos.
+- **Cancelamento de produto:** ao menos uma `FLAG_CANC_*`, separado de movimentação e do status `RETIDO`.
+- **Diferença de valor:** `VALOR_M30 − VALOR_M0`, em produtos e totais com valores comparáveis; não equivale a lucro ou efeito de oferta.
+- **Exposição por família:** somente registros que possuíam o produto em M0 entram no denominador da respectiva movimentação.
 
-**Pergunta descritiva:** quais atributos disponíveis em M0 estão associados à movimentação entre registros classificados como `RETIDO`?
+## Atributos e interpretação
 
-**Unidade:** linha da planilha, **candidata** a episódio do funil. Não é cliente único nem observação longitudinal validada. Não deduplicar automaticamente por `id_cliente`.
+Os modelos de perfil utilizam origem, UF, classificação regional, posse móvel, mix/tamanho da carteira e valores de produtos no estado M0. As variáveis de status, flags finais, cancelamento e campos M30 não são preditores.
 
-**Elegibilidade temporal:** entrada entre junho e dezembro de 2025, inclusive. O desfecho operacional provisório usa `NM_SUB_INDICADOR_NEGOCIO`; movimentos usam OR lógico das quatro `FLAG_MOV`. `LEAD EM ABERTO` não é classificado como fracasso.
+MPlay em M0 possui três estados: `MARCADO` (faturas unificadas), `NAO-MARCADO` (elegível) e vazio (`NAO_ELEGIVEL`). As categorias de negócio não devem ser tratadas indistintamente como ausência estatística.
 
-**Métricas:**
+## Validação dos modelos
 
-- Movimentação entre retidos = retidos com pelo menos uma flag de movimentação / todos os retidos.
-- Evento composto entre fechados = retidos com movimentação / (`RETIDO` + `NAO RETIDO`).
-- Variação monetária observada = soma de `VALOR_{BL,TV,FONE,MV}_M30` menos soma equivalente em M0, apenas quando todos os campos da comparação estão preenchidos. Não é receita faturada.
-- Grupos descritivos com n < 100 são suprimidos. Intervalos de Wilson são descritivos e podem subestimar a incerteza por repetição de clientes.
+O alvo principal é `MOV | RETIDO`, de natureza retrospectiva. O estado `RETIDO` não é conhecido no início do atendimento; o classificador não foi validado como ferramenta para pontuar todos os clientes antes do encerramento.
 
-## Transformações e atributos
+| Partição | Período |
+|---|---|
+| Treino | Junho a setembro de 2025 |
+| Validação | Outubro de 2025 |
+| Teste | Novembro e dezembro de 2025 |
 
-Atributos de entrada: origem, UF, classificação de cidade, elegibilidade para faturas M0, flag móvel, número de famílias M0, presença de cada família em M0 e valores M0 de BL/TV/MV. IDs de cliente, status final, flags de movimentação, cancelamento e campos M30 **não entram como features preditivas**.
+Clientes presentes em períodos posteriores foram excluídos das partições anteriores. Registros repetidos dentro de uma mesma partição podem permanecer.
 
-A informação de produto e valores em M0 depende de comprovação de disponibilidade no instante da decisão. A interpretação de `CLASSIFICACAO` e `MPLAY` requer validação do negócio. Geografia é uma variável sensível à transferência entre canais e à composição da amostra.
+O comparativo global inclui frequência-base, regressão logística regularizada, árvore rasa e boosting tabular. A seleção utiliza Brier na validação; o teste compara AUROC, average precision, log loss, Brier, lift por capacidade e calibração.
 
-## Modelagem
+Quatro análises adicionais condicionam a população à presença da respectiva família em M0. Nelas, a regressão sem pesos e a ponderada são comparadas sobre o mesmo teste com prevalência natural. A ponderação foi testada **sem recalibração posterior**.
 
-Alvo experimental: evento composto `RETIDO` e qualquer `FLAG_MOV=1`, entre os episódios com status encerrado. Essa tarefa não deve ser confundida com `movimentação | RETIDO` e **não** estima efeito incremental de oferta.
+## Limitações estatísticas
 
-- Treino: junho–setembro de 2025.
-- Validação: outubro de 2025.
-- Teste: novembro–dezembro de 2025.
-- IDs de clientes que aparecem em períodos posteriores são removidos dos anteriores; registros repetidos dentro de um mesmo período permanecem.
-- Baseline: probabilidade constante segundo prevalência do treino.
-- Candidatos: regressão logística regularizada e árvore de decisão rasa, com imputação e one-hot codificadas pelo treino.
-- Modelo é selecionado **uma vez** pelo menor Brier score de validação, teste reservado ao final.
-- Discriminação: AUC-ROC, average precision e lift no decil superior; calibração: Brier e log-loss. Se scores são constantes, lift@10 é 1 por ausência de ranking.
+A inexistência de chave oficial do episódio, a seleção por desfecho `RETIDO`, a maturidade desigual dos registros em aberto e a janela limitada a sete meses restringem as inferências. O modelo não identifica aceite de oferta, tratamento causal nem retenção posterior. Não há plano amostral que sustente extrapolação para uma operadora real.
 
-## Limitações não resolvidas
-
-1. Chave de episódio não foi formalizada; a exclusão de IDs entre splits reduz, mas não elimina, dependência de registros.
-2. M30 não representa necessariamente exatamente 30 dias após M0; não há horizonte de evento individual validado.
-3. Leads abertos são excluídos da modelagem, com potencial viés de fechamento por mês e origem.
-4. Taxas de amostra não representam automaticamente o universo da empresa.
-5. Campos monetários não definem periodicidade, descontos, impostos, créditos e bundles; delta não prova preservação de receita real.
-6. Importância de feature ou desempenho preditivo não comprova causalidade ou impacto de negócio.
-7. A validação abrange apenas a série de sete meses; não permite alegação de estabilidade, justiça de tratamento ou viabilidade de produção.
-
-## Reprodutibilidade e privacidade
+## Reprodução
 
 ```bash
 python -m pip install -e '.[analysis,dev]'
@@ -58,4 +46,4 @@ python -m pytest -q
 ruff check src tests
 ```
 
-Depois, executar sequencialmente os notebooks `01`, `02`, `03` e `04`. Somente dados sintéticos fazem parte do CI. A execução sobre dados reais, relatórios, figuras, modelos ajustados e apresentações confidenciais permanecem locais, sem push.
+O repositório inclui módulos em `src/`, testes em `tests/`, notebooks de investigação em `notebooks/` e agregados em `reports/`. A planilha de origem não integra o controle de versão.
