@@ -28,7 +28,14 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
-from retention_analytics.audit import PRODUCTS, _flag, _month, _mplay, _number, _product_id
+from retention_analytics.audit import (
+    PRODUCTS,
+    _flag,
+    _month,
+    _mplay,
+    _number,
+    _product_id,
+)
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
 CAT = ("origin", "uf", "mplay_m0", "classification", "mobile_flag", "family_mix_m0")
