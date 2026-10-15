@@ -28,7 +28,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
-from retention_analytics.audit import PRODUCTS, _flag, _month, _number, _product_id
+from retention_analytics.audit import PRODUCTS, _flag, _month, _mplay, _number, _product_id
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
 CAT = ("origin", "uf", "mplay_m0", "classification", "mobile_flag", "family_mix_m0")
@@ -51,7 +51,7 @@ def extract(row: Mapping[str, str | None]) -> dict[str, Any] | None:
     feature = (
         (row.get("FLAG_ORIGEM") or "UNKNOWN").strip() or "UNKNOWN",
         (row.get("SGL_UF") or "UNKNOWN").strip() or "UNKNOWN",
-        (row.get("DSC_CLI_MPLAY_M0") or "UNKNOWN").strip() or "UNKNOWN",
+        _mplay(row.get("DSC_CLI_MPLAY_M0")),
         (row.get("CLASSIFICACAO") or "UNKNOWN").strip() or "UNKNOWN",
         (row.get("flag_movel") or "UNKNOWN").strip() or "UNKNOWN",
         "+".join(f for f in PRODUCTS if has[f]) or "NONE",
