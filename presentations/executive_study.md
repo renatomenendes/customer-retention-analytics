@@ -106,7 +106,7 @@ No modelo por família, a telefonia fixa e Móvel apresentam AUC pouco acima de 
 
 ### Slide 17 — Pesar classes piorou o erro probabilístico nos quatro produtos
 
-Testamos ponderação balanceada no treino e avaliamos os mesmos registros de novembro e dezembro. O Brier, que mede erro de probabilidade, piorou para internet fixa, TV, Fone e Móvel. Em Fone, por exemplo, a discriminação teve pequena melhora, mas o erro probabilístico praticamente dobrou. Não há justificativa para impor ponderação uniforme como regra comercial. O balanceamento é uma escolha dependente do custo de erro, da métrica e da calibração.
+Testamos ponderação balanceada no treino e avaliamos os mesmos registros de novembro e dezembro. O Brier, que mede erro de probabilidade, piorou para internet fixa, TV, Fone e Móvel. Em Fone, por exemplo, a discriminação teve pequena melhora, mas o erro probabilístico praticamente dobrou. Não há justificativa para impor ponderação uniforme como regra comercial. O balanceamento é uma escolha dependente do custo de erro, da métrica e da calibração. A regressão ponderada não passou por recalibração posterior; portanto, os resultados não descartam a possibilidade de um modelo ponderado e calibrado apresentar comportamento melhor.
 
 *Transição:* Há ainda um resultado que a base não observa: o aceite efetivo da oferta.
 
