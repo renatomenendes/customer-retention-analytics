@@ -1,6 +1,6 @@
 # Retenção e movimentação de produtos — estudo de perfis | Telecom, 2025
 
-*Estudo de case com base sintética e anonimizada, referente a atendimentos de retenção de junho a dezembro de 2025. As associações descritas pertencem à amostra demonstrativa e não devem ser extrapoladas diretamente para uma operação real.*
+*Estudo referente a atendimentos de retenção de junho a dezembro de 2025. As associações descritas pertencem à amostra demonstrativa e não devem ser extrapoladas diretamente para uma operação real.*
 
 > **Pergunta do case.** Quais características dos clientes classificados como **retidos** estão associadas à **movimentação de produtos** durante o atendimento, e o que isso sugere para melhorar a personalização das ofertas e proteger o valor pago?
 
