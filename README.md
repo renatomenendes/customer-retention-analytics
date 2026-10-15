@@ -11,12 +11,11 @@
 | Registros no período | **303.652** | Unidade: registro do funil; um cliente pode reaparecer |
 | Status `RETIDO` | **249.309** | Desfecho do atendimento, não permanência futura |
 | Retidos com alguma movimentação | **86.540 (34,7%)** | Medida central do estudo, condicionada à retenção |
-| Mudança contratual compatível com oferta, proxy estrita | **86.540 (34,7%)** | Não representa aceite comprovado |
 | Retidos com movimento e redução de valor registrado | **78,7%** | A retenção pode coexistir com queda do valor observado |
 | Primeiro registro retido por cliente (sensibilidade) | **34,8%** | Teste de sensibilidade à repetição de clientes, não nova definição de lead |
 | Melhor modelo explicativo condicional no teste | **AUC 0,650** | Performance fora do treino de **P(movimento | retido, M0)** |
 
-**O que este trabalho demonstrou:** diferenças de movimentação associadas a mix, características iniciais e origem, controlando explicitamente a população de retidos; reconciliação parcial de alterações contratuais e valores; e comparação temporal de modelos condicionais. **O que não demonstrou:** aceite real da oferta, benefício causal de uma recomendação ou faturamento incremental.
+O estudo identifica associações entre movimentação, composição inicial da carteira, características do atendimento e mudanças de valor registrado. A comparação temporal dos modelos mostra capacidade discriminatória moderada e heterogênea entre as famílias de produtos. Aceite de oferta, faturamento incremental e efeitos causais não são variáveis identificáveis nesta base.
 
 ## Retenção e cancelamento de produtos — quatro situações distintas
 
@@ -34,7 +33,7 @@ A contagem absoluta de alterações favorece produtos mais presentes no início 
 
 No teste cronológico por família, **os modelos ponderados sem recalibração posterior tiveram Brier pior nas quatro comparações**. Isso não descarta a ponderação acompanhada de calibração. Em Fone, houve aumento de AUC (0,551→0,574), mas o Brier passou de 0,1061 para 0,2219. Em Móvel, a pequena vantagem de validação do modelo ponderado não se repetiu no teste. Portanto, a ponderação não deve ser aplicada por padrão. Os números e os denominadores estão na [análise específica](docs/family_imbalance_analysis.md).
 
-A movimentação das quatro famílias foi examinada como **quatro resultados binários que podem ocorrer simultaneamente**, e não como classes mutuamente exclusivas. A [avaliação específica de desbalanceamento](docs/family_imbalance_analysis.md) apresenta os denominadores e testa a sensibilidade dos modelos à ponderação de classes, preservando a prevalência natural no teste. A área de retenção não deve escolher ofertas pelo volume bruto de movimentações nem presumir que um escore global tenha a mesma qualidade em cada produto.
+A movimentação das quatro famílias foi examinada como **quatro resultados binários que podem ocorrer simultaneamente**, e não como classes mutuamente exclusivas. A [avaliação específica de desbalanceamento](docs/family_imbalance_analysis.md) apresenta os denominadores e testa a sensibilidade dos modelos à ponderação de classes, preservando a prevalência natural no teste. A avaliação de ofertas por produto requer taxas condicionadas à elegibilidade e medidas de desempenho específicas por família.
 
 ## 1. Movimentação entre registros retidos
 
@@ -57,7 +56,7 @@ Carteiras com mais famílias apresentam maior chance de *alguma* movimentação,
 | TV+FONE | 1.169 | 21,1% |
 | FONE | 858 | 8,2% |
 
-Não interpretar os grupos como causalidade, efeito de vender mais produtos ou propensão invariável: origem, elegibilidade, preço e regras de oferta podem diferir.
+As diferenças entre grupos são descritivas e podem refletir origem, elegibilidade, preço e regras de oferta.
 
 ### Canais e período
 
@@ -75,7 +74,7 @@ A base não registra a oferta apresentada nem a decisão de aceite. A análise u
 - **Proxy ampla de movimentação**: ao menos uma `FLAG_MOV_* = 1` (inclui mudanças que podem ser motivadas por outras razões).
 - **Proxy restritiva, compatível com uma mudança contratual de oferta**: flag de movimentação, código/plano diferente em M30, produto presente em M30 e ausência de flag de cancelamento da família. Foram observados **86.540** registros com essa condição (**34,7%** entre retidos).
 
-Nesta amostra, **os dois sinais coincidem exatamente (86.540 registros)**: a proxy restritiva não fornece qualquer informação adicional sobre aceite. **Nenhum deles estima diretamente a taxa de aceite**; inclusive a proxy restritiva pode conter mudanças sem oferta ou deixar de fora ofertas de desconto sem troca de produto. Um cenário de aceite de 25%, 50% ou 75% das movimentações é apenas uma simulação de sensibilidade, jamais um resultado estimado.
+Nesta amostra, **os dois sinais coincidem exatamente (86.540 registros)**: a proxy restritiva não fornece qualquer informação adicional sobre aceite. **Nenhum deles estima diretamente a taxa de aceite**; inclusive a proxy restritiva pode conter mudanças sem oferta ou deixar de fora ofertas de desconto sem troca de produto. Cenários com 25%, 50% ou 75% dos movimentos associados a aceites são simulações hipotéticas, não estimativas observadas.
 
 ## 3. Valor monetário: retenção não significa manutenção do valor
 
@@ -96,7 +95,7 @@ Todos os modelos receberam o **mesmo conjunto de teste cronológico de novembro�
 | small tree | 0,629 | 0,444 | 0,2097 | 0,6083 | 1,67× |
 | hist boosting | 0,650 | 0,487 | 0,2065 | 0,6010 | 1,81× |
 
-O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro foram avaliados no mesmo holdout. O relatório apresenta desempenho por mês, origem e bandas de calibração. Discriminação e calibração **não provam aceite nem efeito de oferta**.
+O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro foram avaliados no mesmo holdout. O relatório apresenta desempenho por mês, origem e bandas de calibração. Essas métricas caracterizam a previsão retrospectiva de movimentação; não estimam aceite nem efeito de oferta.
 
 ## 5. Implicações para a retenção
 
@@ -116,4 +115,3 @@ O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro fora
 - [Notebooks 01–08 — auditoria, perfis, exploração, modelagem e desbalanceamento](notebooks/)
 - [Metodologia e dicionário](docs/methodology.md) · [Referências científicas](docs/benchmark_and_gap_review.md)
 
-**Natureza do resultado:** amostra de registros, não base probabilística comprovada de clientes. Sem ID oficial do episódio, histórico de ofertas, data de encerramento, dados contábeis reconciliados ou experimento causal, as recomendações são hipóteses mensuráveis e não promessas de impacto.
