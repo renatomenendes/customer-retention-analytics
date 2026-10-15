@@ -38,7 +38,7 @@ As quatro tarefas foram treinadas e avaliadas separadamente, cada uma apenas ent
 | Fone | 23.852 | 12,1% | 0,121 | 0,171 | 0,177 | 0,551 | 0,574 | **0,1061** | 0,2219 |
 | Móvel | 3.560 | 40,7% | 0,407 | 0,474 | 0,468 | 0,569 | 0,571 | **0,2381** | 0,2563 |
 
-**Resultado decisivo:** os pesos balanceados pioraram o Brier **nas quatro famílias**. Em Fone, elevaram a AUC de 0,551 para 0,574 e a precision@10% de 20,0% para 21,9%, mas o Brier passou de 0,1061 para 0,2219. Ganho de ranking não equivale a boa probabilidade.
+**Resultado dos pipelines testados:** os pesos balanceados, **sem recalibração posterior das probabilidades**, pioraram o Brier **nas quatro famílias**. Como a ponderação altera a probabilidade estimada, esta comparação não demonstra que um modelo ponderado e posteriormente calibrado teria necessariamente desempenho inferior. Em Fone, elevaram a AUC de 0,551 para 0,574 e a precision@10% de 20,0% para 21,9%, mas o Brier passou de 0,1061 para 0,2219. Ganho de ranking não equivale a boa probabilidade.
 
 Em Móvel, o Brier da validação de outubro favoreceu marginalmente o modelo balanceado (0,24868 versus 0,24947), mas novembro–dezembro favoreceu o modelo sem pesos (0,23812 versus 0,25632). A pequena vantagem de validação não se sustentou temporalmente.
 
