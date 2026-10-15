@@ -92,7 +92,8 @@ def prepare_splits(records: list[dict[str, Any]]) -> tuple[dict[str, list], dict
         "train": sum(r["id"] in ids_test or r["id"] in ids_val for r in pools["train"]),
         "val": sum(r["id"] in ids_test for r in pools["val"]),
     }
-    pools["train"] = [r for r in pools["train"] if r["id"] not in (ids_test | ids_val)]
+    exclude_from_train = ids_test | ids_val
+    pools["train"] = [r for r in pools["train"] if r["id"] not in exclude_from_train]
     pools["val"] = [r for r in pools["val"] if r["id"] not in ids_test]
     return pools, purged
 
