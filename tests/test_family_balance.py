@@ -6,8 +6,8 @@ from retention_analytics.family_balance import family_exposure, scores
 
 
 def test_eligibility_respects_initial_product_presence():
-    a = ("SOLAR", "RJ", "UNKNOWN", "G1", "0", "BL", 1, 1, 0, 0, 0, 100., 0., 0.)
-    b = ("SOLAR", "RJ", "UNKNOWN", "G1", "1", "BL+MV", 2, 1, 0, 0, 1, 100., 0., 50.)
+    a = ("SOLAR", "RJ", "NAO_ELEGIVEL", "G1", "0", "BL", 1, 1, 0, 0, 0, 100., 0., 0.)
+    b = ("SOLAR", "RJ", "NAO_ELEGIVEL", "G1", "1", "BL+MV", 2, 1, 0, 0, 1, 100., 0., 50.)
     data = [
         {"x": a, "moves": {"BL": 1, "TV": 0, "FONE": 0, "MV": 0}},
         {"x": b, "moves": {"BL": 0, "TV": 0, "FONE": 0, "MV": 1}},
