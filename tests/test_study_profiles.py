@@ -41,3 +41,10 @@ def test_first_record_sensitivity_does_not_extrapolate_to_unique_lead():
                             _row(id_cliente="222")],fit_models=False)
     assert study["first_retained_record_per_client_sensitivity"]["n"]==2
     assert study["first_retained_record_per_client_sensitivity"]["movement_rate"]==.5
+
+
+def test_blank_mplay_means_ineligible_not_unknown():
+    assert extract(_row())["x"][2] == "NAO_ELEGIVEL"
+    assert extract(_row(DSC_CLI_MPLAY_M0="  "))["x"][2] == "NAO_ELEGIVEL"
+    assert extract(_row(DSC_CLI_MPLAY_M0="MARCADO"))["x"][2] == "MARCADO"
+    assert extract(_row(DSC_CLI_MPLAY_M0="NAO-MARCADO"))["x"][2] == "NAO-MARCADO"
