@@ -1,0 +1,285 @@
+{
+  "metadata": {
+    "source": "Confidential case XLSX, observed 2025-06..2025-12",
+    "grain": "Retained funnel record; repeated client IDs",
+    "population": "RETIDO and family present in M0",
+    "target": "Movement flag for product among its eligible retained holders",
+    "family_names": {
+      "BL": "Banda Larga (internet fixa)",
+      "TV": "Televisão",
+      "FONE": "Telefone residencial",
+      "MV": "Telefonia móvel"
+    },
+    "method": "DictVectorizer sparse categorical features and M0 value bands; SGD log_loss, train class_weight sensitivity; out-of-time evaluation",
+    "rounding": "Test metrics rounded to 5 decimals in the published aggregate; internal execution stores full precision",
+    "limitations": [
+      "No offer acceptance label",
+      "No causal uplift",
+      "No official episode key",
+      "Not valid as ex-ante policy score because eligibility conditions on final RETIDO"
+    ]
+  },
+  "exposures": {
+    "BL": {
+      "n": 239562,
+      "positive": 74255,
+      "negative": 165307,
+      "rate": 0.30996151309473124
+    },
+    "TV": {
+      "n": 138754,
+      "positive": 24595,
+      "negative": 114159,
+      "rate": 0.17725615117402022
+    },
+    "FONE": {
+      "n": 88578,
+      "positive": 10007,
+      "negative": 78571,
+      "rate": 0.11297387613177087
+    },
+    "MV": {
+      "n": 10964,
+      "positive": 4387,
+      "negative": 6577,
+      "rate": 0.4001276906238599
+    }
+  },
+  "models": {
+    "split_rule": "Train Jun-Sep; validation Oct; test Nov-Dec 2025; clients disjoint across splits",
+    "purge_counts": {
+      "train": 4918,
+      "val": 1131
+    },
+    "families": {
+      "BL": {
+        "split_n": {
+          "train": 133993,
+          "val": 33048,
+          "test": 66696
+        },
+        "prevalence": {
+          "train": 0.3209048234,
+          "val": 0.316902687,
+          "test": 0.2873335732
+        },
+        "model_comparisons": {
+          "prior": {
+            "val": {
+              "brier": 0.21649
+            },
+            "test": {
+              "auc": 0.5,
+              "average_precision": 0.28733,
+              "ap_lift": 1,
+              "brier": 0.2059,
+              "precision_top10": 0.28733,
+              "recall_top10": 0.1,
+              "lift_top10": 1
+            }
+          },
+          "logistic_natural": {
+            "val": {
+              "brier": 0.20949
+            },
+            "test": {
+              "auc": 0.60564,
+              "average_precision": 0.38612,
+              "ap_lift": 1.34379,
+              "brier": 0.19869,
+              "precision_top10": 0.46072,
+              "recall_top10": 0.16035,
+              "lift_top10": 1.60343
+            }
+          },
+          "logistic_balanced": {
+            "val": {
+              "brier": 0.23555
+            },
+            "test": {
+              "auc": 0.60532,
+              "average_precision": 0.38533,
+              "ap_lift": 1.34106,
+              "brier": 0.23324,
+              "precision_top10": 0.46072,
+              "recall_top10": 0.16035,
+              "lift_top10": 1.60343
+            }
+          }
+        },
+        "grouping": "Four overlapping binary outcomes, each conditioned on M0 eligibility"
+      },
+      "TV": {
+        "split_n": {
+          "train": 77557,
+          "val": 18896,
+          "test": 38086
+        },
+        "prevalence": {
+          "train": 0.1746715319,
+          "val": 0.1880821338,
+          "test": 0.1777293494
+        },
+        "model_comparisons": {
+          "prior": {
+            "val": {
+              "brier": 0.15289
+            },
+            "test": {
+              "auc": 0.5,
+              "average_precision": 0.17773,
+              "ap_lift": 1,
+              "brier": 0.14615,
+              "precision_top10": 0.17773,
+              "recall_top10": 0.1,
+              "lift_top10": 1
+            }
+          },
+          "logistic_natural": {
+            "val": {
+              "brier": 0.14838
+            },
+            "test": {
+              "auc": 0.61835,
+              "average_precision": 0.26559,
+              "ap_lift": 1.49434,
+              "brier": 0.14199,
+              "precision_top10": 0.32581,
+              "recall_top10": 0.18334,
+              "lift_top10": 1.83317
+            }
+          },
+          "logistic_balanced": {
+            "val": {
+              "brier": 0.24222
+            },
+            "test": {
+              "auc": 0.61156,
+              "average_precision": 0.25942,
+              "ap_lift": 1.45962,
+              "brier": 0.24038,
+              "precision_top10": 0.30769,
+              "recall_top10": 0.17314,
+              "lift_top10": 1.73124
+            }
+          }
+        },
+        "grouping": "Four overlapping binary outcomes, each conditioned on M0 eligibility"
+      },
+      "FONE": {
+        "split_n": {
+          "train": 49931,
+          "val": 12331,
+          "test": 23852
+        },
+        "prevalence": {
+          "train": 0.1043439947,
+          "val": 0.1334036169,
+          "test": 0.1211638437
+        },
+        "model_comparisons": {
+          "prior": {
+            "val": {
+              "brier": 0.11645
+            },
+            "test": {
+              "auc": 0.5,
+              "average_precision": 0.12116,
+              "ap_lift": 1,
+              "brier": 0.10677,
+              "precision_top10": 0.12116,
+              "recall_top10": 0.1,
+              "lift_top10": 1
+            }
+          },
+          "logistic_natural": {
+            "val": {
+              "brier": 0.11521
+            },
+            "test": {
+              "auc": 0.55085,
+              "average_precision": 0.17094,
+              "ap_lift": 1.41078,
+              "brier": 0.10606,
+              "precision_top10": 0.20034,
+              "recall_top10": 0.1654,
+              "lift_top10": 1.65342
+            }
+          },
+          "logistic_balanced": {
+            "val": {
+              "brier": 0.22476
+            },
+            "test": {
+              "auc": 0.57438,
+              "average_precision": 0.17717,
+              "ap_lift": 1.46228,
+              "brier": 0.22192,
+              "precision_top10": 0.21878,
+              "recall_top10": 0.18062,
+              "lift_top10": 1.80562
+            }
+          }
+        },
+        "grouping": "Four overlapping binary outcomes, each conditioned on M0 eligibility"
+      },
+      "MV": {
+        "split_n": {
+          "train": 5233,
+          "val": 2008,
+          "test": 3560
+        },
+        "prevalence": {
+          "train": 0.3749283394,
+          "val": 0.4661354582,
+          "test": 0.4073033708
+        },
+        "model_comparisons": {
+          "prior": {
+            "val": {
+              "brier": 0.25717
+            },
+            "test": {
+              "auc": 0.5,
+              "average_precision": 0.4073,
+              "ap_lift": 1,
+              "brier": 0.24246,
+              "precision_top10": 0.4073,
+              "recall_top10": 0.1,
+              "lift_top10": 1
+            }
+          },
+          "logistic_natural": {
+            "val": {
+              "brier": 0.24947
+            },
+            "test": {
+              "auc": 0.56902,
+              "average_precision": 0.47408,
+              "ap_lift": 1.16396,
+              "brier": 0.23812,
+              "precision_top10": 0.53652,
+              "recall_top10": 0.13172,
+              "lift_top10": 1.31724
+            }
+          },
+          "logistic_balanced": {
+            "val": {
+              "brier": 0.24868
+            },
+            "test": {
+              "auc": 0.57128,
+              "average_precision": 0.46761,
+              "ap_lift": 1.14806,
+              "brier": 0.25632,
+              "precision_top10": 0.49719,
+              "recall_top10": 0.12207,
+              "lift_top10": 1.22069
+            }
+          }
+        },
+        "grouping": "Four overlapping binary outcomes, each conditioned on M0 eligibility"
+      }
+    }
+  }
+}
