@@ -12,7 +12,7 @@ from pathlib import Path
 from statistics import median
 from typing import Any, Iterable, Mapping
 
-from retention_analytics.audit import PRODUCTS, _flag, _month, _number, _product_id
+from retention_analytics.audit import PRODUCTS, _flag, _month, _mplay, _number, _product_id
 from retention_analytics.xlsx_stream import iter_worksheet_rows
 
 DATE_RANGE = ("2025-06", "2025-12")
@@ -53,7 +53,7 @@ def record_profile(row: Mapping[str, str | None]) -> dict[str, Any] | None:
         "uf": (row.get("SGL_UF") or "UNKNOWN").strip(),
         "regional_group": (row.get("NM_GRUPO_REGIONAL") or "UNKNOWN").strip(),
         "classification": (row.get("CLASSIFICACAO") or "UNKNOWN").strip(),
-        "mplay_m0": (row.get("DSC_CLI_MPLAY_M0") or "UNKNOWN").strip() or "UNKNOWN",
+        "mplay_m0": _mplay(row.get("DSC_CLI_MPLAY_M0")),
         "mobile_flag": (row.get("flag_movel") or "UNKNOWN").strip(),
         "family_count_m0": str(len(initial_families)),
         "family_mix_m0": "+".join(initial_families) or "NONE",
@@ -65,7 +65,7 @@ def record_profile(row: Mapping[str, str | None]) -> dict[str, Any] | None:
             "origin": (row.get("FLAG_ORIGEM") or "UNKNOWN").strip(),
             "uf": (row.get("SGL_UF") or "UNKNOWN").strip(),
             "family_count_m0": len(initial_families),
-            "mplay_m0": (row.get("DSC_CLI_MPLAY_M0") or "UNKNOWN").strip() or "UNKNOWN",
+            "mplay_m0": _mplay(row.get("DSC_CLI_MPLAY_M0")),
             "classification": (row.get("CLASSIFICACAO") or "UNKNOWN").strip(),
             "mobile_flag": (row.get("flag_movel") or "UNKNOWN").strip(),
             "has_bl_m0": int("BL" in initial_families),
