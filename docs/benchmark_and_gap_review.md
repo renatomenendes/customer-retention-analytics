@@ -30,14 +30,14 @@ Se cada família disponível permitisse, *hipoteticamente* e de forma independen
 
 ## Referências metodológicas
 
-| Fonte | O que acrescenta | Utilidade metodológica | O que não deve ser transportado |
+| Fonte | O que acrescenta | Utilidade metodológica | Restrição de comparabilidade |
 |---|---|---|---|
-| Verbeke et al. (2012), *European Journal of Operational Research*, DOI: [10.1016/j.ejor.2011.09.031](https://doi.org/10.1016/j.ejor.2011.09.031) | Seleção orientada a lucro em campanhas de churn | Referência para análise econômica quando custos e ganhos forem observados | Parâmetros de outro operador e “lucro observado” não disponível |
-| Jain, Khunteta e Sharma (2026), *Telecommunication Systems*, DOI: [10.1007/s11235-026-01491-3](https://doi.org/10.1007/s11235-026-01491-3) | Revisão sistemática de 199 estudos, bases e famílias de métodos | Comparação de desenho, métricas e limitações | Não usar métricas alheias como meta numérica do nosso dataset |
-| Verhelst et al. (2025), *ECML PKDD*, DOI: [10.1007/978-3-031-74640-6_21](https://doi.org/10.1007/978-3-031-74640-6_21) | Benchmark de uplift em campanha de telecom | Definição dos requisitos para estimar efeito incremental | Não inferir efeito de tratamento quando falta alocação/intervenção válida |
-| Pacella et al. (2026), *Applied Sciences*, [artigo](https://www.mdpi.com/2076-3417/16/10/4918) | Estabilidade de política, valor econômico e interpretabilidade | Referência para estabilidade e avaliação econômica | Não copiar desempenho sem contexto de dados/cenário experimental |
-| Scikit-learn, [Calibration](https://scikit-learn.org/stable/modules/calibration.html) | Brier não basta para afirmar calibração; curva de confiabilidade é necessária | Relatório de calibração além de métricas agregadas | Não equiparar Brier menor a calibração necessariamente melhor |
-| Scikit-learn, [validação temporal](https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-of-time-series-data) | Avaliar no futuro, não misturar temporalidade | Splits por mês, separação de clientes e análise de maturidade de desfecho | Não aplicar TimeSeriesSplit genérico sem respeitar agrupamento de clientes |
+| Verbeke et al. (2012), *European Journal of Operational Research*, DOI: [10.1016/j.ejor.2011.09.031](https://doi.org/10.1016/j.ejor.2011.09.031) | Seleção orientada a lucro em campanhas de churn | Referência para análise econômica quando custos e ganhos forem observados | Custos e ganhos de outros operadores não são estimativas para esta amostra |
+| Jain, Khunteta e Sharma (2026), *Telecommunication Systems*, DOI: [10.1007/s11235-026-01491-3](https://doi.org/10.1007/s11235-026-01491-3) | Revisão sistemática de 199 estudos, bases e famílias de métodos | Comparação de desenho, métricas e limitações | Métricas obtidas em bases e períodos distintos não são metas comparáveis |
+| Verhelst et al. (2025), *ECML PKDD*, DOI: [10.1007/978-3-031-74640-6_21](https://doi.org/10.1007/978-3-031-74640-6_21) | Benchmark de uplift em campanha de telecom | Definição dos requisitos para estimar efeito incremental | Efeitos incrementais dependem de tratamentos observáveis e identificação adequada |
+| Pacella et al. (2026), *Applied Sciences*, [artigo](https://www.mdpi.com/2076-3417/16/10/4918) | Estabilidade de política, valor econômico e interpretabilidade | Referência para estabilidade e avaliação econômica | Desempenho condicionado à população e ao desenho experimental de origem |
+| Scikit-learn, [Calibration](https://scikit-learn.org/stable/modules/calibration.html) | Brier não basta para afirmar calibração; curva de confiabilidade é necessária | Relatório de calibração além de métricas agregadas | Brier agrega resolução e calibração; ambos requerem inspeção |
+| Scikit-learn, [validação temporal](https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-of-time-series-data) | Avaliar no futuro, não misturar temporalidade | Splits por mês, separação de clientes e análise de maturidade de desfecho | Separação temporal também requer controle de IDs compartilhados |
 
 ### Benchmarks de portfólio — comparação de decisões, não de AUC
 
@@ -46,14 +46,17 @@ Se cada família disponível permitisse, *hipoteticamente* e de forma independen
 - [baichuan23/telecom-churn-retention-analysis](https://github.com/baichuan23/telecom-churn-retention-analysis): separação entre desempenho de churn e análise de sensibilidade econômica; estima ponto de equilíbrio sob premissas ilustrativas.
 - [felipesbonatti/telco-customer-churn](https://github.com/felipesbonatti/telco-customer-churn): exemplo de workflow reproduzível com prevenção de leakage e reconhecimento de que uma única fotografia da carteira não equivale a previsão temporal.
 
-**Regra:** as AUCs relatadas por terceiros **não são diretamente comparáveis** às do case: bases, objetivos, prevalências, desenho amostral, horizonte, tratamento e variáveis-alvo diferem. Benchmark válido requer protocolo comum aplicado aos **mesmos registros elegíveis**, com iguais splits, métricas e orçamento computacional.
+As AUCs de estudos externos não são diretamente comparáveis, pois variam população, prevalência, horizonte e desfecho. O benchmark interno adota o mesmo conjunto elegível, as mesmas partições e as mesmas métricas para os modelos confrontados.
 
 
 ## Aplicabilidade dos métodos
 
-- **Descrever associação?** Taxas estratificadas, distribuições e estimativas de incerteza, com explicação das limitações.
-- **Antecipar o resultado M0?** Benchmark preditivo temporal robusto e calibração.
-- **Medir efetividade de ofertas?** Necessários histórico de tratamentos, elegibilidade, oferta atribuída e grupo comparável; preferir experimento randomizado de campo quando viável. Sem isso, não calcular uplift como efeito causal.
-- **Estudar tempo até cancelamento?** Exige datas de início/evento/corte e censura válida; Kaplan–Meier/Cox não se justificam apenas porque a planilha contém M0/M30.
-- **Decidir por margem econômica?** Exige custo das intervenções, horizonte, desconto e medida validada de receita/margem; na ausência desses dados, apenas sensibilidade a parâmetros hipotéticos.
+| Finalidade | Dados e estratégia necessários |
+|---|---|
+| Caracterizar associações | Taxas por estrato, distribuições e medidas de incerteza |
+| Antecipar desfechos no início do atendimento | Atributos disponíveis em M0, teste temporal externo e avaliação de calibração |
+| Avaliar eficácia de ofertas | Ofertas atribuídas, grupo comparável e desfechos posteriores; preferencialmente experimento randomizado |
+| Estimar tempo até cancelamento | Datas de origem, evento e corte, com regra apropriada de censura |
+| Estimar retorno econômico | Custos de intervenção, horizonte e medida reconciliada de receita ou margem |
 
+Neste estudo, movimentação entre retidos e mudança de valor constituem análises observacionais; eficácia causal, sobrevivência e margem incremental não são identificadas pelos campos disponíveis.
