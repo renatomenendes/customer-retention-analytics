@@ -108,7 +108,6 @@ O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro fora
 ## Apresentação executiva
 
 - [Apresentação — resultados e recomendações](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx)
-- [Roteiro para apresentação oral](presentations/executive_study.md)
 
 ## Como consultar as evidências
 
