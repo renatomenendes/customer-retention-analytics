@@ -1,16 +1,16 @@
-# Exploração aprofundada — o que movimentação e retenção realmente representam
+# Movimentação, cancelamento e resultados monetários observados
 
-**Pesquisa:** telecomunicações, leads com entrada entre junho e dezembro de 2025. **Fonte:** planilha do case processada localmente, arquivo de agregados `reports/extended_eda_2025.json`. **Unidade:** registro da planilha; não equiparar a cliente único ou episódio oficial. **Classificação:** resultados observacionais restritos ao repositório privado. Os números são calculados, mas as definições comerciais permanecem provisórias.
+**Período:** junho a dezembro de 2025. **Unidade:** registro do funil; um cliente pode aparecer em múltiplos registros. **Evidência:** agregados em `reports/extended_eda_2025.json`. Resultados observacionais referentes à amostra.
 
 ## Resumo científico
 
-A análise anterior contrastava movimentação versus ausência de movimentação entre os 249.309 registros classificados como retidos. **Essa divisão escondia cancelamentos de produtos entre os que não se movimentaram**. A decomposição em quatro situações revela que **32.318 retidos sem flag de movimentação tiveram cancelamento de pelo menos um produto**, com mediana de mudança de valor de **−104,90**, e **81,1%** de valores negativos. A categoria não constitui necessariamente sucesso comercial integral.
+Entre os **249.309 registros retidos**, a combinação de flags de movimentação e cancelamento distingue quatro situações contratuais. **32.318 retidos sem flag de movimentação tiveram cancelamento de pelo menos um produto**, com mediana de mudança de valor de **−104,90** e **81,1%** de diferenças negativas. Portanto, ausência de movimentação não significa preservação integral da carteira.
 
 Entre os **86.540 retidos com movimentação**, **13.161 (15,2%)** também registraram cancelamento parcial. A mediana de M30−M0 desse subgrupo foi **−88,96**, comparada a **−22,48** para 73.379 retidos com movimento sem cancelamento. Todas são diferenças dos campos de valores fornecidos; não mensuram perda de faturamento atribuível à ação.
 
 O contraste bruto de movimentação entre retidos **SOLAR menos LEGADO** foi **+3,41 p.p.**. Padronizando a distribuição por mês e quantidade de famílias em M0, ficou em **+2,93 p.p.**, com intervalo bootstrap Poisson agrupado por cliente de **[+2,53; +3,41] p.p.**, a partir de 200 réplicas. Isso melhora a comparação *descritiva*, sem identificar efeito causal do canal: só controla dois fatores e é condicionado à retenção já observada.
 
-## 1. A dimensão oculta: cancelamento e movimentação são eventos distintos
+## 1. Cancelamento e movimentação são eventos distintos
 
 | Retidos: evento composto | Registros | Mediana ΔV | ΔV negativo | P10 ΔV | P90 ΔV |
 |---|---:|---:|---:|---:|---:|
@@ -77,7 +77,7 @@ Sem data de resolução, não existe estimador de Kaplan–Meier/Cox válido par
 
 **Interpretação limitada:** o intervalo não quantifica confundimento residual, mudança de política comercial, amostragem não probabilística ou seleção pelo resultado `RETIDO`. Não é justificativa para migrar clientes de um canal para outro.
 
-## 5. Benchmark econômico viável: teste de limiar, não lucro estimado
+## 5. Avaliação econômica por limiares hipotéticos
 
 Verbeke et al. (2012), DOI [10.1016/j.ejor.2011.09.031](https://doi.org/10.1016/j.ejor.2011.09.031), demonstram por que modelos de churn devem ser avaliados em termos econômicos, não só AUC. Para aplicar a lógica de decisão sem inventar valores, um **cenário hipotético** com custo unitário de ação `C`, ganho de contribuição `G` por sucesso **incremental** e uplift verdadeiro `u` requer:
 
@@ -85,13 +85,13 @@ Verbeke et al. (2012), DOI [10.1016/j.ejor.2011.09.031](https://doi.org/10.1016/
 
 O ponto de equilíbrio é `u_min = C/G` (se `G > 0`). Por exemplo, quando **a relação hipotética** `G/C` é 5, 10 ou 20, o uplift para empate é 20%, 10% ou 5%, respectivamente. **Nenhum dos valores C, G ou u é observado no case.** Não há base para afirmar lucro, custo-benefício positivo ou ranking de clientes pela rentabilidade.
 
-## 6. Uplift e sobrevivência: o que o case não identifica
+## 6. Limites para inferência causal e análise de sobrevivência
 
 **Uplift:** a base não identifica, para cada cliente, qual oferta foi designada, se aceitou, se havia controle comparável e o desfecho da ação. A origem `SOLAR` versus `LEGADO` é um atributo de processo, não o tratamento aleatório. Diferenças brutas ou padronizadas não representam efeito incremental.
 
 **Sobrevivência:** `DATA_FUNIL_SOLAR` é a entrada; M0 e M30 são estados. Não se conhece data individual de cancelamento do relacionamento nem tempo de censura e seguimento. Estimar Kaplan–Meier, Cox ou hazard ratio seria criar um tempo de evento não observado.
 
-**Robustez:** a estimativa agrupada por cliente e o teste de suporte comum **foram executados**. Um benchmark preditivo de quatro métodos no mesmo holdout já consta do notebook 06. Múltiplas janelas prospectivas e validação externa continuam fora do horizonte de sete meses, e não devem ser inventadas.
+**Robustez:** a diferença padronizada entre canais dispõe de intervalo bootstrap agrupado por cliente e verificação de suporte comum. A comparação de quatro modelos usa um teste temporal compartilhado (notebook 06). A janela de sete meses não informa estabilidade externa ou anual.
 
 ## 7. Implicações para a estratégia de retenção
 
@@ -100,4 +100,4 @@ O ponto de equilíbrio é `u_min = C/G` (se `G > 0`). Por exemplo, quando **a re
 3. **Monitorar maturidade de cada origem:** criar controle de coorte com lead aberto, data do desfecho e prazo de fechamento antes de comparar efetividade dos canais.
 4. **Instrumentar ofertas para inferência incremental:** registrar elegibilidade, alternativa ofertada, custo, aceite, tratamento/controle e desfecho posterior; escolher a ação por margem incremental após experimento.
 
-**Reprodução:** executar localmente `from retention_analytics.extended_eda import analyze_workbook; analyze_workbook(<planilha>, <saída_privada>)` com os dados autorizados e consultar o [notebook executado](../notebooks/07_exploratory_deep_dive.ipynb), que usa apenas os agregados versionados. O algoritmo não faz upload de identificadores nem grava linhas individuais.
+**Código e resultados:** `src/retention_analytics/extended_eda.py`, [notebook 07](../notebooks/07_exploratory_deep_dive.ipynb) e [agregados](../reports/extended_eda_2025.json).
