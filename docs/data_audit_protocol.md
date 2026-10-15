@@ -1,38 +1,27 @@
-# Protocolo de auditoria reproduzível
+# Auditoria e consistência da base
 
-## Estado
+## Escopo e granularidade
 
-A planilha está acessível localmente. Há um relatório anterior e arquivos JSON de auditoria, mas este pacote não reexecutou as métricas. Seus números permanecem **resultados preexistentes pendentes de reprodução**.
+A unidade é a linha da planilha de atendimentos, com entrada entre junho e dezembro de 2025. Um mesmo `id_cliente` pode aparecer em mais de um registro. O campo `DATA_FUNIL_SOLAR` delimita o período, sem substituir a data de encerramento do atendimento.
 
-## Inventário mínimo
+O processamento completo considera **303.652 registros no recorte**. O conjunto de estados operacionais inclui `RETIDO`, `NAO RETIDO` e `LEAD EM ABERTO`.
 
-- Fonte: planilha `.xlsx` disponibilizada ao responsável; caminho e fingerprint mantidos em manifesto local não versionado.
-- Aba informada: `bd_case_final_1`.
-- Datas-alvo: entrada no funil entre 2025-06-01 00:00:00 e 2025-12-31 23:59:59, no fuso a confirmar.
-- Colunas candidatas: `id_cliente`, `DATA_FUNIL_SOLAR`, `NM_SUB_INDICADOR_NEGOCIO`, `FLAG_ORIGEM`, produtos M0/M30, flags por família e valores M0/M30.
-- Chave primária do episódio: **não demonstrada**.
+## Verificações de qualidade e interpretação
 
-## Sequência de testes (a implementar e executar)
-
-| ID | Teste | Evidência esperada | Critério inicial |
-|---|---|---|---|
-| DQ-01 | Abrir planilha completa, não apenas intervalo nomeado | Aba, linhas, colunas, fingerprint | Nenhuma truncagem silenciosa |
-| DQ-02 | Contar linhas por data de entrada | Distribuição mensal e fora da janela | Excluir fora de escopo com contagem |
-| DQ-03 | Verificar IDs nulos, repetidos, timestamps e status conflitantes | Quantidade por padrão de repetição | Não descartar antes de definir episódio |
-| DQ-04 | Classificar valores ausentes e sentinelas | Taxa por coluna e família | Distinguir ausência estrutural de falha |
-| DQ-05 | Conferir domínio das flags/status | Frequências e violações | Valores não documentados em quarentena |
-| DQ-06 | Reconciliar transições M0/M30 | Tabelas por produto e tipo de alteração | Divergências documentadas |
-| DQ-07 | Verificar valor monetário por unidade/família | Nulos, zero, negativos, extremos | Não imputar/desconsiderar sem regra |
-| DQ-08 | Verificar origem × mês × status aberto | Cobertura e maturidade | Sem comparações enviesadas não sinalizadas |
-| DQ-09 | Validar fuga de informação temporal | Lista de variáveis M0 versus M30 | Nenhuma variável futura em features preditivas |
-| DQ-10 | Avaliar risco de divulgação | Granularidade de agregações | Nenhum identificador ou grupo sensível divulgado |
+| Dimensão | Verificação | Consequência analítica |
+|---|---|---|
+| Janela temporal | Datas válidas e registros fora do período | Denominador condicionado à entrada entre junho e dezembro |
+| Identificadores | Valores ausentes, IDs repetidos e sobreposição entre partições | Não tratar linhas como clientes únicos; separar clientes entre treino e teste |
+| Estado do funil | Contagens por status e por origem/mês | Casos em aberto permanecem categoria própria |
+| Produtos M0/M30 | Presença e códigos de cada família | Identificar inclusão, retirada, troca e ausência |
+| Flags | `FLAG_MOV_*` e `FLAG_CANC_*` cruzadas com as transições | Eventos distintos; discrepâncias são quantificadas |
+| MPlay | Marcado, não marcado e vazio | Vazio significa **não elegível** à unificação, conforme a definição do campo |
+| Valores | Nulos, zeros, diferenças e sinais por família | Comparações monetárias apenas com pares válidos |
+| Modelagem | Preditores em M0, status final e campos M30 separados | Evitar informação posterior ao desfecho nas variáveis do modelo |
+| Generalização | Mês, origem, composição de carteira e clientes repetidos | Explicitar o alcance do teste temporal |
 
 ## Rastreabilidade
 
-Cada execução deve registrar hash SHA-256 da fonte local, versões do ambiente, instante de execução, regras de recorte, contagem inicial/final, testes e motivos de exceção. Logs e resultados detalhados permanecem em diretórios ignorados pelo Git.
+As regras estão implementadas em `src/retention_analytics/audit.py`, `profiles.py`, `study_profiles.py` e `extended_eda.py`. Resultados sintéticos e métricas agregadas são apresentados em `reports/`; os testes unitários encontram-se em `tests/`.
 
-## Bloqueadores
-
-- Confirmar identidade de lead/episódio e data efetiva de desfecho.
-- Validar significados dos campos financeiros e das flags.
-- Confirmar processo de seleção da amostra e condições de divulgação.
+As contagens descritivas não resolvem, isoladamente, a ausência de uma chave formal do episódio, nem identificam oferta aceita, faturamento efetivo ou permanência posterior.
