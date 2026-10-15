@@ -1,10 +1,10 @@
 # Estudo de clientes retidos com movimentação — caracterização analítica e decisões
 
-**Período de entrada:** junho a dezembro de 2025, inclusive. **Fonte:** base sintética e anonimizada do case, processada localmente e resumida em resultados agregados. **Referência:** `Objetivo do Case.docx` (3 páginas). **População:** status `RETIDO`; **unidade:** linha da planilha até validação da chave de atendimento.
+**Período:** junho a dezembro de 2025. **População:** atendimentos com status `RETIDO`. **Unidade:** registro do funil, não necessariamente cliente único. Os resultados são relativos à amostra demonstrativa.
 
 ## Resumo executivo
 
-O enunciado solicita identificar características de quem aceita ofertas e altera produtos. A base permite observar **o status de retenção, as flags de movimentação, trocas de produto/plano e valores M0/M30**, mas não permite confirmar o **aceite**. O problema mensurável é a caracterização de `P(MOV=1 | RETIDO, X_M0)`, não apenas `P(RETIDO ∧ MOV | X_M0)`.
+A análise caracteriza **movimentações entre registros retidos**, com base no status do funil, nas flags de movimentação, nas transições de produto/plano e nos valores M0/M30. O estimando central é `P(MOV=1 | RETIDO=1, X_M0)`. O conjunto não registra decisões de aceite de oferta.
 
 **População central:** 249.309 registros `RETIDO`; 86.540 com alguma movimentação (34,7%); 86.540 com proxy restritiva de alteração contratual não cancelada (34,7%). Do total de retidos com movimentação, 15,2% também têm alguma flag de cancelamento de produto: **movimentação é heterogênea**, não sinônimo de oferta aceita.
 
@@ -13,7 +13,7 @@ O enunciado solicita identificar características de quem aceita ofertas e alter
 - **R**: `RETIDO`, desfecho operacional do funil. **M**: pelo menos uma `FLAG_MOV_* = 1`. **X_M0**: carteira, atributos geográficos e comerciais disponíveis ou presumidos no início. **A**: aceite real de oferta, **variável latente não observada**.
 - **Estimando central:** `P(M=1 | R=1, X_M0)`. Esta condição gera seleção pelo desfecho e serve para **caracterização retrospectiva**, não para pontuar todos os leads antes da retenção.
 - **Estimando secundário:** `P(R=1, M=1 | X_M0)` entre atendimentos concluídos. Continua no notebook 03 com escopo próprio.
-- **Valor:** M30−M0 de campos `0VALOR`0; o DOCX os descreve como valores pagos associados ao lead. Sem competência e preço líquido conciliado, não equivalem a ganho incremental da campanha.
+- **Valor:** M30−M0 de campos `VALOR_*`; são valores pagos associados ao registro. Sem competência e preço líquido conciliado, não equivalem a ganho incremental da campanha.
 - **Aceite de oferta:** não observado. A proxy ampla pode superestimar aceite e a restritiva pode simultaneamente admitir falsos positivos e excluir aceites sem troca de código. Não há limite estatisticamente identificado para `P(A=1)` a partir dos campos presentes.
 
 ## 2. Caracterização dos perfis — todos os denominadores são retidos
@@ -149,7 +149,7 @@ As transições usam os códigos de produto/plano de M0 e M30. **Troca de códig
 
 Nos retidos que movimentaram: mediana M30−M0 de **-25,46**, redução em **78,7%** e variação agregada da soma de **-20,1%**. Sem transação de oferta, custo e competência financeira, não calcular **preservação de receita incremental** ou margem.
 
-## 4. Inferência disciplinada sobre aceite de ofertas
+## 4. Aceite de ofertas: evidência disponível
 
 **Aceite observado:** indisponível. **Sinais observados:** movimento amplo e transição restritiva compatível com uma alteração de plano/produto. A última exige mudança de código/plano, presença do produto ao final, flag de movimento e inexistência de cancelamento naquela família.
 
@@ -218,15 +218,20 @@ As faixas têm largura de 0,1 e são publicadas quando contêm ao menos 100 obse
 
 O modelo com todas as variáveis iniciais proporciona avaliação multivariada da discriminação, mas seus coeficientes/variáveis não identificam o efeito de intervenção nem inferem o evento **A = aceite**. Intervalos de confiança por cluster de cliente, curvas de decisão e avaliação em novos períodos após dezembro ainda não estão identificados: não os substituímos por p-values ingênuos. A consistência por mês e canal é apresentada com prevalência e denominadores.
 
-## 5.5. Exploração complementar — cancelamento parcial, limites de desfecho e robustez
+### 5.5. Cancelamentos de produtos, desfechos em aberto e robustez
 
-A [exploração aprofundada](deep_exploration_findings.md) foi executada sobre a planilha completa e apresenta os quatro cruzamentos **movimentação × cancelamento**, distribuições monetárias P10–mediana–P90, transições por família, coortes abertas por origem e diferença padronizada entre canais com bootstrap por cliente.
+A [análise de eventos contratuais](deep_exploration_findings.md) apresenta os quatro cruzamentos **movimentação × cancelamento**, distribuições monetárias P10–mediana–P90, transições por família, coortes abertas por origem e diferença padronizada entre canais com bootstrap por cliente.
 
 O achado central é a presença de **32.318** retidos sem `FLAG_MOV_*` e com cancelamento de produto (mediana ΔV **−104,90**); entre os 86.540 retidos com movimento, **13.161** também tiveram cancelamento (mediana **−88,96**). A comparação SOLAR–LEGADO entre retidos passou de **+3,41 p.p.** brutos para **+2,93 p.p.** padronizados por coorte mensal × número de famílias em M0; intervalo bootstrap agrupado por cliente **[+2,53; +3,41] p.p.**. São associações condicionadas ao status RETIDO, sem interpretação causal.
 
-Os limites pessimista/otimista de retenção conforme encerramento dos casos abertos foram calculados; não os tratar como curvas de sobrevivência. Uma análise paramétrica de contribuição marginal versus custo de oferta ilustra limiares de equilíbrio, mas **não estima lucro ou uplift real**, ausentes da fonte.
+Os cenários extremos para atendimentos em aberto mostram a sensibilidade das taxas de retenção ao encerramento dos casos. Eles não constituem curvas de sobrevivência. A análise parametrizada de contribuição e custo apresenta limiares hipotéticos de equilíbrio, sem estimar lucro ou efeito incremental observado.
 
-## 6. Recomendações ordenadas pela decisão
+## 6. Desbalanceamento por família e sensibilidade à ponderação
+
+A análise global não basta para concluir que os modelos representam igualmente bem BL (Banda Larga, internet fixa), TV, Fone e Móvel. A avaliação por produto usa quatro alvos binários, cada um condicionado à presença do respectivo produto em M0. No teste cronológico, a classe positiva variou de 12,1% (Fone) a 40,7% (Móvel). Nos pipelines testados, a ponderação balanceada, sem recalibração posterior, piorou o Brier nas quatro famílias e nem sempre melhorou o ranking. Em Fone elevou a AUC (0,551 para 0,574), mas o Brier subiu de 0,1061 para 0,2219; em Móvel, a vantagem marginal de validação do ponderado não se manteve no teste. Os valores, AP relativa à prevalência e comparação dos modelos estão no [estudo de desbalanceamento](family_imbalance_analysis.md) e no [notebook 08](../notebooks/08_family_imbalance.ipynb). Nenhum resultado valida aceite de oferta ou recomendação causal.
+
+
+## 7. Recomendações para avaliação comercial
 
 | Perfil ou problema | Evidência | Ação/protocolo | Indicador primário | Como validar |
 |---|---|---|---|---|
@@ -237,15 +242,12 @@ Os limites pessimista/otimista de retenção conforme encerramento dos casos abe
 | Aceite não registrado | Proxies têm erros de classificação desconhecidos | Instrumentar ID e resultado de cada oferta | Taxa efetiva de aceite e receita incremental | Experimento randomizado com grupo comparável |
 | Modelo de movimento entre retidos | AUC, AP, Brier por período no holdout | Estudar características associadas, sem aplicação preditiva ex-ante | Estabilidade do perfil e desempenho por período | Avaliar período posterior e reproduzir com chave oficial |
 
-## 7. Conclusão e limites formais
+## 8. Conclusão e alcance dos resultados
 
-**Respondido pela amostra:** perfis observados dentro dos registros classificados como retidos, descrição condicional de movimentação por características iniciais, contraste de transições M0/M30, diferenças entre flags e troca de código, comparação de quatro modelos num mesmo teste temporal e recomendações testáveis.
+**Resultados do estudo:** perfis observados dentro dos registros classificados como retidos, descrição condicional de movimentação por características iniciais, contraste de transições M0/M30, diferenças entre flags e troca de código, comparação de quatro modelos num mesmo teste temporal e recomendações testáveis.
 
-**Não identificável sem novos dados:** taxa verdadeira de aceite, efeito incremental/causal de ofertas, permanência futura, lucro/receita reconhecida e episódios únicos de atendimento. Estas não são etapas de engenharia atrasadas: são limites de identificação da fonte fornecida. O estudo não inventa dados para suprir essas lacunas.
+**Fora do alcance desta base:** taxa verdadeira de aceite, efeito incremental/causal de ofertas, permanência futura, lucro/receita reconhecida e episódios únicos de atendimento. Essas limitações definem o alcance das conclusões observacionais.
 
-**Fonte do enunciado:** `Objetivo do Case.docx` (3 páginas), disponibilizado para o projeto. Dados não publicados no repositório. **Referências metodológicas** e contraindicações encontram-se em `docs/benchmark_and_gap_review.md`.
+A [fundamentação metodológica](benchmark_and_gap_review.md) contextualiza a escolha de estimandos, métricas e métodos.
 
 
-## 8. Desbalanceamento por família e robustez de ponderação
-
-A análise global não basta para concluir que os modelos representam igualmente bem BL (Banda Larga, internet fixa), TV, Fone e Móvel. A nova análise usa quatro alvos binários, cada um condicionado à presença do respectivo produto em M0. No teste cronológico, a classe positiva variou de 12,1% (Fone) a 40,7% (Móvel). A ponderação balanceada no treino piorou o Brier nas quatro famílias e nem sempre melhorou o ranking. Em Fone elevou a AUC (0,551 para 0,574), mas o Brier subiu de 0,1061 para 0,2219; em Móvel, a vantagem marginal de validação do ponderado não se manteve no teste. Os valores, AP relativa à prevalência e comparação dos modelos estão no [estudo de desbalanceamento](family_imbalance_analysis.md) e no [notebook 08](../notebooks/08_family_imbalance.ipynb). Nenhum resultado valida aceite de oferta ou recomendação causal.

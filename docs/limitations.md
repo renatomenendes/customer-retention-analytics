@@ -1,25 +1,24 @@
-# Limitações, vieses e riscos
+# Alcance e limitações dos resultados
 
-| Código | Risco | Efeito potencial | Controle recomendado |
-|---|---|---|---|
-| R-01 | `id_cliente` não identifica episódio único | Duplicidade indevida; denominadores errados | Obter chave do lead e reconciliar múltiplas entradas |
-| R-02 | Status de processo confundido com retenção sustentada | KPI inflado e inferência inadequada | Separar retenção do lead da permanência futura |
-| R-03 | Leads em aberto e maturidade incompleta | Viés por mês/origem | Tratar pendência separadamente; análises de sensibilidade |
-| R-04 | M0/M30 sem timestamps independentes | Horizonte não definido | Não rotular automaticamente como retenção em 30 dias |
-| R-05 | Flags não validadas e divergências com produto | Alvo mal definido | Reconciliação M0/M30 por família |
-| R-06 | Valor monetário sem unidade validada | Alegações financeiras não sustentadas | Rotular como variação de valor observado |
-| R-07 | Amostra sem plano de extração | Generalização indevida | Apresentar apenas estatísticas amostrais |
-| R-08 | Uso de variáveis pós-desfecho | Leakage e métricas artificiais | Contrato temporal de features e validação out-of-time |
-| R-09 | Mesmo cliente em treino e teste | Otimismo artificial de generalização | Segregação por cliente e revisão da cobertura temporal |
-| R-10 | Associação confundida com causalidade | Ações ineficazes ou danosas | Recomendar testes prospectivos; medir resultado incremental |
-| R-11 | Dados comerciais/identificadores vazados | Risco legal e reputacional | Não versionar dados; revisão antes de cada push |
-| R-12 | Classes e segmentos pequenos | Instabilidade e reidentificação | Limiar de supressão a estabelecer com governança |
+| Dimensão | Restrição observada | Implicação metodológica |
+|---|---|---|
+| Unidade de análise | `id_cliente` pode aparecer em múltiplos registros; sem identificador oficial de episódio | Frequências por registro, não contagens confirmadas de episódios ou clientes únicos |
+| Retenção | O status representa encerramento do atendimento | Não mede permanência futura |
+| Atendimentos em aberto | Proporções variáveis entre mês e origem | Comparações de desfecho dependem da maturidade do funil |
+| Temporalidade | M0/M30 representam estados sem timestamps individuais completos | Não estimar duração de permanência nem curvas de sobrevivência |
+| Movimentação | Flags e transições de códigos não representam necessariamente o mesmo evento | Examinar movimentação e cancelamento separadamente |
+| Aceite de oferta | Não há histórico de propostas e decisões | Não estimar taxa verdadeira de aceite |
+| Valores | Não há faturamento conciliado, custos ou margem | Diferenças M30−M0 são mudanças registradas, não resultado financeiro incremental |
+| Amostragem | Não há plano probabilístico conhecido | Resultados caracterizam a amostra, sem extrapolação populacional |
+| Modelagem | Condicionada ao status `RETIDO`, observado ao término | Aplicação retrospectiva, sem validação para decisão inicial |
+| Validação | Teste de novembro–dezembro, dentro da série de sete meses | Não demonstra estabilidade anual nem generalização externa |
+| Observações repetidas | Possível dependência entre registros do mesmo cliente | Segregação entre treino e teste reduz vazamento, mas não remove toda dependência |
+| Inferência causal | Sem designação de ofertas e controles comparáveis | Associações não identificam impacto de intervenção |
 
-**Aviso:** este documento descreve riscos e observações de estrutura, não certifica que a base tenha passado em testes nem que exista impacto financeiro mensurado.
+## Consequências para a interpretação
 
-## Limites resolvidos por formulação e não por imputação
+As duas proxies de movimentação contratual coincidem nos registros retidos analisados e, portanto, não constituem medidas independentes de aceite de oferta. As variações de valor acompanham estados de carteira, mas não identificam efeitos financeiros atribuíveis a uma intervenção específica.
 
-- **Aceite de ofertas:** o DOCX descreve o perfil de quem aceita ofertas, mas a planilha não registra apresentação, proposta, aceite ou recusa. A coincidência exata da flag ampla com a proxy contratual restritiva nos retidos prova que as duas não são sinais independentes; **não autoriza inferir aceite real**.
-- **Predição condicionada ao status final:** a regressão/árvore/boosting de `MOV | RETIDO` descreve retrospectivamente características e não é pontuação operacional para todos os clientes em M0, porque `RETIDO` só será conhecido ao fim do atendimento.
-- **Valores e produto:** o DOCX identifica `valor` como montante pago, mas a planilha não possui conciliação contábil ou custo de oferta; diferenças observadas por produto não estimam preservação de receita incremental.
-- **Estabilidade/representatividade:** testes novembro–dezembro e cortes por origem validam a divisão observacional; não demonstram estabilidade em períodos futuros nem corrigem a seleção da amostra e episódios repetidos.
+No teste por produto, diferenças de prevalência e de exposição exigem leitura conjunta de AUROC, average precision, Brier e medidas de capacidade. A comparação com ponderação refere-se aos pipelines executados, sem recalibração posterior.
+
+As recomendações descrevem possibilidades de avaliação prospectiva, sem estimativas observadas de ganho incremental.

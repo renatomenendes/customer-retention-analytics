@@ -27,7 +27,7 @@ A comparação mantém o conjunto de teste e sua prevalência natural e avalia t
 
 Desbalanceamento não implica necessariamente viés estatístico, e ponderação não garante melhora. Aumentar o peso da classe positiva pode melhorar um critério de decisão e prejudicar a confiabilidade da probabilidade. A decisão dependerá da comparação temporal e do uso de negócio.
 
-## Resultados executados — novembro e dezembro de 2025
+## Resultados no teste de novembro e dezembro de 2025
 
 As quatro tarefas foram treinadas e avaliadas separadamente, cada uma apenas entre retidos que possuíam aquela família no estado M0. A frequência observada no teste não foi artificialmente balanceada.
 
