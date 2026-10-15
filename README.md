@@ -36,7 +36,7 @@ No teste cronológico por família, **os modelos ponderados sem recalibração p
 
 A movimentação das quatro famílias foi examinada como **quatro resultados binários que podem ocorrer simultaneamente**, e não como classes mutuamente exclusivas. A [avaliação específica de desbalanceamento](docs/family_imbalance_analysis.md) apresenta os denominadores e testa a sensibilidade dos modelos à ponderação de classes, preservando a prevalência natural no teste. A área de retenção não deve escolher ofertas pelo volume bruto de movimentações nem presumir que um escore global tenha a mesma qualidade em cada produto.
 
-## 1. O perfil deve ser estudado dentro da população retida
+## 1. Movimentação entre registros retidos
 
 ![Oportunidades de movimentação por tamanho do portfólio](reports/figures/portfolio_opportunities.svg)
 
@@ -68,9 +68,9 @@ Não interpretar os grupos como causalidade, efeito de vender mais produtos ou p
 
 As proporções de atendimentos pendentes são muito diferentes entre canais; portanto **os contrastes entre origens são descritivos, não uma comparação de eficiência causal**.
 
-## 2. Aceite de oferta: evidência observada e hipótese
+## 2. Movimentação contratual e aceite de ofertas
 
-O enunciado menciona clientes que aceitam ofertas, mas **não existe variável de aceite observável na planilha**. Em vez de criar um desfecho fictício, analisamos dois sinais:
+A base não registra a oferta apresentada nem a decisão de aceite. A análise utiliza dois indicadores de movimentação contratual, sem tratá-los como taxa de aceite:
 
 - **Proxy ampla de movimentação**: ao menos uma `FLAG_MOV_* = 1` (inclui mudanças que podem ser motivadas por outras razões).
 - **Proxy restritiva, compatível com uma mudança contratual de oferta**: flag de movimentação, código/plano diferente em M30, produto presente em M30 e ausência de flag de cancelamento da família. Foram observados **86.540** registros com essa condição (**34,7%** entre retidos).
@@ -79,7 +79,7 @@ Nesta amostra, **os dois sinais coincidem exatamente (86.540 registros)**: a pro
 
 ## 3. Valor monetário: retenção não significa manutenção do valor
 
-Nos retidos com movimentação, a mediana dos valores M30−M0 é **-25,46** e **78,7%** apresentam redução; no agregado, a soma dos valores registrou variação de **-20,1%**. O DOCX denomina `valor` como montante pago pelo cliente associado ao lead, mas não descreve competência, descontos e consolidação de pacotes; não chamamos isso de margem, faturamento confirmado nem efeito de ofertas.
+Nos retidos com movimentação, a mediana dos valores M30−M0 é **-25,46** e **78,7%** apresentam redução; no agregado, a soma dos valores registrou variação de **-20,1%**. Os valores representam montantes associados ao registro, sem detalhamento de competência, descontos ou consolidação de pacotes. As diferenças não identificam margem, faturamento reconhecido ou efeito causal de ofertas.
 
 ![Variação observada de valores M0/M30](reports/figures/value_deltas.svg)
 
@@ -114,7 +114,6 @@ O modelo **hist boosting** foi selecionado pelo Brier em outubro; os quatro fora
 - [Relatório completo: perguntas, perfis, inferências, matriz de decisões e limitações](docs/study_report.md)
 - [Notebook 06 — perfis entre retidos, proxy de aceite e comparação condicional de modelos](notebooks/06_retained_profiles_and_offer_proxies.ipynb)
 - [Notebooks 01–08 — auditoria, perfis, exploração, modelagem e desbalanceamento](notebooks/)
-- [Apresentação executiva](presentations/Case_Retencao_Resultados_e_Descobertas_2025.pptx)
 - [Metodologia e dicionário](docs/methodology.md) · [Referências científicas](docs/benchmark_and_gap_review.md)
 
 **Natureza do resultado:** amostra de registros, não base probabilística comprovada de clientes. Sem ID oficial do episódio, histórico de ofertas, data de encerramento, dados contábeis reconciliados ou experimento causal, as recomendações são hipóteses mensuráveis e não promessas de impacto.
