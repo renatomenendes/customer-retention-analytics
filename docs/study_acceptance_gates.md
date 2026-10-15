@@ -1,23 +1,24 @@
-# Critérios de conclusão do estudo frente ao enunciado do case
+# Cobertura analítica e alcance dos resultados
 
-**Referência:** `Objetivo do Case.docx`, três páginas. **Recorte:** junho a dezembro de 2025. Esta matriz descreve o escopo *mensurável na fonte recebida*, não o ciclo de desenvolvimento do repositório.
+**Período:** junho a dezembro de 2025. **Unidade:** registro do funil de retenção.
 
-| Pergunta ou entrega | Evidência produzida | Limite documentado |
+A tabela relaciona as perguntas de pesquisa às evidências disponíveis e aos limites de interpretação.
+
+| Dimensão | Resultado ou procedimento | Alcance |
 |---|---|---|
-| Caracterização descritiva da amostra | Auditoria da planilha completa, 303.652 registros no recorte, status, repetições e evolução mensal | Registro do funil sem chave oficial de episódio |
-| Identificar retidos com movimentação | 249.309 `RETIDO`; 86.540 com alguma `FLAG_MOV`, 34,7% entre retidos | O rótulo é o status do atendimento, não sobrevivência futura |
-| Identificar perfis entre retidos | Mix inicial, quantidade de famílias, região/UF, MPlay, origem, classificação e posse móvel; taxas com denominadores explícitos | Grupos não têm efeito causal; MPlay tem grande parcela sem informação |
-| Conferir se a maior movimentação de multiprodutos é estrutural | Taxa por qualquer movimentação e incidência por família presente em M0 | Normalização por oportunidade não elimina seleção de ofertas |
-| Aceite de ofertas | Hipótese explicitada, testadas flags e proxy de alteração contratual; coincidência das duas na amostra | **Não identificável** como taxa verdadeira sem oferta apresentada e decisão registrada; qualquer simulação é rotulada hipótese |
-| Explorar produtos BL, TV, Fone, MV | Transições de códigos M0/M30, flags de movimento e cancelamento, variações de valor por família | Cancelamento parcial não representa churn de relacionamento |
-| Examinar valor pago associado ao lead | Δ valores M0/M30, sinal de redução, resumo por transição e família | Sem conciliação de faturamento, não se afirma margem ou efeito incremental |
-| Modelagem analítica adequada à pergunta central | Baseline, regressão regularizada, árvore curta e boosting para `MOV` entre retidos, mesmo teste temporal, AP/AUC/Brier/log-loss/lift e calibração | **Retenção condicionante** conhecida apenas após atendimento; não aplicar pontuação ex-ante à população geral |
-| Robustez e explicação | Teste nov–dez, métricas por mês/origem, split disjunto por cliente e sensibilidade primeiro registro retido por ID | Não há histórico pós-dezembro nem chave oficial do episódio |
-| Notebook documentado e apresentação | Notebooks 01–06, síntese executada com agregados, relatório e apresentação de 20 slides | Dados confidenciais não versionados; artefatos descrevem associação e hipóteses |
-| Estratégia de retenção | Seis recomendações associadas a evidência, público/tema, KPI e desenho de validação | Ganhos incrementais exigem medição causal e financeira adicional |
+| Universo e desfechos | 303.652 registros no período; 249.309 classificados como `RETIDO`; 48.091 como `NAO RETIDO`; 6.252 em aberto | Frequências por registro, não necessariamente por cliente único |
+| Movimentação entre retidos | 86.540 retidos com alguma `FLAG_MOV_*` (34,7%) | Evento contratual observado; não comprova aceite de oferta |
+| Perfis iniciais | Mix, quantidade de famílias, região, MPlay, origem, classificação e posse móvel | Associações observacionais dentro do grupo retido |
+| Exposição por família | Taxas por produto presente em M0 e por composição inicial de carteira | Famílias não mutuamente exclusivas; elegibilidade muda o denominador |
+| Cancelamentos e movimentações | Cruzamentos `FLAG_MOV_*` × `FLAG_CANC_*`, transições de códigos M0/M30 | Cancelamento de produto não implica necessariamente perda do relacionamento |
+| Valores M0/M30 | Distribuição da diferença registrada, por segmento e transição | Não representa margem ou receita incremental causal |
+| Modelagem global | Prevalência, regressão logística, árvore e boosting no mesmo teste cronológico | Discriminação retrospectiva de `MOV | RETIDO`, não recomendação operacional em M0 |
+| Modelagem por família | AUROC, AP, Brier, lift e sensibilidade a pesos de classe | Prevalências diferentes; ponderação comparada sem recalibração posterior |
+| Validação | Treino junho–setembro, validação outubro, teste novembro–dezembro; exclusão de clientes compartilhados entre partições | Uma janela temporal, sem evidência de estabilidade anual |
+| Aplicações comerciais | Hipóteses de segmentação, monitoramento de cancelamentos e avaliação de ofertas | Exigem mensuração prospectiva antes da adoção operacional |
 
-## Limites da fonte, não itens disfarçados de análise concluída
+## Limitações de identificação
 
-Sem **ID do lead**, **registro da oferta apresentada/aceita**, **data individual de encerramento**, **faturamento conciliado por competência**, **histórico de retenção posterior** e **plano amostral**, certas afirmações não são estimáveis. O estudo deve demonstrar esses limites e **não inventar valores** para satisfazer formalmente o enunciado.
+O conjunto de dados não contém identificador inequívoco do episódio, registro da oferta apresentada e da decisão de aceite, data individual de encerramento, série de faturamento conciliado nem acompanhamento posterior do relacionamento. Essas ausências impedem estimar aceite verdadeiro, efeito causal das ofertas, permanência futura e lucro incremental.
 
-O repositório privado mantém a investigação observacional e sua documentação. Qualquer divulgação pública de números agregados exige liberação específica.
+As conclusões se restringem à população e aos eventos registrados, preservando a distinção entre associação, predição retrospectiva e resultado comercial efetivo.
