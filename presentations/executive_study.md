@@ -74,9 +74,9 @@ As combinações iniciais exibem frequências distintas de movimentação. Por e
 
 *Transição:* Outros atributos comerciais também apresentam heterogeneidade, com importantes condições de cobertura.
 
-### Slide 12 — MPlay distingue perfis, mas 93% dos retidos não têm classificação
+### Slide 12 — A situação MPlay está associada a taxas distintas de movimentação
 
-A variável de consolidação de faturas é interessante do ponto de vista comercial: os grupos MARCADO e NÃO MARCADO têm taxas de movimentação bastante distintas. Entretanto, 232.017 dos registros retidos não trazem classificação informada, cerca de 93,1 por cento. Isso pode refletir ausência estrutural de elegibilidade; não podemos imputar comportamento nem atribuir efeito causal à unificação.
+O dicionário define MARCADO como faturas unificadas, NÃO MARCADO como elegível para unificação e vazio como NÃO ELEGÍVEL. Entre os retidos, as taxas de movimentação são 54,0% nos 10.587 marcados, 15,2% nos 6.705 não marcados e 34,4% nos 232.017 não elegíveis. Esse último grupo representa 93,1% da população retida; 93,1% é participação do grupo, não taxa de movimentação. As diferenças observadas não estabelecem efeito causal da unificação.
 
 *Transição:* Na comparação dos canais, também é necessário separar comportamento e composição.
 
