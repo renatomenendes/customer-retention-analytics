@@ -1,6 +1,6 @@
 # Estudo de clientes retidos com movimentação — caracterização analítica e decisões
 
-**Período de entrada:** junho a dezembro de 2025, inclusive. **Fonte:** planilha do case processada localmente, com resultados agregados para o repositório privado. **Referência:** `Objetivo do Case.docx` (3 páginas). **População:** status `RETIDO`; **unidade:** linha da planilha até validação da chave de atendimento.
+**Período de entrada:** junho a dezembro de 2025, inclusive. **Fonte:** base sintética e anonimizada do case, processada localmente e resumida em resultados agregados. **Referência:** `Objetivo do Case.docx` (3 páginas). **População:** status `RETIDO`; **unidade:** linha da planilha até validação da chave de atendimento.
 
 ## Resumo executivo
 
